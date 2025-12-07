@@ -2,6 +2,7 @@ import { useState } from "react";
 import TableSelector from "../../components/tables/TableSelector";
 import { tables } from "../../services/tablesService";
 import ColumnSelector from "../../components/tables/ColumnSelector";
+import Footer from "../../components/main/footers";
 
 export default function ToolsTables() {
   const [selectedTable, setSelectedTable] = useState<string>("");
@@ -41,6 +42,7 @@ export default function ToolsTables() {
                 darkMode={darkMode}
             />
             </div>
+            <Footer darkMode={darkMode} />
         </div>
     </div>
   );
