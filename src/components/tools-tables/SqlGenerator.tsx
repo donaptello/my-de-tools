@@ -28,25 +28,31 @@ export default function SqlGenerator({
   };
 
   return (
-    <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-lg p-5 transition hover:shadow-2xl hover:-translate-y-1`}>
-        <div className="flex justify-between items-center mb-3">
-            <h3 className={`text-lg font-semibold text-gray-800 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-                Generated SQL
-            </h3>
+    <div
+      className={`${darkMode ? "bg-gray-800" : "bg-white"} h-full flex flex-col rounded-xl shadow-lg p-5 transition hover:shadow-2xl hover:-translate-y-1`}
+    >
+      <div className="flex justify-between items-center mb-3">
+        <h3
+          className={`text-lg font-semibold text-gray-800 ${
+            darkMode ? "text-white" : "text-gray-800"
+          }`}
+        >
+          Generated SQL
+        </h3>
 
-            <button
-                onClick={copyToClipboard}
-                className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition text-sm"
-            >
-                {copied ? "Copied!" : "Copy"}
-            </button>
-        </div>
+        <button
+          onClick={copyToClipboard}
+          className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition text-sm"
+        >
+          {copied ? "Copied!" : "Copy"}
+        </button>
+      </div>
 
-        <textarea
-            readOnly
-            className={`w-full h-80 border rounded p-3 ${darkMode ? 'text-gray-300 bg-gray-700' : 'text-gray-700 bg-gray-50'} font-mono text-sm focus:ring focus:ring-blue-300`}
-            value={generateSql()}
-        />
+      <textarea
+        readOnly
+        className={`w-full border rounded p-3 ${darkMode ? "text-gray-300 bg-gray-700" : "text-gray-700 bg-gray-50"} font-mono text-sm focus:ring focus:ring-blue-300 flex-1 min-h-0 resize-none overflow-auto`}
+        value={generateSql()}
+      />
     </div>
   );
 }
