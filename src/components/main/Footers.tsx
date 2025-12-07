@@ -8,7 +8,14 @@ export default function Footers({darkMode}: Props) {
   return (
     <footer className={`mt-2 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-300'}`}>
       <div className="text-center text-sm text-gray-500">
-        &copy; {currentYear} <a href="https://github.com/donaptello" target="_blank" className="font-semibold underline text-gray-900">Nathan Parama</a>. All rights reserved.
+        &copy; {currentYear}&nbsp;
+        <a 
+          href="https://github.com/donaptello" 
+          target="_blank" 
+          className={`font-semibold underline ${darkMode ? "text-white": "text-gray-900"}`}>
+          Nathan Parama
+        </a>. 
+        All rights reserved.
       </div>
     </footer>
   );
