@@ -7,18 +7,17 @@ export default function ToolsTables() {
   const [selectedTable, setSelectedTable] = useState<string>("");
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
   const [darkMode, setDarkMode] = useState<boolean>(false);
-
   return (
-    <div className={darkMode ? "dark" : ""}>
-        <div className="p-6 min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 transition-colors">
+    <div>
+        <div className={`p-6 min-h-screen flex flex-col transition-colors ${darkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
             <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                 Table Tools
             </h1>
 
             <button
                 onClick={() => setDarkMode(!darkMode)}
-                className="px-4 py-2 rounded-lg bg-gray-800 text-white dark:bg-gray-200 dark:text-black transition hover:scale-105"
+                className={`px-4 py-2 rounded-lg transition hover:scale-105 ${darkMode ? 'bg-gray-200 text-black' : 'bg-gray-800 text-white'}`}
             >
                 {darkMode ? "☀️" : "🌙"}
             </button>
@@ -29,15 +28,17 @@ export default function ToolsTables() {
                 tables={Object.keys(tables)}
                 selectedTable={selectedTable}
                 onSelectTable={(table) => {
-                setSelectedTable(table);
-                setSelectedColumns([]);
+                    setSelectedTable(table);
+                    setSelectedColumns([]);
                 }}
+                darkMode={darkMode}
             />
 
             <ColumnSelector
                 columns={selectedTable ? tables[selectedTable] : []}
                 selectedColumns={selectedColumns}
                 onChangeColumns={setSelectedColumns}
+                darkMode={darkMode}
             />
             </div>
         </div>

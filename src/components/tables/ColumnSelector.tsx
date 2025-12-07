@@ -2,12 +2,14 @@ interface Props {
   columns: string[];
   selectedColumns: string[];
   onChangeColumns: (columns: string[]) => void;
+  darkMode: boolean;
 }
 
 export default function ColumnSelector({
   columns,
   selectedColumns,
   onChangeColumns,
+  darkMode,
 }: Props) {
   const toggleColumn = (col: string) => {
     if (selectedColumns.includes(col)) {
@@ -18,13 +20,13 @@ export default function ColumnSelector({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 transition hover:shadow-2xl hover:-translate-y-1">
-      <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">
+    <div className={`rounded-xl shadow-lg p-5 transition hover:shadow-2xl hover:-translate-y-1 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+      <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
         Select Columns
       </h3>
 
       {columns.length === 0 && (
-        <p className="text-gray-500 dark:text-gray-400">No table selected</p>
+        <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No table selected</p>
       )}
 
       <div className="space-y-3">
@@ -36,7 +38,7 @@ export default function ColumnSelector({
               onChange={() => toggleColumn(col)}
               className="h-4 w-4 accent-blue-600"
             />
-            <span className="text-gray-700 dark:text-gary-300">{col}</span>
+            <span className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{col}</span>
           </label>
         ))}
       </div>

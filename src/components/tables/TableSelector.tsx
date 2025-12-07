@@ -1,36 +1,92 @@
+import { useState, useRef, useEffect } from 'react'
+
 interface Props {
   tables: string[];
   selectedTable: string;
   onSelectTable: (value: string) => void;
+  darkMode: boolean;
 }
 
 export default function TableSelector({
   tables,
   selectedTable,
   onSelectTable,
+  darkMode,
 }: Props) {
+  const [open, setOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!containerRef.current) return
+      if (!containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('click', onDocClick)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('click', onDocClick)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [])
+
   return (
     <div
-      className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 
-      transition hover:shadow-2xl hover:-translate-y-1"
+      ref={containerRef}
+      className={`rounded-xl shadow-lg p-5 transition hover:shadow-2xl hover:-translate-y-1 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
     >
-      <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-white">
+      <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
         Select Table
       </h3>
 
-      <select
-        value={selectedTable}
-        onChange={(e) => onSelectTable(e.target.value)}
-        className="w-full border rounded p-2 bg-gray-50 dark:bg-gray-700 
-        dark:text-white focus:ring focus:ring-blue-300"
-      >
-        <option value="">-- Choose Table --</option>
-        {tables.map((table) => (
-          <option key={table} value={table}>
-            {table}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <button
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          onClick={() => setOpen((s) => !s)}
+          className={`w-full text-left flex items-center justify-between px-4 py-2 rounded border ${darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-200'}`}
+        >
+          <span className={`${selectedTable ? '' : 'text-gray-400'}`}>{selectedTable || '-- Choose Table --'}</span>
+          <svg className={`w-5 h-5 ml-2 transition-transform ${open ? 'rotate-180' : 'rotate-0'}`} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 8L10 12L14 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+
+        {open && (
+          <ul
+            role="listbox"
+            aria-activedescendant={selectedTable || undefined}
+            className={`absolute z-10 mt-2 w-full rounded-md shadow-lg max-h-60 overflow-auto focus:outline-none ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}
+          >
+            {tables.length === 0 && (
+              <li className={`px-4 py-2 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>No tables</li>
+            )}
+            {tables.map((table) => {
+              const selected = table === selectedTable
+              return (
+                <li
+                  key={table}
+                  id={table}
+                  role="option"
+                  aria-selected={selected}
+                  onClick={() => {
+                    onSelectTable(table)
+                    setOpen(false)
+                  }}
+                  className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${darkMode ? 'hover:bg-gray-700 text-gray-300' : 'text-gray-500'} ${selected ? 'font-semibold' : 'font-normal'}`}
+                >
+                  {table}
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </div>
     </div>
-  );
+  )
 }
