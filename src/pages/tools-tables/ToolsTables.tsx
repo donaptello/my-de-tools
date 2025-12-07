@@ -1,8 +1,9 @@
 import { useState } from "react";
-import TableSelector from "../../components/tables/TableSelector";
+import TableSelector from "../../components/tools-tables/TableSelector";
 import { tables } from "../../services/tablesService";
-import ColumnSelector from "../../components/tables/ColumnSelector";
-import Footer from "../../components/main/footers";
+import ColumnSelector from "../../components/tools-tables/ColumnSelector";
+import Footers from "../../components/main/Footers";
+import SqlGenerator from "../../components/tools-tables/SqlGenerator";
 
 export default function ToolsTables() {
   const [selectedTable, setSelectedTable] = useState<string>("");
@@ -41,8 +42,15 @@ export default function ToolsTables() {
                 onChangeColumns={setSelectedColumns}
                 darkMode={darkMode}
             />
+
+            <SqlGenerator 
+                selectedColumns={selectedColumns}
+                selectedTable={selectedTable}
+                darkMode={darkMode}
+            />
+
             </div>
-            <Footer darkMode={darkMode} />
+            <Footers darkMode={darkMode} />
         </div>
     </div>
   );
