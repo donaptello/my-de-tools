@@ -25,7 +25,7 @@ export default function ToolsTables() {
             </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 items-stretch">
             <TableSelector
                 tables={Object.keys(tables)}
                 selectedTable={selectedTable}
