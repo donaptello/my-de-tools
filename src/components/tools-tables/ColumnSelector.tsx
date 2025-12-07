@@ -11,6 +11,7 @@ export default function ColumnSelector({
   onChangeColumns,
   darkMode,
 }: Props) {
+
   const toggleColumn = (col: string) => {
     if (selectedColumns.includes(col)) {
       onChangeColumns(selectedColumns.filter((c) => c !== col));
@@ -19,11 +20,23 @@ export default function ColumnSelector({
     }
   };
 
+  const toggleSelectAll = () => {
+    onChangeColumns([...columns])
+  }
+
   return (
     <div className={`rounded-xl shadow-lg p-5 transition hover:shadow-2xl hover:-translate-y-1 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-      <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-        Select Columns
-      </h3>
+      <div className="flex justify-between items-center mb-3">
+        <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+          Select Columns
+        </h3>
+        <button
+            onClick={toggleSelectAll}
+            className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition text-sm"
+        >
+            Select All
+        </button>
+      </div>
 
       {columns.length === 0 && (
         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>No table selected</p>
