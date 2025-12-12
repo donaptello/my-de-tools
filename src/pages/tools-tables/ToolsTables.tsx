@@ -4,6 +4,7 @@ import { tables } from "../../services/tablesService";
 import ColumnSelector from "../../components/tools-tables/ColumnSelector";
 import Footers from "../../components/main/Footers";
 import SqlGenerator from "../../components/tools-tables/SqlGenerator";
+import Navbar from "../../components/main/Navbar";
 
 export default function ToolsTables() {
   const [selectedTable, setSelectedTable] = useState<string>("");
@@ -37,24 +38,10 @@ export default function ToolsTables() {
           darkMode ? "bg-gray-900" : "bg-gray-100"
         }`}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h1
-            className={`text-2xl font-bold ${
-              darkMode ? "text-white" : "text-gray-800"
-            }`}
-          >
-            Table Tools
-          </h1>
-
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className={`px-4 py-2 rounded-lg transition hover:scale-105 ${
-              darkMode ? "bg-gray-200 text-black" : "bg-gray-800 text-white"
-            }`}
-          >
-            {darkMode ? "☀️" : "🌙"}
-          </button>
-        </div>
+        <Navbar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 items-stretch">
           <TableSelector
