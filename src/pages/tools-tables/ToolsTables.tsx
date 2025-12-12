@@ -39,6 +39,7 @@ export default function ToolsTables() {
         }`}
       >
         <Navbar
+          title="Table Tools"
           darkMode={darkMode}
           setDarkMode={setDarkMode}
         />

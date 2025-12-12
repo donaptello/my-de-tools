@@ -1,9 +1,10 @@
 interface Props {
+  title: string;
   darkMode: boolean;
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Navbar({ darkMode, setDarkMode }: Props) {
+export default function Navbar({ title, darkMode, setDarkMode }: Props) {
   return (
     <div className="flex justify-between items-center mb-6">
       <h1
@@ -11,7 +12,7 @@ export default function Navbar({ darkMode, setDarkMode }: Props) {
           darkMode ? "text-white" : "text-gray-800"
         }`}
       >
-        Table Tools
+        {title}
       </h1>
 
       <button
