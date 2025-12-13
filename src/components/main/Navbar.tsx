@@ -24,6 +24,13 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
         >
           Home
         </Link>
+        
+        <Link
+          to="/connection"
+          className={`${darkMode ? "text-gray-200" : "text-gray-800"} hover:font-bold`}
+        >
+          Connection
+        </Link>
 
         <Link
           to="/tools"
