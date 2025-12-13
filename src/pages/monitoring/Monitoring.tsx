@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footers from "../../components/main/Footers";
 import Navbar from "../../components/main/Navbar";
 
@@ -16,6 +16,16 @@ export default function Monitoring() {
     }
     return false;
   });
+
+  useEffect(() => {
+      try {
+        localStorage.setItem("dark-mode", darkMode ? "true" : "false");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (e) {/*ignore*/}
+  
+      if (darkMode) document.documentElement.classList.add("dark");
+      else document.documentElement.classList.remove("dark");
+    }, [darkMode]);
 
   return (
     <div>

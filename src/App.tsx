@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from './components/main/Navbar';
 import Footers from './components/main/Footers';
 
-export default function Monitoring() {
+export default function App() {
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     try {
       const saved = localStorage.getItem("dark-mode");
@@ -16,6 +16,16 @@ export default function Monitoring() {
     }
     return false;
   });
+
+  useEffect(() => {
+      try {
+        localStorage.setItem("dark-mode", darkMode ? "true" : "false");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (e) {/*ignore*/}
+  
+      if (darkMode) document.documentElement.classList.add("dark");
+      else document.documentElement.classList.remove("dark");
+    }, [darkMode]);
 
   return (
     <div>
