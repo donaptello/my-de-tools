@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Footers from "../../components/main/Footers";
 import Navbar from "../../components/main/Navbar";
 
-export default function Monitoring() {
+export default function Connection() {
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     try {
       const saved = localStorage.getItem("dark-mode");
@@ -33,7 +33,7 @@ export default function Monitoring() {
         }`}
       >
         <Navbar
-          title="Monitoring"
+          title="Connection"
           darkMode={darkMode}
           setDarkMode={setDarkMode}
         />
@@ -43,7 +43,7 @@ export default function Monitoring() {
               darkMode ? "text-white" : "text-gray-800"
             }`}
           >
-            Todo: make a monitoring
+            Todo: make a input form manage connection
           </p>
         </div>
 
