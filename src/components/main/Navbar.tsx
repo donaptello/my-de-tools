@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface Props {
   title: string;
   darkMode: boolean;
@@ -14,6 +16,29 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
       >
         {title}
       </h1>
+
+      <nav className="flex gap-6 text-lg">
+        <Link
+          to="/"
+          className={`${darkMode ? "text-gray-200" : "text-gray-800"} hover:font-bold`}
+        >
+          Home
+        </Link>
+
+        <Link
+          to="/tools"
+          className={`${darkMode ? "text-gray-200" : "text-gray-800"} hover:font-bold`}
+        >
+          Tools
+        </Link>
+
+        <Link
+          to="/monitoring"
+          className={`${darkMode ? "text-gray-200" : "text-gray-800"} hover:font-bold`}
+        >
+          Monitoring
+        </Link>
+      </nav>
 
       <button
         onClick={() => setDarkMode(!darkMode)}
