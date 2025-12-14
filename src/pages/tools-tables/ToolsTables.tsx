@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TableSelector from "../../components/tools-tables/TableSelector";
 import { tables } from "../../services/tablesService";
 import ColumnSelector from "../../components/tools-tables/ColumnSelector";
@@ -10,7 +10,9 @@ export default function ToolsTables() {
   const [selectedTable, setSelectedTable] = useState<string>("");
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
-  setTitle("Tools Table");
+  useEffect(() => {
+    setTitle("Tools Table");
+  }, [setTitle]);
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-h-0 items-stretch">
       <TableSelector
