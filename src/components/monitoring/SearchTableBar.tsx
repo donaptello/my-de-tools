@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 import { MonitoringTable } from "../../services/types/Monitoring.types";
 
@@ -18,6 +19,22 @@ function colorTags(darkMode: boolean, status: string): string {
 }
 
 export default function SearchTableCard({ darkMode, tableData = [] }: SearchTableCardProps) {
+  const tableScrollRef = useRef<HTMLDivElement | null>(null);
+  const [maxHeightStyle, setMaxHeightStyle] = useState<React.CSSProperties | undefined>(undefined);
+
+  useEffect(() => {
+    function updateMaxHeight() {
+      const top = tableScrollRef.current?.getBoundingClientRect().top ?? 0;
+      const viewportHeight = window.innerHeight;
+      const reserved = 90;
+      const available = Math.max(200, viewportHeight - top - reserved);
+      setMaxHeightStyle({ maxHeight: `${available}px` });
+    }
+
+    updateMaxHeight();
+    window.addEventListener("resize", updateMaxHeight);
+    return () => window.removeEventListener("resize", updateMaxHeight);
+  }, []);
   return (
     <div className={`flex-1 min-h-0 flex flex-col rounded-2xl ${
       darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
@@ -44,7 +61,11 @@ export default function SearchTableCard({ darkMode, tableData = [] }: SearchTabl
       {/* TABLE */}
       <div className="flex-1 min-h-0">
         <div className="overflow-x-auto min-w-0">
-          <div className="max-h-[550px] overflow-y-auto">
+          <div
+            ref={tableScrollRef}
+            className="overflow-y-auto"
+            style={maxHeightStyle}
+          >
             <table className="w-full text-sm table-fixed">
               <thead className={`sticky top-0 ${darkMode ? "text-white bg-gray-900" : "text-gray-500 bg-gray-100"} z-10 text-left `}>
                 <tr>
