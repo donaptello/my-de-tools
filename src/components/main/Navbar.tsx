@@ -27,7 +27,7 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className={`px-4 py-2 rounded-lg transition hover:scale-105 flex-shrink-0 ${
+            className={`px-4 py-2 rounded-lg transition hover:scale-105 shrink-0 ${
               darkMode ? "bg-gray-200 text-black" : "bg-gray-800 text-white"
             }`}
             aria-label="Toggle theme"
