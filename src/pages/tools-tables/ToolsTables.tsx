@@ -9,7 +9,7 @@ import { LayoutContextType } from "../../components/main/Layout";
 export default function ToolsTables() {
   const [selectedTable, setSelectedTable] = useState<string>("");
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
-  const { darkMode, setDarkMode } = useOutletContext<LayoutContextType>();
+  const { darkMode } = useOutletContext<LayoutContextType>();
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-h-0 items-stretch">
       <TableSelector
