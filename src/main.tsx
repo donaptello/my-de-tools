@@ -1,71 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.tsx";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import ToolsTables from "./pages/tools-tables/ToolsTables.tsx";
-import Monitoring from "./pages/monitoring/Monitoring.tsx";
-import Connection from "./pages/connections/Connection.tsx";
-import Layout from "./components/main/Layout.tsx";
-import { AnimatePresence, motion } from "framer-motion";
-
-function AnimatedRoutes() {
-  const location = useLocation();
-
-  return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Layout />}>
-          <Route index element={
-            <motion.div
-              className="h-full min-h-0"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <App />
-            </motion.div>
-          } />
-          <Route path="/tools" element={
-            <motion.div
-              className="h-full min-h-0"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <ToolsTables />
-            </motion.div>
-          } />
-          <Route path="/connection" element={
-            <motion.div
-              className="h-full min-h-0"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Connection />
-            </motion.div>  
-          } />
-          <Route path="/monitoring" element={
-            <motion.div
-              className="h-full min-h-0"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Monitoring />
-            </motion.div>
-            } 
-          />
-        </Route>
-      </Routes>
-    </AnimatePresence>
-  );
-}
+import { BrowserRouter } from "react-router-dom";
+import AnimatedRoutes from "./components/main/Routes";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
