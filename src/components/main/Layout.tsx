@@ -4,10 +4,11 @@ import Footers from "./Footers";
 import { Outlet } from "react-router-dom";
 
 export type LayoutContextType = {
-    darkMode: boolean;
-    setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
+  darkMode: boolean;
+  setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+};
 
 function Layout() {
   const [darkMode, setDarkMode] = useState<boolean>(() => {
@@ -17,14 +18,22 @@ function Layout() {
       if (typeof window !== "undefined" && window.matchMedia) {
         return window.matchMedia("(prefers-color-scheme: dark)").matches;
       }
-    } catch (e) {/* ignore */}
+    } catch (e) {
+      /* ignore */
+    }
     return false;
+  });
+
+  const [title, setTitle] = useState<string>(() => {
+    return "Home";
   });
 
   useEffect(() => {
     try {
       localStorage.setItem("dark-mode", darkMode ? "true" : "false");
-    } catch (e) {/*ignore*/}
+    } catch (e) {
+      /*ignore*/
+    }
 
     if (darkMode) document.documentElement.classList.add("dark");
     else document.documentElement.classList.remove("dark");
@@ -37,10 +46,10 @@ function Layout() {
           darkMode ? "bg-gray-900" : "bg-gray-100"
         }`}
       >
-        <Navbar title="Home" darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Navbar title={title} darkMode={darkMode} setDarkMode={setDarkMode} />
         <div className="grid grid-cols-1 flex-1 items-stretch">
           <main className="h-full min-h-0">
-            <Outlet context={{darkMode, setDarkMode}}/>
+            <Outlet context={{ darkMode, setDarkMode, title, setTitle }} />
           </main>
         </div>
         <Footers darkMode={darkMode} />

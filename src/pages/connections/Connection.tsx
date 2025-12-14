@@ -2,7 +2,8 @@ import { useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
 
 export default function Connection() {
-  const { darkMode } = useOutletContext<LayoutContextType>();
+  const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
+  setTitle("Connection");
   return (
     <div className="grid grid-cols-1 flex-1 items-stretch">
       <p className={`${darkMode ? "text-white" : "text-gray-800"}`}>
