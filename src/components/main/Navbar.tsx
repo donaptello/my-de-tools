@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Moon, MoonIcon, Sun } from "lucide-react";
 
 interface Props {
   title: string;
@@ -32,7 +33,7 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
             }`}
             aria-label="Toggle theme"
           >
-            {darkMode ? "☀️" : "🌙"}
+            {darkMode ? <Sun /> : <Moon />}
           </button>
 
           <button
