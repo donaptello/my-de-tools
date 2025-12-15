@@ -10,17 +10,26 @@ type SearchTableCardProps = {
 
 function colorTags(darkMode: boolean, status: string): string {
   if (status === "Completed") {
-    return darkMode ? "bg-green-900 text-green-300" : "bg-green-100 text-green-700"
+    return darkMode
+      ? "bg-green-900 text-green-300"
+      : "bg-green-100 text-green-700";
   } else if (status === "InCompleted") {
-    return darkMode ? "bg-yellow-900 text-yellow-300" : "bg-yellow-100 text-yellow-700"
+    return darkMode
+      ? "bg-yellow-900 text-yellow-300"
+      : "bg-yellow-100 text-yellow-700";
   } else {
-    return darkMode ? "bg-red-900 text-red-300" : "bg-red-100 text-red-700"
+    return darkMode ? "bg-red-900 text-red-300" : "bg-red-100 text-red-700";
   }
 }
 
-export default function SearchTableCard({ darkMode, tableData = [] }: SearchTableCardProps) {
+export default function SearchTableCard({
+  darkMode,
+  tableData = [],
+}: SearchTableCardProps) {
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
-  const [maxHeightStyle, setMaxHeightStyle] = useState<React.CSSProperties | undefined>(undefined);
+  const [maxHeightStyle, setMaxHeightStyle] = useState<
+    React.CSSProperties | undefined
+  >(undefined);
 
   useEffect(() => {
     function updateMaxHeight() {
@@ -36,11 +45,17 @@ export default function SearchTableCard({ darkMode, tableData = [] }: SearchTabl
     return () => window.removeEventListener("resize", updateMaxHeight);
   }, []);
   return (
-    <div className={`flex-1 min-h-0 flex flex-col rounded-2xl ${
-      darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-    } shadow-sm transition hover:shadow-2xl hover:-translate-y-1`}>
+    <div
+      className={`flex-1 min-h-0 flex flex-col rounded-2xl ${
+        darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
+      } shadow-sm transition hover:shadow-2xl hover:-translate-y-1`}
+    >
       {/* SEARCH BAR */}
-          <div className={`border-b p-4 ${darkMode ? "border-gray-700" : "border-gray-200"}`}>
+      <div
+        className={`border-b p-4 ${
+          darkMode ? "border-gray-700" : "border-gray-200"
+        }`}
+      >
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
             <Search className="h-5 w-5 text-blue-600" />
@@ -67,53 +82,119 @@ export default function SearchTableCard({ darkMode, tableData = [] }: SearchTabl
             style={maxHeightStyle}
           >
             <table className="w-full text-sm table-fixed">
-              <thead className={`sticky top-0 ${darkMode ? "text-white bg-gray-900" : "text-gray-500 bg-gray-100"} z-10 text-left `}>
+              <thead
+                className={`sticky top-0 ${
+                  darkMode
+                    ? "text-white bg-gray-900"
+                    : "text-gray-500 bg-gray-100"
+                } z-10 text-left `}
+              >
                 <tr>
                   <th className="px-4 py-3 font-medium w-[40%]">Table Name</th>
-                  <th className="px-4 py-3 font-medium w-[30%]">Last Run Count ETL</th>
-                  <th className="px-4 py-3 font-medium w-[20%]">Last Update Data</th>
+                  <th className="px-4 py-3 font-medium w-[30%]">
+                    Last Run Count ETL
+                  </th>
+                  <th className="px-4 py-3 font-medium w-[20%]">
+                    Last Update Data
+                  </th>
                   <th className="px-4 py-3 font-medium w-[20%]">Code Source</th>
                   <th className="px-4 py-3 font-medium w-[20%]">DB Source</th>
                   <th className="px-4 py-3 font-medium w-[20%]">DB Target</th>
-                  <th className="px-4 py-3 font-medium w-[20%]">Record in Source</th>
-                  <th className="px-4 py-3 font-medium w-[20%]">Record in DWH</th>
-                  <th className="px-4 py-3 font-medium w-[20%]">Total Different</th>
+                  <th className="px-4 py-3 font-medium w-[20%]">
+                    Record in Source
+                  </th>
+                  <th className="px-4 py-3 font-medium w-[20%]">
+                    Record in DWH
+                  </th>
+                  <th className="px-4 py-3 font-medium w-[20%]">
+                    Total Different
+                  </th>
                   <th className="px-4 py-3 font-medium w-[20%]">Status</th>
                 </tr>
               </thead>
 
-              <tbody className={`divide-y ${darkMode ? "divide-gray-700" : "divide-gray-300"}`}>
+              <tbody
+                className={`divide-y ${
+                  darkMode ? "divide-gray-700" : "divide-gray-300"
+                }`}
+              >
                 {tableData.map((row, i) => (
-                  <tr key={i} className={`h-12 ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"}`}>
-                    <td className={`px-4 overflow-hidden truncate ${darkMode ? "text-gray-100" : "text-gray-700"}`}>
+                  <tr
+                    key={i}
+                    className={`h-12 ${
+                      darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"
+                    }`}
+                  >
+                    <td
+                      className={`px-4 overflow-hidden truncate ${
+                        darkMode ? "text-gray-100" : "text-gray-700"
+                      }`}
+                    >
                       {row.tableName}
                     </td>
-                    <td className={`px-4 overflow-hidden truncate ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    <td
+                      className={`px-4 overflow-hidden truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {row.lastRunEtl}
                     </td>
-                    <td className={`px-4 overflow-hidden truncate ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    <td
+                      className={`px-4 overflow-hidden truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {row.lastUpdateData}
                     </td>
-                    <td className={`px-4 overflow-hidden truncate ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    <td
+                      className={`px-4 overflow-hidden truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {row.CodeSource}
                     </td>
-                    <td className={`px-4 overflow-hidden truncate ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    <td
+                      className={`px-4 overflow-hidden truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {row.DbSource}
                     </td>
-                    <td className={`px-4 overflow-hidden truncate ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    <td
+                      className={`px-4 overflow-hidden truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {row.DbTarget}
                     </td>
-                    <td className={`px-4 overflow-hidden truncate ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    <td
+                      className={`px-4 overflow-hidden truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {row.RecordSource}
                     </td>
-                    <td className={`px-4 overflow-hidden truncate ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    <td
+                      className={`px-4 overflow-hidden truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {row.RecordDwh}
                     </td>
-                    <td className={`px-4 overflow-hidden truncate ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    <td
+                      className={`px-4 overflow-hidden truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       {row.TotalDiffRecord}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`rounded-full px-2 py-1 text-xs font-medium ${colorTags(darkMode, row.status)}`}>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${colorTags(
+                          darkMode,
+                          row.status
+                        )}`}
+                      >
                         {row.status}
                       </span>
                     </td>
