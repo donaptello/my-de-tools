@@ -1,4 +1,4 @@
-import { ConnectionData } from "../../services/types/Connections.types";
+import { ConnectionData, GeneralConnection, S3Connection } from "../../services/types/Connections.types";
 
 interface Props {
   connection?: ConnectionData;
@@ -8,35 +8,61 @@ interface Props {
 export default function ConnectionDetail({ connection, darkMode }: Props) {
   if (!connection) {
     return (
-      <div className="flex h-full items-center justify-center text-gray-400">
+      <div
+        className={`
+        flex rounded-xl shadow-lg p-5 
+        transition hover:shadow-2xl 
+        hover:-translate-y-1 h-full 
+        items-center justify-center 
+        ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800"}`}
+      >
         Select a connection to view details
       </div>
     );
   }
 
+  function resultText(conn: ConnectionData): string {
+    const title = (conn.name ?? "").toUpperCase().replace(/\s+/g, "_");
+
+    const common = conn.connection as { host?: string; port?: number };
+    const base: string[] = [`[${title}]`, `HOST=${common.host ?? ""}`, `PORT=${common.port ?? ""}`];
+
+    if (conn.type === "S3") {
+      const s3 = conn.connection as S3Connection;
+      base.push(`ACCESS_KEY=${s3.accessKey ?? ""}`, `SECRET_KEY=${s3.secretKey ?? ""}`);
+    } else {
+      const general = conn.connection as GeneralConnection;
+      base.push(`USERNAME=${general.username ?? ""}`, `PASSWORD=${general.password ?? ""}`);
+    }
+
+    return base.join("\n");
+  }
+
   return (
     <div
-      className={`rounded-xl p-3 ${
-        darkMode ? "bg-gray-900" : "bg-white"
-      } shadow-sm border border-transparent h-full`}
+      className={`rounded-xl p-6 ${
+        darkMode ? "bg-gray-800" : "bg-white"
+      } shadow-sm border border-transparent h-full
+        transition hover:shadow-2xl hover:-translate-y-1`}
     >
       <div className="flex flex-col h-full space-y-4">
         <div>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
+          <h2
+            className={`
+            text-xl font-semibold 
+            ${darkMode ? "text-white" : "text-gray-800"}`}
+          >
             {connection.name}
           </h2>
           <p className="text-sm text-gray-500">{connection.type}</p>
         </div>
 
         <textarea
-          className="
-          flex-1 w-full resize-none rounded-xl border
-          p-4 text-sm
-          bg-gray-50 dark:bg-gray-800
-          border-gray-300 dark:border-gray-700
-          focus:outline-none focus:ring-2 focus:ring-blue-500
-        "
-          value={connection.description}
+          className={`w-full border rounded p-3 
+            ${darkMode ? "text-gray-300 bg-gray-700" : "text-gray-700 bg-gray-50"} 
+            font-mono text-sm focus:ring focus:ring-blue-300 flex-1 min-h-0 
+            resize-none overflow-auto`}
+          value={resultText(connection)}
           readOnly
         />
       </div>

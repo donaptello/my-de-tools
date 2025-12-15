@@ -5,7 +5,22 @@ export interface ConnectionData {
     name: string;
     type: string;
     description?: string;
-    connection: object;
+    connection: GeneralConnection | S3Connection;
+}
+
+export interface GeneralConnection { 
+    host: string;
+    port: number;
+    username: string;
+    password: string;
+}
+
+export interface S3Connection {
+    accessKey: string;
+    secretKey: string;
+    domain: string;
+    host: string;
+    port: number;
 }
 
 export type ConnectionDataRes = ApiResponse<ConnectionData[]>;
