@@ -3,7 +3,7 @@ import { LayoutContextType } from "../../components/main/Layout";
 import { useEffect } from "react";
 import { monitoringTableDataMock, monitoringTotalDataMock } from "../../services/mocks/Monitoring.mock";
 import StatCard from "../../components/monitoring/StatCard";
-import SearchBar from "../../components/monitoring/SearchTableBar";
+import SearchTableCard from "../../components/monitoring/SearchTableBar";
 
 export default function Monitoring() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
@@ -48,7 +48,7 @@ export default function Monitoring() {
       </div>
       
       <div className="w-full px-6 md:px-20 md:pt-6 md:pb-6">
-        <SearchBar darkMode={darkMode} tableData={tableData} />
+        <SearchTableCard darkMode={darkMode} tableData={tableData} />
       </div>
     </div>
   );
