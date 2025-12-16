@@ -43,7 +43,7 @@ export default function ConnectionList({
     <div
       className={`rounded-xl p-3 ${
         darkMode ? "bg-gray-800" : "bg-white"
-      }  border border-transparent rounded-xl shadow-sm p-5 transition hover:shadow-2xl hover:-translate-y-1`}
+      }  border border-transparent h-full rounded-xl shadow-sm p-5 transition hover:shadow-2xl hover:-translate-y-1`}
     >
       <div
         className={`border-b p-4 ${
