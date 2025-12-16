@@ -10,7 +10,7 @@ export default function ConnectionDetail({ connection, darkMode }: Props) {
     return (
       <div
         className={`
-        flex rounded-xl shadow-lg p-5 
+        flex rounded-xl shadow-sm p-5 
         transition hover:shadow-2xl 
         hover:-translate-y-1 h-full 
         items-center justify-center 

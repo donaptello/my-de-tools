@@ -25,7 +25,7 @@ export default function ColumnSelector({
   }
 
   return (
-    <div className={`rounded-xl shadow-lg p-5 transition hover:shadow-2xl hover:-translate-y-1 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+    <div className={`rounded-xl shadow-sm p-5 transition hover:shadow-2xl hover:-translate-y-1 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
       <div className="flex justify-between items-center mb-3">
         <h3 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
           Select Columns

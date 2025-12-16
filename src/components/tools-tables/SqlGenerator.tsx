@@ -29,7 +29,7 @@ export default function SqlGenerator({
 
   return (
     <div
-      className={`${darkMode ? "bg-gray-800" : "bg-white"} h-full flex flex-col rounded-xl shadow-lg p-5 transition hover:shadow-2xl hover:-translate-y-1`}
+      className={`${darkMode ? "bg-gray-800" : "bg-white"} h-full flex flex-col rounded-xl shadow-sm p-5 transition hover:shadow-2xl hover:-translate-y-1`}
     >
       <div className="flex justify-between items-center mb-3">
         <h3

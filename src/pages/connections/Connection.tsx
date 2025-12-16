@@ -16,7 +16,7 @@ export default function Connection() {
   }, [setTitle]);
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-h-0 flex-1 items-stretch">
-      {/* LEFT CARD */}
+
       <div className="md:col-span-1 items-stretch">
         <ConnectionList
           connections={data}
