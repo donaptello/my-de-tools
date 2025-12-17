@@ -5,22 +5,30 @@ import ColumnSelector from "../../components/tools-tables/ColumnSelector";
 import SqlGenerator from "../../components/tools-tables/SqlGenerator";
 import { useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
+import { connectionDatas } from "../../services/mocks/Connections.mock";
 
 export default function ToolsTables() {
   const [selectedTable, setSelectedTable] = useState<string>("");
+  const [selectedConnection, setSelectedConnection] = useState<string>("");
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
+
   useEffect(() => {
     setTitle("Tools Table");
   }, [setTitle]);
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-h-0 items-stretch">
       <TableSelector
+        connections={connectionDatas.data}
         tables={Object.keys(tables)}
         selectedTable={selectedTable}
+        selectedConnection={selectedConnection}
         onSelectTable={(table) => {
           setSelectedTable(table);
           setSelectedColumns([]);
+        }}
+        onSelectConnection={(connection) => {
+          setSelectedConnection(connection)
         }}
         darkMode={darkMode}
       />

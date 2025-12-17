@@ -1,16 +1,23 @@
 import { useState, useRef, useEffect } from 'react'
+import { ConnectionData } from '../../services/types/Connections.types';
 
 interface Props {
+  connections: ConnectionData[];
   tables: string[];
   selectedTable: string;
+  selectedConnection: string;
   onSelectTable: (value: string) => void;
+  onSelectConnection: (value: string) => void;
   darkMode: boolean;
 }
 
 export default function TableSelector({
+  connections,
   tables,
   selectedTable,
+  selectedConnection,
   onSelectTable,
+  onSelectConnection,
   darkMode,
 }: Props) {
   const [open, setOpen] = useState(false)
@@ -51,7 +58,7 @@ export default function TableSelector({
           onClick={() => setOpen((s) => !s)}
           className={`w-full text-left flex items-center justify-between px-4 py-2 rounded border ${darkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-800 border-gray-200'}`}
         >
-          <span className={`${selectedTable ? '' : 'text-gray-400'}`}>{selectedTable || '-- Choose Table --'}</span>
+          <span className={`${selectedConnection ? '' : 'text-gray-400'}`}>{selectedConnection || '-- Choose Connection --'}</span>
           <svg className={`w-5 h-5 ml-2 transition-transform ${open ? 'rotate-180' : 'rotate-0'}`} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M6 8L10 12L14 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -63,24 +70,24 @@ export default function TableSelector({
             aria-activedescendant={selectedTable || undefined}
             className={`absolute z-10 mt-2 w-full rounded-md shadow-lg max-h-60 overflow-auto focus:outline-none ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-100'}`}
           >
-            {tables.length === 0 && (
+            {connections.length === 0 && (
               <li className={`px-4 py-2 ${darkMode ? 'text-gray-300' : 'text-gray-500'}`}>No tables</li>
             )}
-            {tables.map((table) => {
-              const selected = table === selectedTable
+            {connections.map((connection) => {
+              const selected = connection.name === selectedConnection
               return (
                 <li
-                  key={table}
-                  id={table}
+                  key={connection.name}
+                  id={connection.id}
                   role="option"
                   aria-selected={selected}
                   onClick={() => {
-                    onSelectTable(table)
-                    setOpen(false)
+                    onSelectConnection(connection.name);
+                    setOpen(false);
                   }}
                   className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${darkMode ? 'hover:bg-gray-700 text-gray-300' : 'text-gray-500'} ${selected ? 'font-semibold' : 'font-normal'}`}
                 >
-                  {table}
+                  {connection.name}
                 </li>
               )
             })}
