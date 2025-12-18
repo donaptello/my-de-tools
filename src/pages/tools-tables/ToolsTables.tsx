@@ -10,6 +10,7 @@ import { connectionDatas } from "../../services/mocks/Connections.mock";
 export default function ToolsTables() {
   const [selectedTable, setSelectedTable] = useState<string>("");
   const [selectedConnection, setSelectedConnection] = useState<string>("");
+  const [selectedSchemas, setSelectedSchemas] = useState<string>("");
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
 
@@ -21,14 +22,19 @@ export default function ToolsTables() {
       <TableSelector
         connections={connectionDatas.data}
         tables={Object.keys(tables)}
+        schemas={[]}
         selectedTable={selectedTable}
         selectedConnection={selectedConnection}
+        selectedSchema={selectedSchemas}
         onSelectTable={(table) => {
           setSelectedTable(table);
           setSelectedColumns([]);
         }}
         onSelectConnection={(connection) => {
-          setSelectedConnection(connection)
+          setSelectedConnection(connection);
+        }}
+        onSelectSchema={(schema) => {
+          setSelectedSchemas(schema);
         }}
         darkMode={darkMode}
       />
