@@ -2,10 +2,13 @@ import { Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { MonitoringTable } from "../../services/types/Monitoring.types";
+import Skeleton from "../main/Skleton";
 
 type SearchTableCardProps = {
   darkMode: boolean;
   tableData?: MonitoringTable[];
+  setQueryTableData?: (value: string) => void;
+  loading: boolean;
 };
 
 function colorTags(darkMode: boolean, status: string): string {
@@ -25,11 +28,14 @@ function colorTags(darkMode: boolean, status: string): string {
 export default function SearchTableCard({
   darkMode,
   tableData = [],
+  loading,
+  setQueryTableData,
 }: SearchTableCardProps) {
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
   const [maxHeightStyle, setMaxHeightStyle] = useState<
     React.CSSProperties | undefined
   >(undefined);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     function updateMaxHeight() {
@@ -64,6 +70,12 @@ export default function SearchTableCard({
           <input
             type="text"
             placeholder="Search table..."
+            value={search}
+            onChange={(e) => {
+              const v = e.target.value;
+              setSearch(v);
+              setQueryTableData?.(v);
+            }}
             className={`flex-1 rounded-lg px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 ${
               darkMode
                 ? "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-400 focus:ring-blue-900"
@@ -118,88 +130,164 @@ export default function SearchTableCard({
                   darkMode ? "divide-gray-700" : "divide-gray-300"
                 }`}
               >
-                {tableData.map((row, i) => (
-                  <tr
-                    key={i}
-                    className={`h-12 ${
-                      darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"
-                    }`}
-                  >
-                    <td
-                      className={`px-4 overflow-hidden truncate ${
-                        darkMode ? "text-gray-100" : "text-gray-700"
-                      }`}
-                    >
-                      {row.tableName}
-                    </td>
-                    <td
-                      className={`px-4 overflow-hidden truncate ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      {row.lastRunEtl}
-                    </td>
-                    <td
-                      className={`px-4 overflow-hidden truncate ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      {row.lastUpdateData}
-                    </td>
-                    <td
-                      className={`px-4 overflow-hidden truncate ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      {row.CodeSource}
-                    </td>
-                    <td
-                      className={`px-4 overflow-hidden truncate ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      {row.DbSource}
-                    </td>
-                    <td
-                      className={`px-4 overflow-hidden truncate ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      {row.DbTarget}
-                    </td>
-                    <td
-                      className={`px-4 overflow-hidden truncate ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      {row.RecordSource}
-                    </td>
-                    <td
-                      className={`px-4 overflow-hidden truncate ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      {row.RecordDwh}
-                    </td>
-                    <td
-                      className={`px-4 overflow-hidden truncate ${
-                        darkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      {row.TotalDiffRecord}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`rounded-full px-2 py-1 text-xs font-medium ${colorTags(
-                          darkMode,
-                          row.status
-                        )}`}
+                {loading
+                  ? Array.from({ length: 10 }).map((_, index) => (
+                      <tr
+                        key={index}
+                        className={`h-12 ${
+                          darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"
+                        }`}
                       >
-                        {row.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-100" : "text-gray-700"
+                          }`}
+                        >
+                          <Skeleton />
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <Skeleton />
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <Skeleton />
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <Skeleton />
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <Skeleton />
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <Skeleton />
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <Skeleton />
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <Skeleton />
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          <Skeleton />
+                        </td>
+                        <td className="px-4 py-3">
+                          <Skeleton />
+                        </td>
+                      </tr>
+                    ))
+                  : tableData.map((row, i) => (
+                      <tr
+                        key={i}
+                        className={`h-12 ${
+                          darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"
+                        }`}
+                      >
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-100" : "text-gray-700"
+                          }`}
+                        >
+                          {row.tableName}
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {row.lastRunEtl}
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {row.lastUpdateData}
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {row.CodeSource}
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {row.DbSource}
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {row.DbTarget}
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {row.RecordSource}
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {row.RecordDwh}
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {row.TotalDiffRecord}
+                        </td>
+                        <td className="px-4 py-3">
+                          <span
+                            className={`rounded-full px-2 py-1 text-xs font-medium ${colorTags(
+                              darkMode,
+                              row.status
+                            )}`}
+                          >
+                            {row.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
               </tbody>
             </table>
           </div>

@@ -1,8 +1,10 @@
 import SvgIcons from "./SvgIcons";
+import Skeleton from "../main/Skleton";
 
 type StatCardProps = {
   title: string;
   value: number | undefined;
+  loading: boolean;
   darkMode: boolean;
   description: string;
 };
@@ -10,6 +12,7 @@ type StatCardProps = {
 export default function StatCard({
   title,
   value,
+  loading,
   darkMode,
   description,
 }: StatCardProps) {
@@ -42,13 +45,17 @@ export default function StatCard({
 
       {/* Value */}
       <div className="mt-2">
-        <h2
-          className={`text-2xl font-semibold ${
-            darkMode ? "text-white" : "text-gray-900"
-          }`}
-        >
-          {value ?? 0}
-        </h2>
+        {loading ? (
+          <Skeleton />
+        ) : (
+          <h2
+            className={`text-2xl font-semibold ${
+              darkMode ? "text-white" : "text-gray-900"
+            }`}
+          >
+            {value}
+          </h2>
+        )}
       </div>
 
       {/* Footer */}

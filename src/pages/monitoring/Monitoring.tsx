@@ -27,6 +27,7 @@ export default function Monitoring() {
         <StatCard
           title="Total Table"
           value={totalData?.data.totalTable}
+          loading={loadingTotalData}
           darkMode={darkMode}
           description="Total table has replicated"
         />
@@ -34,6 +35,7 @@ export default function Monitoring() {
         <StatCard
           title="In Completed"
           value={totalData?.data.inCompleted}
+          loading={loadingTotalData}
           darkMode={darkMode}
           description="Total table in completed process etl"
         />
@@ -41,6 +43,7 @@ export default function Monitoring() {
         <StatCard
           title="Completed"
           value={totalData?.data.completed}
+          loading={loadingTotalData}
           darkMode={darkMode}
           description="Total table completed process"
         />
@@ -48,13 +51,19 @@ export default function Monitoring() {
         <StatCard
           title="To be Checked"
           value={totalData?.data.toBeChecked}
+          loading={loadingTotalData}
           darkMode={darkMode}
           description="Total table need to checked process"
         />
       </div>
 
       <div className="w-full px-6 md:px-20 md:pt-6 md:pb-6">
-        <SearchTableCard darkMode={darkMode} tableData={tableData?.data} />
+        <SearchTableCard
+          darkMode={darkMode}
+          tableData={tableData?.data}
+          loading={loadingTableData}
+          setQueryTableData={(value: string) => setQueryTableData({ table: value })}
+        />
       </div>
     </div>
   );
