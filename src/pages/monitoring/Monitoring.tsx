@@ -1,15 +1,22 @@
 import { useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
 import { useEffect } from "react";
-import { monitoringTableDataMock, monitoringTotalDataMock } from "../../services/mocks/Monitoring.mock";
 import StatCard from "../../components/monitoring/StatCard";
 import SearchTableCard from "../../components/monitoring/SearchTableBar";
+import {
+  useMonitoringData,
+  useMonitoringTable,
+} from "../../services/hooks/useMonitoring";
 
 export default function Monitoring() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
-  const { data: totalData } = monitoringTotalDataMock;
-  const { data: tableData } = monitoringTableDataMock;
-
+  const { data: totalData, loading: loadingTotalData } = useMonitoringData();
+  const {
+    data: tableData,
+    loading: loadingTableData,
+    setQuery: setQueryTableData,
+  } = useMonitoringTable();
+  console.info(totalData);
   useEffect(() => {
     setTitle("Monitoring");
   }, [setTitle]);
@@ -17,38 +24,37 @@ export default function Monitoring() {
   return (
     <div className="grid grid-cols-1 flex-1 items-stretch">
       <div className="grid grid-cols-1 px-6 md:px-20 md:grid-cols-4 gap-6 items-stretch">
-
-        <StatCard 
+        <StatCard
           title="Total Table"
-          value={totalData.totalTable}
+          value={totalData?.data.totalTable}
           darkMode={darkMode}
           description="Total table has replicated"
         />
 
-        <StatCard 
+        <StatCard
           title="In Completed"
-          value={totalData.inCompleted}
+          value={totalData?.data.inCompleted}
           darkMode={darkMode}
           description="Total table in completed process etl"
         />
 
-        <StatCard 
+        <StatCard
           title="Completed"
-          value={totalData.completed}
+          value={totalData?.data.completed}
           darkMode={darkMode}
           description="Total table completed process"
         />
 
-        <StatCard 
+        <StatCard
           title="To be Checked"
-          value={totalData.toBeChecked}
+          value={totalData?.data.toBeChecked}
           darkMode={darkMode}
           description="Total table need to checked process"
         />
       </div>
-      
+
       <div className="w-full px-6 md:px-20 md:pt-6 md:pb-6">
-        <SearchTableCard darkMode={darkMode} tableData={tableData} />
+        <SearchTableCard darkMode={darkMode} tableData={tableData?.data} />
       </div>
     </div>
   );

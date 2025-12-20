@@ -20,5 +20,9 @@ export interface MonitoringTable {
     status: string;
 }
 
+export interface MonitoringTableParams {
+  table?: string;
+}
+
 export type MonitoringTotalDataRes = ApiResponse<MonitoringTotalData>;
 export type MonitoringTotalTableRes = ApiResponse<MonitoringTable[]>;

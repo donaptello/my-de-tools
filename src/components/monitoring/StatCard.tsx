@@ -2,7 +2,7 @@ import SvgIcons from "./SvgIcons";
 
 type StatCardProps = {
   title: string;
-  value: number;
+  value: number | undefined;
   darkMode: boolean;
   description: string;
 };
@@ -47,7 +47,7 @@ export default function StatCard({
             darkMode ? "text-white" : "text-gray-900"
           }`}
         >
-          {value}
+          {value ?? 0}
         </h2>
       </div>
 
