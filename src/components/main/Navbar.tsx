@@ -58,6 +58,7 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
       <nav className="absolute left-1/2 top-1/2 hidden sm:flex transform -translate-x-1/2 -translate-y-1/2 gap-6 text-lg">
         <Link
           to="/"
+          hidden={true}
           className={`${darkMode ? "text-gray-200 after:bg-gray-400" : "text-gray-800 after:bg-gray-900"} relative inline-block cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
         >
           Home
