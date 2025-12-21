@@ -7,7 +7,6 @@ import { apiDeTools } from "./Http";
 
 export const monitoringService = {
   getTotalData(): Promise<MonitoringTotalDataRes> {
-    console.info(apiDeTools.get("/v1/monitoring/widget/total_card"));
     return apiDeTools
       .get("/v1/monitoring/widget/total_card")
       .then((res) => res.data);
