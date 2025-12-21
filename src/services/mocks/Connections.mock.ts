@@ -152,4 +152,6 @@ export const connectionDatas: ConnectionDataRes = {
       },
     },
   ],
+  messages: "",
+  timeExecution: 0,
 };

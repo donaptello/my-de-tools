@@ -1,12 +1,27 @@
-import { ConnectionData, GeneralConnection, S3Connection } from "../../services/types/Connections.types";
+import {
+  ConnectionData,
+  GeneralConnection,
+  S3Connection,
+} from "../../services/types/Connections.types";
+import ConnectionForm from "./ConnectionForm";
 
 interface Props {
   connection?: ConnectionData;
   darkMode: boolean;
+  isAdding?: boolean;
+  onCancel?: () => void;
+  onCreate?: (conn: ConnectionData) => void;
 }
 
-export default function ConnectionDetail({ connection, darkMode }: Props) {
-  if (!connection) {
+export default function ConnectionDetail({
+  connection,
+  darkMode,
+  isAdding,
+  onCancel,
+  onCreate,
+}: Props) {
+
+  if (!connection && !isAdding) {
     return (
       <div
         className={`
@@ -21,18 +36,40 @@ export default function ConnectionDetail({ connection, darkMode }: Props) {
     );
   }
 
+  if (isAdding && !connection) {
+    return (
+      <>
+        <ConnectionForm 
+          isAdding={isAdding}
+          darkMode={darkMode}
+          onCancel={onCancel}
+          onCreate={onCreate}
+        />
+      </>
+    )
+  }
   function resultText(conn: ConnectionData): string {
     const title = (conn.name ?? "").toUpperCase().replace(/\s+/g, "_");
 
     const common = conn.connection as { host?: string; port?: number };
-    const base: string[] = [`[${title}]`, `HOST=${common.host ?? ""}`, `PORT=${common.port ?? ""}`];
+    const base: string[] = [
+      `[${title}]`,
+      `HOST=${common.host ?? ""}`,
+      `PORT=${common.port ?? ""}`,
+    ];
 
     if (conn.type === "S3") {
       const s3 = conn.connection as S3Connection;
-      base.push(`ACCESS_KEY=${s3.accessKey ?? ""}`, `SECRET_KEY=${s3.secretKey ?? ""}`);
+      base.push(
+        `ACCESS_KEY=${s3.accessKey ?? ""}`,
+        `SECRET_KEY=${s3.secretKey ?? ""}`
+      );
     } else {
       const general = conn.connection as GeneralConnection;
-      base.push(`USERNAME=${general.username ?? ""}`, `PASSWORD=${general.password ?? ""}`);
+      base.push(
+        `USERNAME=${general.username ?? ""}`,
+        `PASSWORD=${general.password ?? ""}`
+      );
     }
 
     return base.join("\n");
@@ -52,17 +89,21 @@ export default function ConnectionDetail({ connection, darkMode }: Props) {
             text-xl font-semibold 
             ${darkMode ? "text-white" : "text-gray-800"}`}
           >
-            {connection.name}
+            {connection!.name}
           </h2>
-          <p className="text-sm text-gray-500">{connection.type}</p>
+          <p className="text-sm text-gray-500">{connection!.type}</p>
         </div>
 
         <textarea
           className={`w-full border rounded p-3 
-            ${darkMode ? "text-gray-300 bg-gray-700" : "text-gray-700 bg-gray-50"} 
+            ${
+              darkMode
+                ? "text-gray-300 bg-gray-700"
+                : "text-gray-700 bg-gray-50"
+            } 
             font-mono text-sm focus:ring focus:ring-blue-300 flex-1 min-h-0 
             resize-none overflow-auto`}
-          value={resultText(connection)}
+          value={resultText(connection!)}
           readOnly
         />
       </div>
