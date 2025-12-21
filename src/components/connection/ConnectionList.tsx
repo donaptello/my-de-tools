@@ -3,11 +3,13 @@ import { ConnectionData } from "../../services/types/Connections.types";
 import { Search, Plus } from "lucide-react";
 
 interface Props {
-  connections: ConnectionData[];
+  connections: ConnectionData[] | undefined;
   selectedId?: string;
   onSelect: (conn: ConnectionData) => void;
   onAdd?: () => void;
   darkMode: boolean;
+  loading: boolean;
+  setQuery?: (value: string) => void;
 }
 
 export default function ConnectionList({
@@ -16,8 +18,11 @@ export default function ConnectionList({
   onSelect,
   onAdd,
   darkMode,
+  loading,
+  setQuery,
 }: Props) {
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
+  const [search, setSearch] = useState("");
   const [maxHeightStyle, setMaxHeightStyle] = useState<
     React.CSSProperties | undefined
   >(undefined);
@@ -58,6 +63,12 @@ export default function ConnectionList({
 
             <input
               type="text"
+              value={search}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSearch(value);
+                setQuery?.(value);
+              }}
               placeholder="Search Connection ..."
               className={`flex-1 rounded-lg px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 ${
                 darkMode
@@ -91,7 +102,7 @@ export default function ConnectionList({
         role="list"
         aria-label="Connections"
       >
-        {connections.map((conn) => {
+        {connections?.map((conn) => {
           const initials = conn.name
             .split(" ")
             .map((s) => s[0])
