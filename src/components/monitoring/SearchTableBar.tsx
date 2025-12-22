@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 
 import { MonitoringTable } from "../../services/types/Monitoring.types";
 import Skeleton from "../main/Skleton";
@@ -36,6 +36,46 @@ export default function SearchTableCard({
     React.CSSProperties | undefined
   >(undefined);
   const [search, setSearch] = useState("");
+
+  const [sortBy, setSortBy] = useState<keyof MonitoringTable | null>(null);
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  function toggleSort(key: keyof MonitoringTable) {
+    if (sortBy === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+      console.debug("[SearchTableBar] toggled sort", { key, sortBy, sortDir });
+    } else {
+      setSortBy(key);
+      setSortDir("asc");
+      console.debug("[SearchTableBar] set sort", { key });
+    }
+  }
+
+  const displayedData = useMemo(() => {
+    if (!sortBy) return tableData;
+    const arr = [...tableData];
+    arr.sort((a, b) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const va = (a as any)[sortBy];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const vb = (b as any)[sortBy];
+
+      const na = Number(va);
+      const nb = Number(vb);
+
+      let cmp = 0;
+      if (!Number.isNaN(na) && !Number.isNaN(nb)) {
+        cmp = na - nb;
+      } else {
+        const sa = (va ?? "").toString();
+        const sb = (vb ?? "").toString();
+        cmp = sa.localeCompare(sb, undefined, { sensitivity: "base" });
+      }
+
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+    return arr;
+  }, [tableData, sortBy, sortDir]);
 
   useEffect(() => {
     function updateMaxHeight() {
@@ -102,26 +142,45 @@ export default function SearchTableCard({
                 } z-10 text-left `}
               >
                 <tr>
-                  <th className="px-4 py-3 font-medium w-[40%]">Table Name</th>
-                  <th className="px-4 py-3 font-medium w-[30%]">
-                    Last Run Count ETL
+                  <th aria-sort={sortBy === "tableName" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[40%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("tableName")}>Table Name {sortBy === "tableName" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
                   </th>
-                  <th className="px-4 py-3 font-medium w-[20%]">
-                    Last Update Data
+
+                  <th aria-sort={sortBy === "lastRunEtl" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[30%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("lastRunEtl")}>Last Run Count ETL {sortBy === "lastRunEtl" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
                   </th>
-                  <th className="px-4 py-3 font-medium w-[20%]">Code Source</th>
-                  <th className="px-4 py-3 font-medium w-[20%]">DB Source</th>
-                  <th className="px-4 py-3 font-medium w-[20%]">DB Target</th>
-                  <th className="px-4 py-3 font-medium w-[20%]">
-                    Record in Source
+
+                  <th aria-sort={sortBy === "lastUpdateData" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("lastUpdateData")}>Last Update Data {sortBy === "lastUpdateData" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
                   </th>
-                  <th className="px-4 py-3 font-medium w-[20%]">
-                    Record in DWH
+
+                  <th aria-sort={sortBy === "CodeSource" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("CodeSource")}>Code Source {sortBy === "CodeSource" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
                   </th>
-                  <th className="px-4 py-3 font-medium w-[20%]">
-                    Total Different
+
+                  <th aria-sort={sortBy === "DbSource" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("DbSource")}>DB Source {sortBy === "DbSource" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
                   </th>
-                  <th className="px-4 py-3 font-medium w-[20%]">Status</th>
+
+                  <th aria-sort={sortBy === "DbTarget" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("DbTarget")}>DB Target {sortBy === "DbTarget" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  </th>
+
+                  <th aria-sort={sortBy === "RecordSource" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("RecordSource")}>Record in Source {sortBy === "RecordSource" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  </th>
+
+                  <th aria-sort={sortBy === "RecordDwh" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("RecordDwh")}>Record in DWH {sortBy === "RecordDwh" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  </th>
+
+                  <th aria-sort={sortBy === "TotalDiffRecord" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("TotalDiffRecord")}>Total Different {sortBy === "TotalDiffRecord" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  </th>
+
+                  <th aria-sort={sortBy === "status" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
+                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("status")}>Status {sortBy === "status" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  </th>
                 </tr>
               </thead>
 
@@ -206,7 +265,7 @@ export default function SearchTableCard({
                         </td>
                       </tr>
                     ))
-                  : tableData.map((row, i) => (
+                  : displayedData.map((row, i) => (
                       <tr
                         key={i}
                         className={`h-12 ${
