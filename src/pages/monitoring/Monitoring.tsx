@@ -16,7 +16,6 @@ export default function Monitoring() {
     loading: loadingTableData,
     setQuery: setQueryTableData,
   } = useMonitoringTable();
-  console.info(totalData);
   useEffect(() => {
     setTitle("Monitoring");
   }, [setTitle]);
