@@ -21,10 +21,12 @@ export default function StatCard({
       ? "bg-green-100"
       : title === "In Completed"
       ? "bg-yellow-100"
-      : title === "Total Table"
+      : title === "Total Table" || title === "Total Source"
       ? "bg-blue-100"
-      : title === "To be Checked"
+      : title === "To be Checked" || title === "Total Different" || title === "Total Different Each Date"
       ? "bg-red-100"
+      : title === "Total Target"
+      ? "bg-green-200"
       : "bg-green-100";
 
   return (
