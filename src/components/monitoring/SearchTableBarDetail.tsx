@@ -264,13 +264,6 @@ export default function SearchTableDetailCard({
                             darkMode ? "text-gray-400" : "text-gray-500"
                           }`}
                         >
-                          {row.target}
-                        </td>
-                        <td
-                          className={`px-4 overflow-hidden truncate ${
-                            darkMode ? "text-gray-400" : "text-gray-500"
-                          }`}
-                        >
                           {row.totalInSource}
                         </td>
                         <td
@@ -279,6 +272,13 @@ export default function SearchTableDetailCard({
                           }`}
                         >
                           {row.totalInTarget}
+                        </td>
+                        <td
+                          className={`px-4 overflow-hidden truncate ${
+                            darkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {row.diff}
                         </td>
                         <td
                           className={`px-4 overflow-hidden truncate ${
