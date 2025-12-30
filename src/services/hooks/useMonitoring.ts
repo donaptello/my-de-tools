@@ -1,25 +1,35 @@
 import { useEffect, useState } from "react";
 import {
+  MonitoringTableDetailRes,
   MonitoringTableParams,
   MonitoringTotalDataRes,
   MonitoringTotalTableRes,
 } from "../types/Monitoring.types";
 import { monitoringService } from "../api/Monitoring.service";
 
-export function useMonitoringTable() {
+export function useMonitoringTable(tableName?: string) {
   const [query, setQuery] = useState<MonitoringTableParams>({});
   const [data, setData] = useState<MonitoringTotalTableRes | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    monitoringService
-      .getTableData(query)
-      .then((res) => {
-        setData(res);
-      })
-      .finally(() => setLoading(false));
-  }, [query]);
+    if (!tableName) {
+      monitoringService
+        .getTableData(query)
+        .then((res) => {
+          setData(res);
+        })
+        .finally(() => setLoading(false));
+    } else {
+      monitoringService
+        .getTableData({ table: tableName })
+        .then((res) => {
+          setData(res);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [query, tableName]);
 
   return {
     data,
@@ -28,20 +38,31 @@ export function useMonitoringTable() {
   };
 }
 
-export function useMonitoringFetchTable() {
-  const [data, setData] = useState<MonitoringTotalTableRes | null>(null);
+export function useMonitoringFetchTable(tableName: string | undefined) {
+  const [data, setData] = useState<MonitoringTableDetailRes | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchOne = async (query: MonitoringTableParams) => {
+  useEffect(() => {
+    if (!tableName) return;
+
+    let cancelled = false;
+
     setLoading(true);
-    try {
-      const res = await monitoringService.getTableData(query);
-      setData(res);
-    } finally {
-      setLoading(false);
-    }
-  };
-  return { data, loading, fetchOne };
+    monitoringService
+      .getTableDataDetail({ table: tableName })
+      .then((res) => {
+        if (!cancelled) setData(res);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [tableName]);
+
+  return { data, loading };
 }
 
 export function useMonitoringData() {

@@ -1,4 +1,5 @@
 import {
+  MonitoringTableDetailRes,
   MonitoringTableParams,
   MonitoringTotalDataRes,
   MonitoringTotalTableRes,
@@ -15,5 +16,16 @@ export const monitoringService = {
     params: MonitoringTableParams
   ): Promise<MonitoringTotalTableRes> {
     return apiDeTools.get("/v1/monitoring", { params }).then((res) => res.data);
+  },
+  getTableDataDetail(
+    params: MonitoringTableParams
+  ): Promise<MonitoringTableDetailRes> {
+    return apiDeTools
+      .get(`/v1/monitoring/detail/${params.table}`, {
+        params: {
+          limit: params.limit,
+        },
+      })
+      .then((res) => res.data);
   },
 };
