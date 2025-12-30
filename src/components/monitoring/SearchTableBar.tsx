@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 
 import { MonitoringTable } from "../../services/types/Monitoring.types";
 import Skeleton from "../main/Skleton";
+import { useNavigate } from "react-router-dom";
 
 type SearchTableCardProps = {
   darkMode: boolean;
@@ -31,6 +32,7 @@ export default function SearchTableCard({
   loading,
   setQueryTableData,
 }: SearchTableCardProps) {
+  const navigate = useNavigate();
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
   const [maxHeightStyle, setMaxHeightStyle] = useState<
     React.CSSProperties | undefined
@@ -142,44 +144,244 @@ export default function SearchTableCard({
                 } z-10 text-left `}
               >
                 <tr>
-                  <th aria-sort={sortBy === "tableName" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[40%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("tableName")}>Table Name {sortBy === "tableName" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "tableName"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[40%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("tableName")}
+                    >
+                      Table Name{" "}
+                      {sortBy === "tableName"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
 
-                  <th aria-sort={sortBy === "lastRunEtl" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[30%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("lastRunEtl")}>Last Run Count ETL {sortBy === "lastRunEtl" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "lastRunEtl"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[30%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("lastRunEtl")}
+                    >
+                      Last Run Count ETL{" "}
+                      {sortBy === "lastRunEtl"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
 
-                  <th aria-sort={sortBy === "lastUpdateData" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("lastUpdateData")}>Last Update Data {sortBy === "lastUpdateData" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "lastUpdateData"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[20%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("lastUpdateData")}
+                    >
+                      Last Update Data{" "}
+                      {sortBy === "lastUpdateData"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
 
-                  <th aria-sort={sortBy === "CodeSource" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("CodeSource")}>Code Source {sortBy === "CodeSource" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "CodeSource"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[20%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("CodeSource")}
+                    >
+                      Code Source{" "}
+                      {sortBy === "CodeSource"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
 
-                  <th aria-sort={sortBy === "DbSource" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("DbSource")}>DB Source {sortBy === "DbSource" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "DbSource"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[20%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("DbSource")}
+                    >
+                      DB Source{" "}
+                      {sortBy === "DbSource"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
 
-                  <th aria-sort={sortBy === "DbTarget" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("DbTarget")}>DB Target {sortBy === "DbTarget" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "DbTarget"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[20%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("DbTarget")}
+                    >
+                      DB Target{" "}
+                      {sortBy === "DbTarget"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
 
-                  <th aria-sort={sortBy === "RecordSource" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("RecordSource")}>Record in Source {sortBy === "RecordSource" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "RecordSource"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[20%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("RecordSource")}
+                    >
+                      Record in Source{" "}
+                      {sortBy === "RecordSource"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
 
-                  <th aria-sort={sortBy === "RecordDwh" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("RecordDwh")}>Record in DWH {sortBy === "RecordDwh" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "RecordDwh"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[20%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("RecordDwh")}
+                    >
+                      Record in DWH{" "}
+                      {sortBy === "RecordDwh"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
 
-                  <th aria-sort={sortBy === "TotalDiffRecord" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("TotalDiffRecord")}>Total Different {sortBy === "TotalDiffRecord" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "TotalDiffRecord"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[20%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("TotalDiffRecord")}
+                    >
+                      Total Different{" "}
+                      {sortBy === "TotalDiffRecord"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
 
-                  <th aria-sort={sortBy === "status" ? (sortDir === "asc" ? "ascending" : "descending") : "none"} className="px-4 py-3 font-medium w-[20%]">
-                    <button type="button" className="flex items-center gap-2" onClick={() => toggleSort("status")}>Status {sortBy === "status" ? (sortDir === "asc" ? "▲" : "▼") : ""}</button>
+                  <th
+                    aria-sort={
+                      sortBy === "status"
+                        ? sortDir === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
+                    className="px-4 py-3 font-medium w-[20%]"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-2"
+                      onClick={() => toggleSort("status")}
+                    >
+                      Status{" "}
+                      {sortBy === "status"
+                        ? sortDir === "asc"
+                          ? "▲"
+                          : "▼"
+                        : ""}
+                    </button>
                   </th>
                 </tr>
               </thead>
@@ -268,9 +470,10 @@ export default function SearchTableCard({
                   : displayedData.map((row, i) => (
                       <tr
                         key={i}
-                        className={`h-12 ${
-                          darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"
+                        className={`h-12 cursor-pointer ${
+                          darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
                         }`}
+                        onClick={() => navigate(`/monitoring/${row.tableName}`)}
                       >
                         <td
                           className={`px-4 overflow-hidden truncate ${
