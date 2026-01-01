@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  ConnectionData,
   ConnectionDataRes,
   ConnectionSearchParams,
 } from "../types/Connections.types";
@@ -25,4 +26,13 @@ export function useConnectionData() {
     loading,
     setQuery,
   };
+}
+
+export function useCreateConnection() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = async (payload: ConnectionData) => {
+    setLoading(true);
+  }
 }
