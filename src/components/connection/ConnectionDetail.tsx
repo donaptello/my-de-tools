@@ -68,7 +68,8 @@ export default function ConnectionDetail({
       const general = conn.configuration as GeneralConnection;
       base.push(
         `USERNAME=${general.username ?? ""}`,
-        `PASSWORD=${general.password ?? ""}`
+        `PASSWORD=${general.password ?? ""}`,
+        `DATABASE=${general.database ?? ""}`,
       );
     }
 

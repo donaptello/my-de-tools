@@ -31,6 +31,7 @@ export default function ConnectionForm({
     accessKey: string;
     secretKey: string;
     domain: string;
+    database: string;
   };
 
   type FormErrors = Partial<Record<keyof FormValues, string>>;
@@ -47,6 +48,7 @@ export default function ConnectionForm({
       accessKey: "",
       secretKey: "",
       domain: "",
+      database: "",
     }),
     []
   );
@@ -108,6 +110,7 @@ export default function ConnectionForm({
               port: Number(form.port) || undefined,
               username: form.username,
               password: form.password,
+              database: form.database,
             } as GeneralConnection),
     };
 
@@ -295,6 +298,22 @@ export default function ConnectionForm({
                 />
                 {errors.password && (
                   <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="text-sm font-medium">Database</label>
+                <input
+                  aria-invalid={!!errors.database}
+                  className={`mt-1 block w-full p-2 rounded border ${
+                    errors.database ? "border-red-400" : "border-gray-300"
+                  }`}
+                  placeholder="Database"
+                  value={form.database}
+                  onChange={(e) => update("database", e.target.value)}
+                />
+                {errors.database && (
+                  <p className="text-red-500 text-sm mt-1">{errors.database}</p>
                 )}
               </div>
             </>

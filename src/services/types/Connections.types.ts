@@ -13,6 +13,7 @@ export interface GeneralConnection {
   port: number;
   username: string;
   password: string;
+  database: string;
 }
 
 export interface S3Connection {
