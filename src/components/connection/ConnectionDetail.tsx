@@ -51,7 +51,7 @@ export default function ConnectionDetail({
   function resultText(conn: ConnectionData): string {
     const title = (conn.name ?? "").toUpperCase().replace(/\s+/g, "_");
 
-    const common = conn.connection as { host?: string; port?: number };
+    const common = conn.configuration as { host?: string; port?: number };
     const base: string[] = [
       `[${title}]`,
       `HOST=${common.host ?? ""}`,
@@ -59,13 +59,13 @@ export default function ConnectionDetail({
     ];
 
     if (conn.type === "S3") {
-      const s3 = conn.connection as S3Connection;
+      const s3 = conn.configuration as S3Connection;
       base.push(
         `ACCESS_KEY=${s3.accessKey ?? ""}`,
         `SECRET_KEY=${s3.secretKey ?? ""}`
       );
     } else {
-      const general = conn.connection as GeneralConnection;
+      const general = conn.configuration as GeneralConnection;
       base.push(
         `USERNAME=${general.username ?? ""}`,
         `PASSWORD=${general.password ?? ""}`

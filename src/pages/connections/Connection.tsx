@@ -4,17 +4,25 @@ import { useEffect, useState } from "react";
 import { ConnectionData } from "../../services/types/Connections.types";
 import ConnectionList from "../../components/connection/ConnectionList";
 import ConnectionDetail from "../../components/connection/ConnectionDetail";
-import { useConnectionData } from "../../services/hooks/useConnection";
+import {
+  useConnectionData,
+  useCreateConnection,
+} from "../../services/hooks/useConnection";
 
 export default function Connection() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
   const [selected, setSelected] = useState<ConnectionData | undefined>();
-  const { data: connections, loading, setQuery } = useConnectionData();
+  const {
+    data: connections,
+    loading: connectionLoading,
+    setQuery,
+    appendConnection,
+  } = useConnectionData();
+  const { submit } = useCreateConnection();
   const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     setTitle("Connections");
-
   }, [setTitle]);
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-h-0 flex-1 items-stretch">
@@ -30,8 +38,8 @@ export default function Connection() {
             setIsAdding(true);
             setSelected(undefined);
           }}
-          loading={loading}
-          setQuery={(value: string) => setQuery({name: value})}
+          loading={connectionLoading}
+          setQuery={(value: string) => setQuery({ name: value })}
           darkMode={darkMode}
         />
       </div>
@@ -42,10 +50,13 @@ export default function Connection() {
           darkMode={darkMode}
           isAdding={isAdding}
           onCancel={() => setIsAdding(false)}
-          onCreate={(conn) => {
-            // setConnections((s) => [conn, ...s]);
-            setSelected(conn);
-            setIsAdding(false);
+          onCreate={async (conn) => {
+            const res = await submit(conn);
+            if (res.statusCode === 201) {
+              appendConnection(conn);
+              setSelected(conn);
+              setIsAdding(false);
+            }
           }}
         />
       </div>

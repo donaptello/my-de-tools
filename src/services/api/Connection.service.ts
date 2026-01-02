@@ -1,4 +1,6 @@
 import {
+  ConnectionCreateDataRes,
+  ConnectionData,
   ConnectionDataRes,
   ConnectionSearchParams,
 } from "../types/Connections.types";
@@ -8,7 +10,9 @@ export const connectionService = {
   getConnection(params: ConnectionSearchParams): Promise<ConnectionDataRes> {
     return apiDeTools.get("v1/connection", { params }).then((res) => res.data);
   },
-  insertConnection(): void {
-    apiDeTools.post("v1/connection")
-  }
+  async insertConnection(
+    payload: ConnectionData
+  ): Promise<ConnectionCreateDataRes> {
+    return apiDeTools.post("v1/connection", payload).then((res) => res.data);
+  },
 };

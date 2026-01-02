@@ -4,3 +4,9 @@ export interface ApiResponse<T> {
     timeExecution: number;
     data: T;
 }
+
+export interface ApiResponseInserted {
+    statusCode: number;
+    messages: string;
+    timeExecution: number;
+}

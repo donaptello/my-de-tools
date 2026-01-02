@@ -94,7 +94,7 @@ export default function ConnectionForm({
       name: form.name,
       type: form.type,
       description: form.description,
-      connection:
+      configuration:
         form.type === "S3"
           ? ({
               accessKey: form.accessKey,
