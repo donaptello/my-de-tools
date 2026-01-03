@@ -1,3 +1,4 @@
+import { PencilIcon, Trash } from "lucide-react";
 import {
   ConnectionData,
   GeneralConnection,
@@ -39,14 +40,14 @@ export default function ConnectionDetail({
   if (isAdding && !connection) {
     return (
       <>
-        <ConnectionForm 
+        <ConnectionForm
           isAdding={isAdding}
           darkMode={darkMode}
           onCancel={onCancel}
           onCreate={onCreate}
         />
       </>
-    )
+    );
   }
   function resultText(conn: ConnectionData): string {
     const title = (conn.name ?? "").toUpperCase().replace(/\s+/g, "_");
@@ -69,7 +70,7 @@ export default function ConnectionDetail({
       base.push(
         `USERNAME=${general.username ?? ""}`,
         `PASSWORD=${general.password ?? ""}`,
-        `DATABASE=${general.database ?? ""}`,
+        `DATABASE=${general.database ?? ""}`
       );
     }
 
@@ -85,13 +86,39 @@ export default function ConnectionDetail({
     >
       <div className="flex flex-col h-full space-y-4">
         <div>
-          <h2
-            className={`
+          <div className="flex justify-between">
+            <h2
+              className={`
             text-xl font-semibold 
             ${darkMode ? "text-white" : "text-gray-800"}`}
-          >
-            {connection!.name}
-          </h2>
+            >
+              {connection!.name}
+            </h2>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                className={`mr-2 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
+                  darkMode
+                    ? "bg-yellow-600 text-white hover:bg-yellow-500 focus:ring-yellow-400"
+                    : "bg-yellow-50 text-yellow-700 hover:bg-yellow-100 focus:ring-yellow-200"
+                }`}
+              >
+                <PencilIcon className="h-4 w-4" />
+                Update
+              </button>
+              <button
+                type="button"
+                className={`inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
+                  darkMode
+                    ? "bg-red-600 text-white hover:bg-red-500 focus:ring-red-400"
+                    : "bg-red-50 text-red-700 hover:bg-red-100 focus:ring-red-200"
+                }`}
+              >
+                <Trash className="h-4 w-4" />
+                Delete
+              </button>
+            </div>
+          </div>
           <p className="text-sm text-gray-500">{connection!.type}</p>
         </div>
 

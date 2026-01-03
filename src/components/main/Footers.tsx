@@ -12,8 +12,8 @@ export default function Footers({darkMode}: Props) {
         <a 
           href="https://github.com/donaptello" 
           target="_blank" 
-          className={`font-semibold underline ${darkMode ? "text-white": "text-gray-900"}`}>
-          Nathan Parama
+          className={`font-semibold ${darkMode ? "text-white": "text-gray-900"}`}>
+          :)
         </a>. 
         All rights reserved.
       </div>

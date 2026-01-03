@@ -8,10 +8,12 @@ import {
   useConnectionData,
   useCreateConnection,
 } from "../../services/hooks/useConnection";
+import ModalValidationDelete from "../../components/modal/ModalValidationDelete";
 
 export default function Connection() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
   const [selected, setSelected] = useState<ConnectionData | undefined>();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
   const {
     data: connections,
     loading: connectionLoading,
