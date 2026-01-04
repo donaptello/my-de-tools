@@ -61,7 +61,6 @@ export default function ModalValidationDelete({
                   onClick={() => {
                     setShowDeleteConfirm(false);
                     onConfirm(connection);
-                    console.log("DELETE", connection?.id);
                   }}
                   className="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-500"
                 >

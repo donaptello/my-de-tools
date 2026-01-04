@@ -59,8 +59,6 @@ export default function Connection() {
             const res = await submit(conn);
             if (res.statusCode === 201) {
               appendConnection(res.data);
-              console.info(connections);
-              console.info(res.data);
               setSelected(res.data);
               setIsAdding(false);
             }
@@ -76,8 +74,6 @@ export default function Connection() {
           showDeleteConfirm={showDeleteConfirm}
           onConfirm={async (conn) => {
             if (conn !== undefined) {
-              console.info(connections)
-              console.info(conn);
               await deleteConnection(conn.id);
               await popConnection(conn);
               setSelected(undefined);
