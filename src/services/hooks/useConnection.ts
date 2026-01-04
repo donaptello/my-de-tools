@@ -87,6 +87,29 @@ export function useCreateConnection() {
   return { submit, loading, error };
 }
 
+export function useUpdateConnection() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const update = async (id: string, payload: ConnectionData) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await connectionService.updateConnection(id, payload);
+      return res;
+    } catch (err: unknown) {
+      if (isAxiosError(err)) {
+        setError(err?.response?.data?.message ?? "Something went wrong");
+      }
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+  return { update, loading, error };
+}
+
 export function useDeleteConnection() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

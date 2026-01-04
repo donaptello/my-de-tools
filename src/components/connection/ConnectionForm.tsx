@@ -6,26 +6,32 @@ import {
 } from "../../services/types/Connections.types";
 
 interface Props {
+  connection?: ConnectionData;
   isAdding?: boolean;
+  isUpdate?: boolean;
   darkMode: boolean;
   onCancel?: () => void;
   onCreate?: (conn: ConnectionData) => void;
+  onUpdate?: (id: string, conn: ConnectionData) => void;
 }
 
 export default function ConnectionForm({
+  connection,
   isAdding,
+  isUpdate,
   darkMode,
   onCancel,
   onCreate,
+  onUpdate,
 }: Props) {
   type ConnType = "S3" | "PostgreSQL" | "Oracle";
 
   type FormValues = {
     name: string;
     description: string;
-    type: ConnType;
+    type: ConnType | string;
     host: string;
-    port?: number | string;
+    port?: number | string | undefined;
     username: string;
     password: string;
     accessKey: string;
@@ -36,8 +42,50 @@ export default function ConnectionForm({
 
   type FormErrors = Partial<Record<keyof FormValues, string>>;
 
-  const initialForm = useMemo<FormValues>(
-    () => ({
+  const initialForm = useMemo<FormValues>(() => {
+    if (isUpdate && connection) {
+      return {
+        name: connection.name ?? "",
+        description: connection.description ?? "",
+        type: connection.type ?? "PostgreSQL",
+
+        host:
+          "host" in connection.configuration
+            ? connection.configuration.host ?? ""
+            : "",
+        port:
+          "port" in connection.configuration
+            ? connection.configuration.port
+            : undefined,
+        username:
+          "username" in connection.configuration
+            ? connection.configuration.username ?? ""
+            : "",
+        database:
+          "database" in connection.configuration
+            ? connection.configuration.database ?? ""
+            : "",
+
+        accessKey:
+          "accessKey" in connection.configuration
+            ? connection.configuration.accessKey ?? ""
+            : "",
+        secretKey:
+          "secretKey" in connection.configuration
+            ? connection.configuration.secretKey ?? ""
+            : "",
+        domain:
+          "domain" in connection.configuration
+            ? connection.configuration.domain ?? ""
+            : "",
+        password:
+          "password" in connection.configuration
+            ? connection.configuration.password ?? ""
+            : "",
+      };
+    }
+
+    return {
       name: "",
       description: "",
       type: "PostgreSQL",
@@ -49,9 +97,8 @@ export default function ConnectionForm({
       secretKey: "",
       domain: "",
       database: "",
-    }),
-    []
-  );
+    };
+  }, [isUpdate, connection]);
 
   const [form, setForm] = useState<FormValues>(initialForm);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -126,6 +173,46 @@ export default function ConnectionForm({
     setErrors({});
   }
 
+  function handleUpdate(e?: React.FormEvent) {
+    e?.preventDefault();
+    if (!validate()) return;
+    if (!connection?.id) return;
+
+    const conn: ConnectionData = {
+      id: connection?.id,
+      name: form.name,
+      type: form.type,
+      description: form.description,
+      configuration:
+        form.type === "S3"
+          ? ({
+              accessKey: form.accessKey,
+              secretKey: form.secretKey,
+              domain: form.domain,
+              host: form.host,
+              port: Number(form.port) || undefined,
+            } as S3Connection)
+          : ({
+              host: form.host,
+              port: Number(form.port) || undefined,
+              username: form.username,
+              password: form.password,
+              database: form.database,
+            } as GeneralConnection),
+    };
+
+    try {
+      onUpdate?.(conn.id, conn);
+    } catch (err) {
+      console.error("[ConnectionDetail] onCreate threw:", err);
+      // keep form intact so user can retry
+      return;
+    }
+
+    setForm(initialForm);
+    setErrors({});
+  }
+
   const disabled =
     !form.name.trim() ||
     !form.host.trim() ||
@@ -135,7 +222,7 @@ export default function ConnectionForm({
 
   return (
     <form
-      onSubmit={handleCreate}
+      onSubmit={isUpdate ? handleUpdate : handleCreate}
       className={`rounded-xl p-6 ${
         darkMode ? "bg-gray-800" : "bg-white"
       } shadow-sm border border-transparent h-full transition hover:shadow-2xl hover:-translate-y-1`}
@@ -147,9 +234,11 @@ export default function ConnectionForm({
               darkMode ? "text-white" : "text-gray-800"
             }`}
           >
-            Add Connection
+            {!isUpdate? "Add Connection" : `Update Connection`}
           </h2>
-          <p className="text-sm text-gray-500">Create a new connection</p>
+          <p className="text-sm text-gray-500">
+            {!isUpdate? "Create a new connection" : `Update a connection: ${connection?.name}`}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -202,7 +291,9 @@ export default function ConnectionForm({
               Type
             </label>
             <select
-              className={`mt-1 block w-full p-2 rounded border border-gray-300 ${darkMode ? "text-gray-100" : "text-gray-800"}`}
+              className={`mt-1 block w-full p-2 rounded border border-gray-300 ${
+                darkMode ? "text-gray-100" : "text-gray-800"
+              }`}
               value={form.type}
               onChange={(e) => update("type", e.target.value as ConnType)}
             >
@@ -402,28 +493,48 @@ export default function ConnectionForm({
                 focus:outline-none focus:ring-2 font-medium px-3 py-2 rounded-md text-sm ${
                   darkMode
                     ? "text-white bg-gray-600 border-gray-600 hover:bg-gray-500 focus:ring-gray-100 focus:border-gary-500"
-                    : "text-gray-700 bg-gray-200 border-gray-200 hover:bg-gray-300 focus:ring-gray-100 focus:border-gary-500"
+                    : "text-gray-700 bg-gray-50 border-gray-200 hover:bg-gray-100 focus:ring-gray-100 focus:border-gary-500"
                 }`}
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              disabled={disabled}
-              className={`items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
-                !darkMode && disabled
-                  ? "bg-gray-300 text-gray-600"
-                  : !darkMode && !disabled
-                  ? "bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-200"
-                  : darkMode && disabled
-                  ? "bg-gray-600 text-white"
-                  : darkMode && !disabled
-                  ? "bg-blue-600 text-white hover:bg-blue-500 focus:ring-blue-400"
-                  : "bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-200"
-              }`}
-            >
-              Create
-            </button>
+            {isUpdate ? (
+              <button
+                type="submit"
+                disabled={disabled}
+                className={`items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
+                  !darkMode && disabled
+                    ? "bg-gray-300 text-gray-600"
+                    : !darkMode && !disabled
+                    ? "bg-yellow-50 text-yellow-700 hover:bg-yellow-100 focus:ring-yellow-200"
+                    : darkMode && disabled
+                    ? "bg-gray-600 text-white"
+                    : darkMode && !disabled
+                    ? "bg-yellow-600 text-white hover:bg-yellow-500 focus:ring-yellow-400"
+                    : "bg-yellow-50 text-yellow-700 hover:bg-yellow-100 focus:ring-yellow-200"
+                }`}
+              >
+                Update
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={disabled}
+                className={`items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
+                  !darkMode && disabled
+                    ? "bg-gray-300 text-gray-600"
+                    : !darkMode && !disabled
+                    ? "bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-200"
+                    : darkMode && disabled
+                    ? "bg-gray-600 text-white"
+                    : darkMode && !disabled
+                    ? "bg-blue-600 text-white hover:bg-blue-500 focus:ring-blue-400"
+                    : "bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-200"
+                }`}
+              >
+                Create
+              </button>
+            )}
           </div>
         </div>
       </div>

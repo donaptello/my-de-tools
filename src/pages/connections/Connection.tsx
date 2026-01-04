@@ -8,6 +8,7 @@ import {
   useConnectionData,
   useCreateConnection,
   useDeleteConnection,
+  useUpdateConnection,
 } from "../../services/hooks/useConnection";
 import ModalValidationDelete from "../../components/modal/ModalValidationDelete";
 
@@ -25,6 +26,8 @@ export default function Connection() {
   } = useConnectionData();
   const { submit } = useCreateConnection();
   const [isAdding, setIsAdding] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const { update } = useUpdateConnection();
 
   useEffect(() => {
     setTitle("Connections");
@@ -37,10 +40,12 @@ export default function Connection() {
           selectedId={selected?.id}
           onSelect={(c) => {
             setSelected(c);
+            setIsUpdate(false);
             setIsAdding(false);
           }}
           onAdd={() => {
             setIsAdding(true);
+            setIsUpdate(false);
             setSelected(undefined);
           }}
           loading={connectionLoading}
@@ -54,7 +59,10 @@ export default function Connection() {
           connection={selected}
           darkMode={darkMode}
           isAdding={isAdding}
-          onCancel={() => setIsAdding(false)}
+          onCancel={() => {
+            setIsAdding(false);
+            setIsUpdate(false);
+          }}
           onCreate={async (conn) => {
             const res = await submit(conn);
             if (res.statusCode === 201) {
@@ -64,6 +72,19 @@ export default function Connection() {
             }
           }}
           setShowDeleteConfirm={(validate) => setShowDeleteConfirm(validate)}
+          setShowUpdate={() => setIsUpdate(true)}
+          isUpdate={isUpdate}
+          onUpdate={async (id, conn) => {
+            console.log(id, conn);
+            const res = await update(id, conn);
+            if (res.statusCode === 201) {
+              await popConnection(conn);
+              appendConnection(res.data);
+              setIsUpdate(false);
+              setIsAdding(false);
+              setSelected(res.data);
+            }
+          }}
         />
       </div>
       <div className="absolute">

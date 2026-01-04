@@ -10,18 +10,24 @@ interface Props {
   connection?: ConnectionData;
   darkMode: boolean;
   isAdding?: boolean;
+  isUpdate?: boolean;
   onCancel?: () => void;
   onCreate?: (conn: ConnectionData) => void;
+  onUpdate?: (id: string, conn: ConnectionData) => void;
   setShowDeleteConfirm: (value: boolean) => void;
+  setShowUpdate: () => void;
 }
 
 export default function ConnectionDetail({
   connection,
   darkMode,
   isAdding,
+  isUpdate,
   onCancel,
   onCreate,
+  onUpdate,
   setShowDeleteConfirm,
+  setShowUpdate,
 }: Props) {
   if (!connection && !isAdding) {
     return (
@@ -49,7 +55,21 @@ export default function ConnectionDetail({
         />
       </>
     );
+  } else if (isUpdate && connection) {
+    return (
+      <>
+        <ConnectionForm 
+          isUpdate={isUpdate}
+          darkMode={darkMode}
+          onCancel={onCancel}
+          onUpdate={onUpdate}
+          connection={connection}
+        />
+      </>
+    )
   }
+
+
   function resultText(conn: ConnectionData): string {
     const title = (conn.name ?? "").toUpperCase().replace(/\s+/g, "_");
 
@@ -98,6 +118,7 @@ export default function ConnectionDetail({
             <div className="flex justify-end">
               <button
                 type="button"
+                onClick={() => setShowUpdate()}
                 className={`mr-2 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
                   darkMode
                     ? "bg-yellow-600 text-white hover:bg-yellow-500 focus:ring-yellow-400"

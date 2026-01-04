@@ -7,13 +7,23 @@ import {
 import { apiDeTools } from "./Http";
 
 export const connectionService = {
-  async getConnection(params: ConnectionSearchParams): Promise<ConnectionDataRes> {
+  async getConnection(
+    params: ConnectionSearchParams
+  ): Promise<ConnectionDataRes> {
     return apiDeTools.get("v1/connection", { params }).then((res) => res.data);
   },
   async insertConnection(
     payload: ConnectionData
   ): Promise<ConnectionCreateDataRes> {
     return apiDeTools.post("v1/connection", payload).then((res) => res.data);
+  },
+  async updateConnection(
+    id: string,
+    payload: ConnectionData
+  ): Promise<ConnectionCreateDataRes> {
+    return apiDeTools
+      .put(`v1/connection/${id}`, payload)
+      .then((res) => res.data);
   },
   async deleteConnection(id: string): Promise<ConnectionCreateDataRes> {
     return apiDeTools.delete(`v1/connection/${id}`).then((res) => res.data);
