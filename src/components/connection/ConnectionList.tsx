@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ConnectionData } from "../../services/types/Connections.types";
 import { Search, Plus } from "lucide-react";
+import Skeleton from "../main/Skleton";
 
 interface Props {
   connections: ConnectionData[] | undefined;
@@ -102,7 +103,53 @@ export default function ConnectionList({
         role="list"
         aria-label="Connections"
       >
-        {connections?.map((conn) => {
+        {loading ? Array.from({length: 10}).map((_, index) => {
+          
+          return (
+            <div
+              key={index}
+              role="listitem"
+              tabIndex={0}
+              aria-selected={false}
+              onKeyDown={undefined}
+              onClick={undefined}
+              className={`flex items-center gap-4 p-3 rounded-lg transition-shadow duration-150 focus:outline-none focus:ring-2 border-b last:border-b-0 ${
+                darkMode ? "border-gray-100/60" : "border-gray-800/30"
+              }`}
+            >
+              <div
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md font-medium ${
+                  darkMode
+                    ? "bg-blue-400 text-gray-200"
+                    : "bg-blue-50 text-blue-600"
+                }`}
+              >
+                <Skeleton />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div
+                  className={`text-sm w-2xl font-semibold ${
+                    darkMode ? "text-gray-100" : "text-gray-800"
+                  }`}
+                >
+                  <Skeleton />
+                </div>
+                <div
+                  className={`mt-1 text-xs truncate ${
+                    darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
+                  <Skeleton />
+                </div>
+              </div>
+
+              <div className="ml-2 shrink-0 text-xs">
+                <Skeleton />
+              </div>
+            </div>
+          );
+        }) : connections?.map((conn) => {
           const initials = conn.name
             .split(" ")
             .map((s) => s[0])

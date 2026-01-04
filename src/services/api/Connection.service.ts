@@ -7,7 +7,7 @@ import {
 import { apiDeTools } from "./Http";
 
 export const connectionService = {
-  getConnection(params: ConnectionSearchParams): Promise<ConnectionDataRes> {
+  async getConnection(params: ConnectionSearchParams): Promise<ConnectionDataRes> {
     return apiDeTools.get("v1/connection", { params }).then((res) => res.data);
   },
   async insertConnection(
