@@ -7,6 +7,7 @@ import ConnectionDetail from "../../components/connection/ConnectionDetail";
 import {
   useConnectionData,
   useCreateConnection,
+  useDeleteConnection,
 } from "../../services/hooks/useConnection";
 import ModalValidationDelete from "../../components/modal/ModalValidationDelete";
 
@@ -14,11 +15,13 @@ export default function Connection() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
   const [selected, setSelected] = useState<ConnectionData | undefined>();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+  const { deleteConnection } = useDeleteConnection();
   const {
     data: connections,
     loading: connectionLoading,
     setQuery,
     appendConnection,
+    popConnection,
   } = useConnectionData();
   const { submit } = useCreateConnection();
   const [isAdding, setIsAdding] = useState(false);
@@ -56,8 +59,28 @@ export default function Connection() {
             const res = await submit(conn);
             if (res.statusCode === 201) {
               appendConnection(conn);
+              console.info(connections);
+              console.info(conn);
               setSelected(conn);
               setIsAdding(false);
+            }
+          }}
+          setShowDeleteConfirm={(validate) => setShowDeleteConfirm(validate)}
+        />
+      </div>
+      <div className="absolute">
+        <ModalValidationDelete
+          connection={selected}
+          darkMode={darkMode}
+          setShowDeleteConfirm={(validate) => setShowDeleteConfirm(validate)}
+          showDeleteConfirm={showDeleteConfirm}
+          onConfirm={async (conn) => {
+            if (conn !== undefined) {
+              console.info(connections)
+              console.info(conn);
+              await deleteConnection(conn.id);
+              await popConnection(conn);
+              setSelected(undefined);
             }
           }}
         />

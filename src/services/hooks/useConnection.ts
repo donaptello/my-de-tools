@@ -14,6 +14,22 @@ export function useConnectionData() {
   const appendConnection = (conn: ConnectionData) => {
     setData((prev) => (prev ? { ...prev, data: [conn, ...prev.data] } : prev));
   };
+  const popConnection = async (conn: ConnectionData) => {
+    setData((prev) => {
+      if (!prev) return prev;
+      const newData: ConnectionData[] = [];
+
+      for (let index = 0; index < prev.data.length; index++) {
+        if (prev.data[index].id !== conn.id) {
+          newData.push(prev.data[index]);
+        }
+      }
+      return {
+        ...prev,
+        data: newData,
+      };
+    });
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -29,7 +45,8 @@ export function useConnectionData() {
     data,
     loading,
     setQuery,
-    appendConnection
+    appendConnection,
+    popConnection,
   };
 }
 
@@ -54,4 +71,27 @@ export function useCreateConnection() {
     }
   };
   return { submit, loading, error };
+}
+
+export function useDeleteConnection() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const deleteConnection = async (id: string) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await connectionService.deleteConnection(id);
+      return res;
+    } catch (err: unknown) {
+      if (isAxiosError(err)) {
+        setError(err?.response?.data.message ?? "Something went wrong");
+      }
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+  return { deleteConnection, loading, error };
 }

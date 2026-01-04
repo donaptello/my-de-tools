@@ -1,4 +1,7 @@
-import { ApiResponse, ApiResponseInserted } from "../../services/types/ApiResponse.types";
+import {
+  ApiResponse,
+  ApiResponseInserted,
+} from "../../services/types/ApiResponse.types";
 
 export interface ConnectionData {
   id: string;

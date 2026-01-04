@@ -12,6 +12,7 @@ interface Props {
   isAdding?: boolean;
   onCancel?: () => void;
   onCreate?: (conn: ConnectionData) => void;
+  setShowDeleteConfirm: (value: boolean) => void;
 }
 
 export default function ConnectionDetail({
@@ -20,8 +21,8 @@ export default function ConnectionDetail({
   isAdding,
   onCancel,
   onCreate,
+  setShowDeleteConfirm,
 }: Props) {
-
   if (!connection && !isAdding) {
     return (
       <div
@@ -108,6 +109,7 @@ export default function ConnectionDetail({
               </button>
               <button
                 type="button"
+                onClick={() => setShowDeleteConfirm(true)}
                 className={`inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
                   darkMode
                     ? "bg-red-600 text-white hover:bg-red-500 focus:ring-red-400"

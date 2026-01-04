@@ -15,4 +15,7 @@ export const connectionService = {
   ): Promise<ConnectionCreateDataRes> {
     return apiDeTools.post("v1/connection", payload).then((res) => res.data);
   },
+  async deleteConnection(id: string): Promise<ConnectionCreateDataRes> {
+    return apiDeTools.delete(`v1/connection/${id}`).then((res) => res.data);
+  },
 };
