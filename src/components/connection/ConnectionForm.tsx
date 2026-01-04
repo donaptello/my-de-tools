@@ -154,12 +154,18 @@ export default function ConnectionForm({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
-            <label className="text-sm font-medium">Name</label>
+            <label
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-100" : "text-gray-800"
+              }`}
+            >
+              Name
+            </label>
             <input
               aria-invalid={!!errors.name}
               className={`mt-1 block w-full p-2 rounded border ${
                 errors.name ? "border-red-400" : "border-gray-300"
-              }`}
+              } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
               placeholder="Name"
               value={form.name}
               onChange={(e) => update("name", e.target.value)}
@@ -170,9 +176,17 @@ export default function ConnectionForm({
           </div>
 
           <div>
-            <label className="text-sm font-medium">Description</label>
+            <label
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-100" : "text-gray-800"
+              }`}
+            >
+              Description
+            </label>
             <input
-              className="mt-1 block w-full p-2 rounded border border-gray-300"
+              className={`mt-1 block w-full p-2 rounded border ${
+                errors.name ? "border-red-400" : "border-gray-300"
+              } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
               placeholder="Description"
               value={form.description}
               onChange={(e) => update("description", e.target.value)}
@@ -180,9 +194,15 @@ export default function ConnectionForm({
           </div>
 
           <div>
-            <label className="text-sm font-medium">Type</label>
+            <label
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-100" : "text-gray-800"
+              }`}
+            >
+              Type
+            </label>
             <select
-              className="mt-1 block w-full p-2 rounded border border-gray-300"
+              className={`mt-1 block w-full p-2 rounded border border-gray-300 ${darkMode ? "text-gray-100" : "text-gray-800"}`}
               value={form.type}
               onChange={(e) => update("type", e.target.value as ConnType)}
             >
@@ -193,12 +213,18 @@ export default function ConnectionForm({
           </div>
 
           <div>
-            <label className="text-sm font-medium">Host</label>
+            <label
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-100" : "text-gray-800"
+              }`}
+            >
+              Host
+            </label>
             <input
               aria-invalid={!!errors.host}
               className={`mt-1 block w-full p-2 rounded border ${
-                errors.host ? "border-red-400" : "border-gray-300"
-              }`}
+                errors.name ? "border-red-400" : "border-gray-300"
+              } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
               placeholder="Host"
               value={form.host}
               onChange={(e) => update("host", e.target.value)}
@@ -209,9 +235,17 @@ export default function ConnectionForm({
           </div>
 
           <div>
-            <label className="text-sm font-medium">Port</label>
+            <label
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-100" : "text-gray-800"
+              }`}
+            >
+              Port
+            </label>
             <input
-              className="mt-1 block w-full p-2 rounded border border-gray-300"
+              className={`mt-1 block w-full p-2 rounded border ${
+                errors.name ? "border-red-400" : "border-gray-300"
+              } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
               placeholder="Port"
               value={form.port ?? ""}
               onChange={(e) => update("port", e.target.value)}
@@ -221,12 +255,18 @@ export default function ConnectionForm({
           {form.type === "S3" ? (
             <>
               <div>
-                <label className="text-sm font-medium">Access Key</label>
+                <label
+                  className={`text-sm font-medium ${
+                    darkMode ? "text-gray-100" : "text-gray-800"
+                  }`}
+                >
+                  Access Key
+                </label>
                 <input
                   aria-invalid={!!errors.accessKey}
                   className={`mt-1 block w-full p-2 rounded border ${
-                    errors.accessKey ? "border-red-400" : "border-gray-300"
-                  }`}
+                    errors.name ? "border-red-400" : "border-gray-300"
+                  } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
                   placeholder="Access Key"
                   value={form.accessKey}
                   onChange={(e) => update("accessKey", e.target.value)}
@@ -239,12 +279,18 @@ export default function ConnectionForm({
               </div>
 
               <div>
-                <label className="text-sm font-medium">Secret Key</label>
+                <label
+                  className={`text-sm font-medium ${
+                    darkMode ? "text-gray-100" : "text-gray-800"
+                  }`}
+                >
+                  Secret Key
+                </label>
                 <input
                   aria-invalid={!!errors.secretKey}
                   className={`mt-1 block w-full p-2 rounded border ${
-                    errors.secretKey ? "border-red-400" : "border-gray-300"
-                  }`}
+                    errors.name ? "border-red-400" : "border-gray-300"
+                  } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
                   placeholder="Secret Key"
                   value={form.secretKey}
                   onChange={(e) => update("secretKey", e.target.value)}
@@ -256,10 +302,18 @@ export default function ConnectionForm({
                 )}
               </div>
 
-              <div className="md:col-span-2">
-                <label className="text-sm font-medium">Domain</label>
+              <div>
+                <label
+                  className={`text-sm font-medium ${
+                    darkMode ? "text-gray-100" : "text-gray-800"
+                  }`}
+                >
+                  Domain
+                </label>
                 <input
-                  className="mt-1 block w-full p-2 rounded border border-gray-300"
+                  className={`mt-1 block w-full p-2 rounded border ${
+                    errors.name ? "border-red-400" : "border-gray-300"
+                  } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
                   placeholder="Domain"
                   value={form.domain}
                   onChange={(e) => update("domain", e.target.value)}
@@ -269,12 +323,18 @@ export default function ConnectionForm({
           ) : (
             <>
               <div>
-                <label className="text-sm font-medium">Username</label>
+                <label
+                  className={`text-sm font-medium ${
+                    darkMode ? "text-gray-100" : "text-gray-800"
+                  }`}
+                >
+                  Username
+                </label>
                 <input
                   aria-invalid={!!errors.username}
                   className={`mt-1 block w-full p-2 rounded border ${
-                    errors.username ? "border-red-400" : "border-gray-300"
-                  }`}
+                    errors.name ? "border-red-400" : "border-gray-300"
+                  } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
                   placeholder="Username"
                   value={form.username}
                   onChange={(e) => update("username", e.target.value)}
@@ -285,13 +345,19 @@ export default function ConnectionForm({
               </div>
 
               <div>
-                <label className="text-sm font-medium">Password</label>
+                <label
+                  className={`text-sm font-medium ${
+                    darkMode ? "text-gray-100" : "text-gray-800"
+                  }`}
+                >
+                  Password
+                </label>
                 <input
                   aria-invalid={!!errors.password}
-                  type="password"
+                  type="text"
                   className={`mt-1 block w-full p-2 rounded border ${
-                    errors.password ? "border-red-400" : "border-gray-300"
-                  }`}
+                    errors.name ? "border-red-400" : "border-gray-300"
+                  } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
                   placeholder="Password"
                   value={form.password}
                   onChange={(e) => update("password", e.target.value)}
@@ -302,12 +368,18 @@ export default function ConnectionForm({
               </div>
 
               <div>
-                <label className="text-sm font-medium">Database</label>
+                <label
+                  className={`text-sm font-medium ${
+                    darkMode ? "text-gray-100" : "text-gray-800"
+                  }`}
+                >
+                  Database
+                </label>
                 <input
                   aria-invalid={!!errors.database}
                   className={`mt-1 block w-full p-2 rounded border ${
-                    errors.database ? "border-red-400" : "border-gray-300"
-                  }`}
+                    errors.name ? "border-red-400" : "border-gray-300"
+                  } ${darkMode ? "text-gray-100" : "text-gray-800"}`}
                   placeholder="Database"
                   value={form.database}
                   onChange={(e) => update("database", e.target.value)}
@@ -326,17 +398,28 @@ export default function ConnectionForm({
                 onCancel?.();
                 setForm(initialForm);
               }}
-              className="px-3 py-2 bg-gray-200 rounded"
+              className={`border transition 
+                focus:outline-none focus:ring-2 font-medium px-3 py-2 rounded-md text-sm ${
+                  darkMode
+                    ? "text-white bg-gray-600 border-gray-600 hover:bg-gray-500 focus:ring-gray-100 focus:border-gary-500"
+                    : "text-gray-700 bg-gray-200 border-gray-200 hover:bg-gray-300 focus:ring-gray-100 focus:border-gary-500"
+                }`}
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={disabled}
-              className={`px-3 py-2 rounded ${
-                disabled
+              className={`items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
+                !darkMode && disabled
                   ? "bg-gray-300 text-gray-600"
-                  : "bg-blue-600 text-white"
+                  : !darkMode && !disabled
+                  ? "bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-200"
+                  : darkMode && disabled
+                  ? "bg-gray-600 text-white"
+                  : darkMode && !disabled
+                  ? "bg-blue-600 text-white hover:bg-blue-500 focus:ring-blue-400"
+                  : "bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-200"
               }`}
             >
               Create
