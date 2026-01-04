@@ -1,6 +1,5 @@
 import {
   ApiResponse,
-  ApiResponseInserted,
 } from "../../services/types/ApiResponse.types";
 
 export interface ConnectionData {
@@ -32,4 +31,4 @@ export interface ConnectionSearchParams {
 }
 
 export type ConnectionDataRes = ApiResponse<ConnectionData[]>;
-export type ConnectionCreateDataRes = ApiResponseInserted;
+export type ConnectionCreateDataRes = ApiResponse<ConnectionData>;

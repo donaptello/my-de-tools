@@ -12,7 +12,21 @@ export function useConnectionData() {
   const [data, setData] = useState<ConnectionDataRes | null>(null);
   const [loading, setLoading] = useState(false);
   const appendConnection = (conn: ConnectionData) => {
-    setData((prev) => (prev ? { ...prev, data: [conn, ...prev.data] } : prev));
+    // setData((prev) => (prev ? { ...prev, data: [conn, ...prev.data] } : prev));
+    setData((prev) => {
+      if (!prev) return prev;
+      const newData: ConnectionData[] = [];
+
+      newData.push(conn);
+      for (let index = 0; index < prev.data.length; index++) {
+        newData.push(prev.data[index]);
+      }
+
+      return {
+        ...prev,
+        data: newData,
+      };
+    });
   };
   const popConnection = async (conn: ConnectionData) => {
     setData((prev) => {

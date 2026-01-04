@@ -58,10 +58,10 @@ export default function Connection() {
           onCreate={async (conn) => {
             const res = await submit(conn);
             if (res.statusCode === 201) {
-              appendConnection(conn);
+              appendConnection(res.data);
               console.info(connections);
-              console.info(conn);
-              setSelected(conn);
+              console.info(res.data);
+              setSelected(res.data);
               setIsAdding(false);
             }
           }}
