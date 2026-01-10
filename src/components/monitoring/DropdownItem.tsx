@@ -1,6 +1,8 @@
+import { Table2Icon, ToolCaseIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 type ItemProps = {
+  into: string;
   title: string;
   description: string;
   color: "blue" | "yellow" | "green" | "red";
@@ -8,6 +10,7 @@ type ItemProps = {
 };
 
 export default function DropdownItem({
+  into,
   title,
   description,
   color,
@@ -22,27 +25,34 @@ export default function DropdownItem({
 
   return (
     <div
-      className="
+      className={`
         flex items-center gap-3 rounded-xl px-3 py-2
         cursor-pointer transition
-        hover:bg-gray-100
-      "
+        ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"}`}
     >
       <div
         className={`flex h-10 w-10 items-center justify-center rounded-full ${colorMap[color]}`}
       >
-        ●
+        {into === "/monitoring" ? <Table2Icon /> : <ToolCaseIcon />}
       </div>
 
       <Link
-        to="/monitoring"
+        to={into}
         className={`${
           darkMode
             ? "text-gray-200 after:bg-gray-400"
             : "text-gray-800 after:bg-gray-900"
         } flex flex-col`}
       >
-        <span className="font-medium text-gray-900">{title}</span>
+        <span
+          className={`font-medium ${
+            darkMode
+              ? "text-gray-200 after:bg-gray-400"
+              : "text-gray-800 after:bg-gray-900"
+          }`}
+        >
+          {title}
+        </span>
         <span className="text-sm text-gray-500">{description}</span>
       </Link>
     </div>

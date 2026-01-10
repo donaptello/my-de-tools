@@ -124,13 +124,13 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
           {/* Trigger */}
           <div
             className={`
-      relative inline-flex items-center gap-1 cursor-pointer
-      font-medium
-      ${darkMode ? "text-blue-400" : "text-blue-600"}
-      after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full
-      after:origin-left after:scale-x-100
-      after:${darkMode ? "bg-blue-400" : "bg-blue-600"}
-    `}
+            relative inline-flex items-center gap-1 cursor-pointer
+            font-medium
+            ${darkMode ? "text-gray-200 after:bg-gray-400" : "text-gray-800 after:bg-gray-900"}
+            after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full
+            after:origin-left after:scale-x-0
+            after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100
+          `}
           >
             Monitoring
             <svg
@@ -151,26 +151,35 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
           {/* Dropdown */}
           <div
             className={`
-            absolute left-1/2 top-full z-50 mt-3 w-72
+            absolute left-1/2 top-full z-50 mt-1 w-72
             -translate-x-1/2
             opacity-0 translate-y-2
+            pointer-events-none
             transition-all duration-200 ease-out
-            group-hover:opacity-100 group-hover:translate-y-0
-            group-hover:pointer-events-auto`}
+            group-hover:opacity-100 
+            group-hover:translate-y-0
+            group-hover:pointer-events-auto
+          `}
           >
             <div
-              className={`rounded-2xl border shadow-xl p-3 space-y-1 ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"}`}
+              className={`rounded-2xl border shadow-xl p-3 space-y-1 ${
+                darkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-white border-gray-200"
+              }`}
             >
               {/* Item */}
               <DropdownItem
-                title="Total Table"
+                into="/monitoring"
+                title="Monitoring Table"
                 description="View all tables"
                 color="blue"
                 darkMode={darkMode}
               />
 
               <DropdownItem
-                title="In Completed"
+                into="#"
+                title="Monitoring Hop"
                 description="Pending items"
                 color="yellow"
                 darkMode={darkMode}
