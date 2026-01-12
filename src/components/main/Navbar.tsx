@@ -81,7 +81,6 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
       <nav className="absolute left-1/2 top-1/2 hidden sm:flex transform -translate-x-1/2 -translate-y-1/2 gap-6 text-lg">
         <Link
           to="/"
-          hidden={true}
           className={`${
             darkMode
               ? "text-gray-200 after:bg-gray-400"
