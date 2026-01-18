@@ -144,7 +144,7 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
           {/* Dropdown */}
           <div
             className={`
-            absolute left-1/2 top-full z-50 mt-1 w-72
+            absolute left-1/2 top-full z-50 mt-1 w-80
             -translate-x-1/2
             opacity-0 translate-y-2
             pointer-events-none
@@ -167,6 +167,16 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
                 title="Monitoring Table"
                 description="View all tables"
                 color="blue"
+                disabled={false}
+                darkMode={darkMode}
+              />
+
+              <DropdownItem
+                into="#"
+                title="Monitoring Table Detail"
+                description="Table Detail"
+                color="yellow"
+                disabled={true}
                 darkMode={darkMode}
               />
 
@@ -175,8 +185,72 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
                 title="Monitoring Hop"
                 description="Pending items"
                 color="yellow"
+                disabled={true}
                 darkMode={darkMode}
               />
+
+            </div>
+          </div>
+        </div>
+
+        <div className="relative group inline-block">
+          {/* Trigger */}
+          <div
+            className={`
+            relative inline-flex items-center gap-1 cursor-pointer
+            font-medium
+            ${darkMode ? "text-gray-200 after:bg-gray-400" : "text-gray-800 after:bg-gray-900"}
+            after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full
+            after:origin-left after:scale-x-0
+            after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100
+          `}
+          >
+            Configuration
+            <svg
+              className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+
+          {/* Dropdown */}
+          <div
+            className={`
+            absolute left-1/2 top-full z-50 mt-1 w-80
+            -translate-x-1/2
+            opacity-0 translate-y-2
+            pointer-events-none
+            transition-all duration-200 ease-out
+            group-hover:opacity-100 
+            group-hover:translate-y-0
+            group-hover:pointer-events-auto
+          `}
+          >
+            <div
+              className={`rounded-2xl border shadow-xl p-3 space-y-1 ${
+                darkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-white border-gray-200"
+              }`}
+            >
+              {/* Item */}
+              <DropdownItem
+                into="/monitoring-configuration"
+                title="Configuration Monitoring"
+                description="Configuration Monitoring Table"
+                color="blue"
+                disabled={false}
+                darkMode={darkMode}
+              />
+
             </div>
           </div>
         </div>

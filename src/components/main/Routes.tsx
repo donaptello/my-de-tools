@@ -6,6 +6,7 @@ import ToolsTables from "../../pages/tools-tables/ToolsTables";
 import Connection from "../../pages/connections/Connection";
 import Monitoring from "../../pages/monitoring/Monitoring";
 import MonitoringDetail from "../../pages/monitoring-detail/MonitoringDetail";
+import MonitoringConfiguration from "../../pages/monitoring-configuration/MonitoringConfig";
 
 
 export default function AnimatedRoutes() {
@@ -57,6 +58,19 @@ export default function AnimatedRoutes() {
               transition={{ duration: 0.3 }}
             >
               <Monitoring />
+            </motion.div>
+            } 
+          />
+
+          <Route path="/monitoring-configuration" element={
+            <motion.div
+              className="h-full min-h-0"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <MonitoringConfiguration/>
             </motion.div>
             } 
           />
