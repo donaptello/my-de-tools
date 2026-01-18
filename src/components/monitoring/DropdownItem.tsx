@@ -6,6 +6,7 @@ type ItemProps = {
   title: string;
   description: string;
   color: "blue" | "yellow" | "green" | "red";
+  disabled: boolean;
   darkMode: boolean;
 };
 
@@ -14,6 +15,7 @@ export default function DropdownItem({
   title,
   description,
   color,
+  disabled,
   darkMode,
 }: ItemProps) {
   const colorMap = {
@@ -26,8 +28,8 @@ export default function DropdownItem({
   return (
     <div
       className={`
-        flex items-center gap-3 rounded-xl px-3 py-2
-        cursor-pointer transition
+        flex items-center gap-3 rounded-xl px-3 py-2 transition
+        ${disabled ? "cursor-not-allowed opacity-50 pointer-events-none" : "cursor-pointer"}
         ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"}`}
     >
       <div
@@ -45,7 +47,7 @@ export default function DropdownItem({
         } flex flex-col`}
       >
         <span
-          className={`font-medium ${
+          className={`font-small ${
             darkMode
               ? "text-gray-200 after:bg-gray-400"
               : "text-gray-800 after:bg-gray-900"
