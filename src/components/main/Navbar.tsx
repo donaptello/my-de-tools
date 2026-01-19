@@ -118,7 +118,6 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
           <div
             className={`
             relative inline-flex items-center gap-1 cursor-pointer
-            font-medium
             ${darkMode ? "text-gray-200 after:bg-gray-400" : "text-gray-800 after:bg-gray-900"}
             after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full
             after:origin-left after:scale-x-0
@@ -198,7 +197,6 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
           <div
             className={`
             relative inline-flex items-center gap-1 cursor-pointer
-            font-medium
             ${darkMode ? "text-gray-200 after:bg-gray-400" : "text-gray-800 after:bg-gray-900"}
             after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full
             after:origin-left after:scale-x-0
