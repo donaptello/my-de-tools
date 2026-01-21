@@ -28,12 +28,17 @@ export default function MonitoringConfigurationList({
     React.CSSProperties | undefined
   >(undefined);
 
+  const [filters, setFilters] = useState({
+    layer: '',
+    flag: ''
+  });
+
   useEffect(() => {
     function updateMaxHeight() {
       const top = tableScrollRef.current?.getBoundingClientRect().top ?? 0;
       const viewportHeight = window.innerHeight;
       const reserved = 90;
-      const available = Math.max(200, viewportHeight - top - reserved);
+      const available = Math.max(250, viewportHeight - top - reserved);
       setMaxHeightStyle({ maxHeight: `${available}px` });
     }
 
@@ -41,6 +46,12 @@ export default function MonitoringConfigurationList({
     window.addEventListener("resize", updateMaxHeight);
     return () => window.removeEventListener("resize", updateMaxHeight);
   }, []);
+
+  const filteredMonitorings = monitorings?.filter(item => {
+    if (filters.layer && item.layer !== filters.layer) return false;
+    if (filters.flag && item.flag !== filters.flag) return false;
+    return true;
+  });
 
   return (
     <div
@@ -53,30 +64,59 @@ export default function MonitoringConfigurationList({
           darkMode ? "border-gray-700" : "border-gray-200"
         }`}
       >
-        <div className="flex items-center gap-3 justify-between">
-          <div className="flex items-center gap-3 flex-1">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
-              <Search className="h-5 w-5 text-blue-600" />
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
+                <Search className="h-5 w-5 text-blue-600" />
+              </div>
+
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSearch(value);
+                  setQuery?.(value);
+                }}
+                placeholder="Search Connection ..."
+                className={`flex-1 rounded-lg px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 ${
+                  darkMode
+                    ? "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-400 focus:ring-blue-900"
+                    : "text-gray-700 bg-white border border-gray-200 focus:border-blue-500 focus:ring-blue-100"
+                }`}
+              />
             </div>
 
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => {
-                const value = e.target.value;
-                setSearch(value);
-                setQuery?.(value);
-              }}
-              placeholder="Search Connection ..."
-              className={`flex-1 rounded-lg px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 ${
+            <select
+              value={filters.layer}
+              onChange={(e) => setFilters(prev => ({ ...prev, layer: e.target.value }))}
+              className={`rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 border ${
                 darkMode
-                  ? "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-400 focus:ring-blue-900"
-                  : "text-gray-700 bg-white border border-gray-200 focus:border-blue-500 focus:ring-blue-100"
+                  ? "text-gray-200 bg-gray-700 border-gray-600 focus:border-blue-400 focus:ring-blue-900"
+                  : "text-gray-700 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-100"
               }`}
-            />
-          </div>
+            >
+              <option value="">All Layers</option>
+              <option value="bronze">Bronze</option>
+              <option value="silver">Silver</option>
+              <option value="gold">Gold</option>
+            </select>
 
-          <div className="ml-3 hidden sm:flex">
+            <select
+              value={filters.flag}
+              onChange={(e) => setFilters(prev => ({ ...prev, flag: e.target.value }))}
+              className={`rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 border ${
+                darkMode
+                  ? "text-gray-200 bg-gray-700 border-gray-600 focus:border-blue-400 focus:ring-blue-900"
+                  : "text-gray-700 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-100"
+              }`}
+            >
+              <option value="">All Flags</option>
+              <option value="source">Source</option>
+              <option value="target">Target</option>
+            </select>
+
             <button
               type="button"
               onClick={() =>
@@ -94,6 +134,7 @@ export default function MonitoringConfigurationList({
               Add Table
             </button>
           </div>
+
         </div>
       </div>
 
@@ -151,7 +192,7 @@ export default function MonitoringConfigurationList({
                 </div>
               );
             })
-          : monitorings?.map((data) => {
+          : filteredMonitorings?.map((data) => {
               const initials = data.tableNameSource
                 .split(" ")
                 .map((s) => s[0])
@@ -220,20 +261,6 @@ export default function MonitoringConfigurationList({
                 </div>
               );
             })}
-      </div>
-
-      <div className="sm:hidden">
-        <button
-          aria-label="Add Table Monitoring"
-          onClick={() =>
-            typeof onAdd === "function"
-              ? onAdd()
-              : console.warn("onAdd not provided")
-          }
-          className="fixed bottom-6 right-4 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-        >
-          <Plus className="h-5 w-5" />
-        </button>
       </div>
     </div>
   );
