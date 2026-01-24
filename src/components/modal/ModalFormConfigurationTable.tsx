@@ -132,26 +132,32 @@ export default function ModalFormConfigurationTable({
     <AnimatePresence>
       {showFormInput && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 z-50 flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
         >
-          <motion.div
-            className={`w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-xl shadow-lg ${
-              darkMode ? "bg-gray-800" : "bg-white"
-            }`}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-          >
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black/50"
+              onClick={() => setShowFormInput(false)}
+            />
+
+            <motion.div
+              className={`relative z-10 w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-xl shadow-lg ${
+                darkMode ? "bg-gray-800" : "bg-white"
+              }`}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+            >
             <form
               onSubmit={isUpdate ? handleUpdate : handleCreate}
               className="flex flex-col h-full"
             >
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="p-6">
                 <h2
                   className={`text-xl font-semibold ${
                     darkMode ? "text-white" : "text-gray-800"
@@ -430,28 +436,10 @@ export default function ModalFormConfigurationTable({
                       <p className="text-red-500 text-sm mt-1">{errors.flag}</p>
                     )}
                   </div>
-
-                  <div className="flex items-center">
-                    <input
-                      id="withDetail"
-                      type="checkbox"
-                      className={`h-4 w-4 rounded border-gray-300 ${darkMode ? "text-blue-400 focus:ring-blue-400" : "text-blue-600 focus:ring-blue-500"} focus:ring-2`}
-                      checked={form.withDetail}
-                      onChange={(e) => update("withDetail", e.target.checked)}
-                    />
-                    <label
-                      htmlFor="withDetail"
-                      className={`ml-2 text-sm font-medium ${
-                        darkMode ? "text-gray-100" : "text-gray-800"
-                      }`}
-                    >
-                      With Detail
-                    </label>
-                  </div>
                 </div>
               </div>
 
-              <div className="flex gap-2 justify-end p-6 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex gap-2 justify-end p-6">
                 <button
                   type="button"
                   onClick={() => {
@@ -479,7 +467,8 @@ export default function ModalFormConfigurationTable({
                 </button>
               </div>
             </form>
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
