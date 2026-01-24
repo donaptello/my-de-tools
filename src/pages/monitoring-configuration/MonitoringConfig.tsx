@@ -9,6 +9,7 @@ import {
 import { useMonitoringConfigurationData } from "../../services/hooks/useMonitoringConfiguration";
 import MonitoringConfigurationList from "../../components/monitoring-configuration/MonitoringConfigurationList";
 import { MonitoringConfigurationData } from "../../services/types/MonitoringConfigurations.types";
+import ModalFormConfigurationTable from "../../components/modal/ModalFormConfigurationTable";
 
 export default function MonitoringConfiguration() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
@@ -16,6 +17,7 @@ export default function MonitoringConfiguration() {
     MonitoringConfigurationData | undefined
   >();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+  const [showFormInput, setShowFormInput] = useState<boolean>(false);
   const { deleteConnection } = useDeleteConnection();
   const {
     data: monitorings,
@@ -44,8 +46,7 @@ export default function MonitoringConfiguration() {
             setIsAdding(false);
           }}
           onAdd={() => {
-            setIsAdding(true);
-            setIsUpdate(false);
+            setShowFormInput(true);
             setSelected(undefined);
           }}
           loading={connectionLoading}
@@ -103,6 +104,18 @@ export default function MonitoringConfiguration() {
             }
           }}
         /> */}
+        <ModalFormConfigurationTable
+          darkMode={darkMode}
+          showFormInput={showFormInput}
+          setShowFormInput={(validate) => setShowFormInput(validate)}
+          onConfirm={async (conn) => {
+            if (conn !== undefined) {
+              // await deleteConnection(conn.id);
+              // await popConnection(conn);
+              setSelected(undefined);
+            }
+          }}
+        />
       </div>
     </div>
   );
