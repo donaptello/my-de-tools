@@ -10,7 +10,7 @@ interface Props {
   onAdd?: () => void;
   darkMode: boolean;
   loading: boolean;
-  setQuery?: (value: string) => void;
+  setQuery?: (value: string, layer: string, flag: string) => void;
 }
 
 export default function MonitoringConfigurationList({
@@ -29,8 +29,8 @@ export default function MonitoringConfigurationList({
   >(undefined);
 
   const [filters, setFilters] = useState({
-    layer: "",
-    flag: "",
+    layer: "all-layer",
+    flag: "source",
   });
 
   const getLayerColor = (layer: string) => {
@@ -66,12 +66,6 @@ export default function MonitoringConfigurationList({
     return () => window.removeEventListener("resize", updateMaxHeight);
   }, []);
 
-  const filteredMonitorings = monitorings?.filter((item) => {
-    if (filters.layer && item.layer !== filters.layer) return false;
-    if (filters.flag && item.flag !== filters.flag) return false;
-    return true;
-  });
-
   return (
     <div
       className={`rounded-xl p-3 ${
@@ -96,7 +90,7 @@ export default function MonitoringConfigurationList({
                 onChange={(e) => {
                   const value = e.target.value;
                   setSearch(value);
-                  setQuery?.(value);
+                  setQuery?.(value, filters.layer, filters.flag);
                 }}
                 placeholder="Search Connection ..."
                 className={`flex-1 rounded-lg px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 ${
@@ -109,9 +103,10 @@ export default function MonitoringConfigurationList({
 
             <select
               value={filters.layer}
-              onChange={(e) =>
-                setFilters((prev) => ({ ...prev, layer: e.target.value }))
-              }
+              onChange={(e) => {
+                setFilters((prev) => ({ ...prev, layer: e.target.value }));
+                setQuery?.(search, e.target.value, filters.flag);
+              }}
               className={`rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 border ${
                 darkMode
                   ? "text-gray-200 bg-gray-700 border-gray-600 focus:border-blue-400 focus:ring-blue-900"
@@ -126,18 +121,17 @@ export default function MonitoringConfigurationList({
 
             <select
               value={filters.flag}
-              onChange={(e) =>
-                setFilters((prev) => ({ ...prev, flag: e.target.value }))
-              }
+              onChange={(e) => {
+                setFilters((prev) => ({ ...prev, flag: e.target.value }));
+                setQuery?.(search, filters.layer, e.target.value);
+              }}
               className={`rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 border ${
                 darkMode
                   ? "text-gray-200 bg-gray-700 border-gray-600 focus:border-blue-400 focus:ring-blue-900"
                   : "text-gray-700 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-100"
               }`}
             >
-              <option selected value="source">
-                Source
-              </option>
+              <option value="source">Source</option>
               <option value="target">Target</option>
             </select>
 
@@ -215,7 +209,7 @@ export default function MonitoringConfigurationList({
                 </div>
               );
             })
-          : filteredMonitorings?.map((data) => {
+          : monitorings?.map((data) => {
               const initials = data.layer.charAt(0).toUpperCase();
 
               function handleKeyDown(e: React.KeyboardEvent) {
