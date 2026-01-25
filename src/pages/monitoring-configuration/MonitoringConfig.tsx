@@ -10,6 +10,7 @@ import { useMonitoringConfigurationData } from "../../services/hooks/useMonitori
 import MonitoringConfigurationList from "../../components/monitoring-configuration/MonitoringConfigurationList";
 import { MonitoringConfigurationData } from "../../services/types/MonitoringConfigurations.types";
 import ModalFormConfigurationTable from "../../components/modal/ModalFormConfigurationTable";
+import MonitoringConfigurationCard from "../../components/monitoring-configuration/MonitoringConfigurationCard";
 
 export default function MonitoringConfiguration() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
@@ -58,52 +59,11 @@ export default function MonitoringConfiguration() {
       </div>
 
       <div className="md:col-span-2 items-stretch">
-        {/* <ConnectionDetail
-          connection={selected}
+        <MonitoringConfigurationCard 
           darkMode={darkMode}
-          isAdding={isAdding}
-          onCancel={() => {
-            setIsAdding(false);
-            setIsUpdate(false);
-          }}
-          onCreate={async (conn) => {
-            const res = await submit(conn);
-            if (res.statusCode === 201) {
-              appendConnection(res.data);
-              setSelected(res.data);
-              setIsAdding(false);
-            }
-          }}
-          setShowDeleteConfirm={(validate) => setShowDeleteConfirm(validate)}
-          setShowUpdate={() => setIsUpdate(true)}
-          isUpdate={isUpdate}
-          onUpdate={async (id, conn) => {
-            console.log(id, conn);
-            const res = await update(id, conn);
-            if (res.statusCode === 201) {
-              await popConnection(conn);
-              appendConnection(res.data);
-              setIsUpdate(false);
-              setIsAdding(false);
-              setSelected(res.data);
-            }
-          }}
-        /> */}
+        />
       </div>
       <div className="absolute">
-        {/* <ModalValidationDelete
-          connection={selected}
-          darkMode={darkMode}
-          setShowDeleteConfirm={(validate) => setShowDeleteConfirm(validate)}
-          showDeleteConfirm={showDeleteConfirm}
-          onConfirm={async (conn) => {
-            if (conn !== undefined) {
-              await deleteConnection(conn.id);
-              await popConnection(conn);
-              setSelected(undefined);
-            }
-          }}
-        /> */}
         <ModalFormConfigurationTable
           darkMode={darkMode}
           showFormInput={showFormInput}
