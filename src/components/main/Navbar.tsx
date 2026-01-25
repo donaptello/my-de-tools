@@ -172,7 +172,7 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
 
               <DropdownItem
                 into="/monitoring-configuration"
-                title="Configuration Monitoring"
+                title="Rowcount Configuration"
                 description="Configuration Monitoring Table"
                 color="blue"
                 disabled={false}
