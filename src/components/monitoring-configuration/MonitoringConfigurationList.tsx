@@ -29,9 +29,28 @@ export default function MonitoringConfigurationList({
   >(undefined);
 
   const [filters, setFilters] = useState({
-    layer: '',
-    flag: ''
+    layer: "",
+    flag: "",
   });
+
+  const getLayerColor = (layer: string) => {
+    switch (`${layer}_${darkMode}`) {
+      case "bronze_true":
+        return "bg-amber-400 text-amber-50";
+      case "silver_true":
+        return "bg-slate-400 text-slate-50";
+      case "gold_true":
+        return "bg-yellow-400 text-yellow-50";
+      case "bronze_false":
+        return "bg-amber-300 text-amber-700";
+      case "silver_false":
+        return "bg-slate-300 text-slate-700";
+      case "gold_false":
+        return "bg-yellow-300 text-yellow-700";
+      default:
+        return "bg-blue-500 text-gray-200";
+    }
+  };
 
   useEffect(() => {
     function updateMaxHeight() {
@@ -47,7 +66,7 @@ export default function MonitoringConfigurationList({
     return () => window.removeEventListener("resize", updateMaxHeight);
   }, []);
 
-  const filteredMonitorings = monitorings?.filter(item => {
+  const filteredMonitorings = monitorings?.filter((item) => {
     if (filters.layer && item.layer !== filters.layer) return false;
     if (filters.flag && item.flag !== filters.flag) return false;
     return true;
@@ -90,14 +109,16 @@ export default function MonitoringConfigurationList({
 
             <select
               value={filters.layer}
-              onChange={(e) => setFilters(prev => ({ ...prev, layer: e.target.value }))}
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, layer: e.target.value }))
+              }
               className={`rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 border ${
                 darkMode
                   ? "text-gray-200 bg-gray-700 border-gray-600 focus:border-blue-400 focus:ring-blue-900"
                   : "text-gray-700 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-100"
               }`}
             >
-              <option value="">All Layers</option>
+              <option value="all-layer">All Layers</option>
               <option value="bronze">Bronze</option>
               <option value="silver">Silver</option>
               <option value="gold">Gold</option>
@@ -105,15 +126,18 @@ export default function MonitoringConfigurationList({
 
             <select
               value={filters.flag}
-              onChange={(e) => setFilters(prev => ({ ...prev, flag: e.target.value }))}
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, flag: e.target.value }))
+              }
               className={`rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 border ${
                 darkMode
                   ? "text-gray-200 bg-gray-700 border-gray-600 focus:border-blue-400 focus:ring-blue-900"
                   : "text-gray-700 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-100"
               }`}
             >
-              <option value="">All Flags</option>
-              <option value="source">Source</option>
+              <option selected value="source">
+                Source
+              </option>
               <option value="target">Target</option>
             </select>
 
@@ -134,7 +158,6 @@ export default function MonitoringConfigurationList({
               Add Table
             </button>
           </div>
-
         </div>
       </div>
 
@@ -193,12 +216,7 @@ export default function MonitoringConfigurationList({
               );
             })
           : filteredMonitorings?.map((data) => {
-              const initials = data.tableNameSource
-                .split(" ")
-                .map((s) => s[0])
-                .slice(0, 2)
-                .join("")
-                .toUpperCase();
+              const initials = data.layer.charAt(0).toUpperCase();
 
               function handleKeyDown(e: React.KeyboardEvent) {
                 if (e.key === "Enter" || e.key === " ") onSelect(data);
@@ -225,11 +243,7 @@ export default function MonitoringConfigurationList({
                   }`}
                 >
                   <div
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md font-medium ${
-                      darkMode
-                        ? "bg-blue-400 text-gray-200"
-                        : "bg-blue-50 text-blue-600"
-                    }`}
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md font-medium ${getLayerColor(data.layer)}`}
                   >
                     {initials}
                   </div>
@@ -247,7 +261,7 @@ export default function MonitoringConfigurationList({
                         darkMode ? "text-gray-400" : "text-gray-500"
                       }`}
                     >
-                      {`DB: ${data.dbSource}`}
+                      {`DB: ${data.dbTarget}`}
                     </div>
                   </div>
 
