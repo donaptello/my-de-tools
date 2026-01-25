@@ -51,17 +51,20 @@ export default function MonitoringConfiguration() {
             setSelected(undefined);
           }}
           loading={connectionLoading}
-          setQuery={(value: string) =>
-            setQuery({ name: value, withDetail: true })
+          setQuery={(value: string, layer: string, flag: string) =>
+            setQuery({
+              name: value,
+              layer: layer,
+              flag: flag,
+              withDetail: true,
+            })
           }
           darkMode={darkMode}
         />
       </div>
 
       <div className="md:col-span-2 items-stretch">
-        <MonitoringConfigurationCard 
-          darkMode={darkMode}
-        />
+        <MonitoringConfigurationCard darkMode={darkMode} />
       </div>
       <div className="absolute">
         <ModalFormConfigurationTable
