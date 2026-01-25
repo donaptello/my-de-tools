@@ -1,10 +1,15 @@
 import { PencilIcon, Trash, Database, ArrowRight } from "lucide-react";
+import { MonitoringConfigurationData } from "../../services/types/MonitoringConfigurations.types";
 
 interface MonitoringConfigurationCardProps {
+  monitoring: MonitoringConfigurationData | undefined;
+  setShowDeleteConfirm: (value: boolean) => void;
   darkMode: boolean;
 }
 
 export default function MonitoringConfigurationCard({
+  monitoring,
+  setShowDeleteConfirm,
   darkMode,
 }: MonitoringConfigurationCardProps) {
   const getLayerColor = (layer: string) => {
@@ -37,102 +42,21 @@ export default function MonitoringConfigurationCard({
       case "gold":
         return "Silver & Bronze Sources";
       default:
-        return "Sources";
+        return "Raw Sources";
     }
-  };
-
-  const selectedConfig = {
-    name: "Sample Configuration",
-    database: "postgres_db",
-    layer: "bronze",
-    sources: ["bronze_raw_data", "bronze_events"],
-    schema: "public",
-    targetTable: "target_table",
-    dateColumn: "created_at",
-    dataSource: "s3://bucket/path",
-    withDetail: true,
   };
 
   return (
     <div
-      className={`w-full bg-card rounded-xl border border-border overflow-hidden flex flex-col ${
+      className={`h-full bg-card rounded-xl border border-border overflow-hidden flex flex-col shadow-sm p-5 transition hover:shadow-2xl hover:-translate-y-1 ${
         darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
       }`}
     >
-      {/* Header */}
-      <div
-        className={`p-4 border-b ${
-          darkMode ? "border-gray-700" : "border-gray-200"
-        }`}
-      >
-        <div className="flex items-center gap-3 mb-3">
-          <div
-            className={`w-10 h-10 rounded-lg ${getLayerColor(selectedConfig.layer)} flex items-center justify-center font-bold`}
-          >
-            {getLayerLetter(selectedConfig.layer)}
-          </div>
-          <div className="flex-1">
-            <h3
-              className={`font-semibold text-sm ${
-                darkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              {selectedConfig.name}
-            </h3>
-            <p
-              className={`text-xs ${
-                darkMode ? "text-gray-400" : "text-gray-500"
-              }`}
-            >
-              DB: {selectedConfig.database}
-            </p>
-          </div>
-          <div className="flex gap-1">
-            <button
-              type="button"
-              className={`p-2 rounded-md transition-colors ${
-                darkMode
-                  ? "text-yellow-400 hover:bg-yellow-500/10"
-                  : "text-yellow-600 hover:bg-yellow-50"
-              }`}
-              title="Update"
-            >
-              <PencilIcon className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              className={`p-2 rounded-md transition-colors ${
-                darkMode
-                  ? "text-red-400 hover:bg-red-500/10"
-                  : "text-red-600 hover:bg-red-50"
-              }`}
-              title="Delete"
-            >
-              <Trash className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <span
-            className={`px-2 py-1 rounded-md text-xs font-medium capitalize ${
-              selectedConfig.layer === "bronze"
-                ? "bg-amber-100 text-amber-700"
-                : selectedConfig.layer === "silver"
-                  ? "bg-slate-100 text-slate-700"
-                  : "bg-yellow-100 text-yellow-700"
-            }`}
-          >
-            {selectedConfig.layer} Layer
-          </span>
-        </div>
-      </div>
-
-      {/* Configuration Details */}
-      <div className="flex-1 overflow-y-auto p-4">
-        {selectedConfig.layer === "bronze" ? (
-          <div className="flex flex-col items-center justify-center h-full text-center">
+      {!monitoring ? (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
             <Database
-              className={`w-12 h-12 mb-3 ${
+              className={`w-12 h-12 mx-auto mb-3 ${
                 darkMode ? "text-gray-500" : "text-gray-400"
               }`}
             />
@@ -141,87 +65,86 @@ export default function MonitoringConfigurationCard({
                 darkMode ? "text-gray-400" : "text-gray-500"
               }`}
             >
-              Bronze layer is the source layer
+              Select a monitoring configuration
             </p>
             <p
               className={`text-xs mt-1 ${
                 darkMode ? "text-gray-500" : "text-gray-400"
               }`}
             >
-              Raw data ingestion point
+              Choose a configuration to view details
             </p>
           </div>
-        ) : (
-          <>
-            <div className="flex items-center gap-2 mb-4">
-              <ArrowRight
-                className={`w-4 h-4 ${
-                  darkMode ? "text-blue-400" : "text-blue-600"
-                }`}
-              />
-              <h4
-                className={`text-sm font-medium ${
-                  darkMode ? "text-white" : "text-gray-900"
+        </div>
+      ) : (
+        <>
+          {/* Header */}
+          <div
+            className={`p-4 border-b ${
+              darkMode ? "border-gray-700" : "border-gray-200"
+            }`}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div
+                className={`w-10 h-10 rounded-lg ${getLayerColor(monitoring.layer)} flex items-center justify-center font-bold`}
+              >
+                {getLayerLetter(monitoring.layer)}
+              </div>
+              <div className="flex-1">
+                <h3
+                  className={`font-semibold text-sm ${
+                    darkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  {monitoring.tableNameSource}
+                </h3>
+                <p
+                  className={`text-xs ${
+                    darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
+                  DB: {monitoring.dbSource}
+                </p>
+              </div>
+              <div className="flex gap-1">
+                <button
+                  type="button"
+                  className={`p-2 rounded-md transition-colors ${
+                    darkMode
+                      ? "text-yellow-400 hover:bg-yellow-500/10"
+                      : "text-yellow-600 hover:bg-yellow-50"
+                  }`}
+                  title="Update"
+                >
+                  <PencilIcon className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className={`p-2 rounded-md transition-colors ${
+                    darkMode
+                      ? "text-red-400 hover:bg-red-500/10"
+                      : "text-red-600 hover:bg-red-50"
+                  }`}
+                  title="Delete"
+                >
+                  <Trash className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span
+                className={`px-2 py-1 rounded-md text-xs font-medium capitalize ${
+                  monitoring.layer === "bronze"
+                    ? "bg-amber-100 text-amber-700"
+                    : monitoring.layer === "silver"
+                      ? "bg-slate-100 text-slate-700"
+                      : "bg-yellow-100 text-yellow-700"
                 }`}
               >
-                {getSourceLabel(selectedConfig.layer)}
-              </h4>
+                {monitoring.layer} Layer
+              </span>
             </div>
-            <div className="space-y-2">
-              {selectedConfig.sources.map((source, index) => {
-                const isSilver =
-                  source.startsWith("silver") ||
-                  source.startsWith("stg_silver");
-                const isBronze =
-                  source.startsWith("bronze") ||
-                  source.startsWith("stg_bronze");
-
-                return (
-                  <div
-                    key={index}
-                    className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
-                      darkMode
-                        ? "bg-gray-700/50 hover:bg-gray-700"
-                        : "bg-gray-50 hover:bg-gray-100"
-                    }`}
-                  >
-                    <div
-                      className={`w-6 h-6 rounded-md flex items-center justify-center text-white text-xs font-bold ${
-                        isSilver
-                          ? "bg-slate-500"
-                          : isBronze
-                            ? "bg-amber-500"
-                            : "bg-blue-500"
-                      }`}
-                    >
-                      {isSilver ? "S" : isBronze ? "B" : "T"}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p
-                        className={`text-sm truncate ${
-                          darkMode ? "text-gray-300" : "text-gray-900"
-                        }`}
-                      >
-                        {source}
-                      </p>
-                      <p
-                        className={`text-xs capitalize ${
-                          darkMode ? "text-gray-500" : "text-gray-500"
-                        }`}
-                      >
-                        {isSilver
-                          ? "Silver Layer"
-                          : isBronze
-                            ? "Bronze Layer"
-                            : "Table"}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Configuration Details */}
             <div className="mt-6 space-y-3">
               <div
                 className={`p-3 rounded-lg border border-dashed ${
@@ -245,19 +168,19 @@ export default function MonitoringConfigurationCard({
                     <span
                       className={darkMode ? "text-gray-300" : "text-gray-900"}
                     >
-                      {selectedConfig.schema}
+                      {monitoring.schemas}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span
                       className={darkMode ? "text-gray-400" : "text-gray-500"}
                     >
-                      Target Table:
+                      Location Database:
                     </span>
                     <span
                       className={darkMode ? "text-gray-300" : "text-gray-900"}
                     >
-                      {selectedConfig.targetTable}
+                      {monitoring.dbTarget}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -269,55 +192,134 @@ export default function MonitoringConfigurationCard({
                     <span
                       className={darkMode ? "text-gray-300" : "text-gray-900"}
                     >
-                      {selectedConfig.dateColumn}
+                      {monitoring.columnDateName}
                     </span>
                   </div>
-                  <div className="flex justify-between">
+                   <div className="flex justify-between">
                     <span
                       className={darkMode ? "text-gray-400" : "text-gray-500"}
                     >
-                      Data Source:
+                      Insert time:
                     </span>
                     <span
-                      className={`truncate max-w-32 ${darkMode ? "text-gray-300" : "text-gray-900"}`}
+                      className={darkMode ? "text-gray-300" : "text-gray-900"}
                     >
-                      {selectedConfig.dataSource}
+                      {monitoring.insertTime}
                     </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* With Detail Toggle */}
-              <div
-                className={`p-3 rounded-lg border border-dashed ${
-                  darkMode ? "border-gray-600" : "border-gray-300"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`text-xs font-medium ${
-                      darkMode ? "text-gray-300" : "text-gray-700"
-                    }`}
-                  >
-                    With Detail
-                  </span>
-                  <div className="flex items-center">
-                    <input
-                      id="withDetail"
-                      type="checkbox"
-                      className={`h-4 w-4 rounded border-gray-300 ${
-                        darkMode ? "text-blue-400" : "text-blue-600"
-                      }`}
-                      checked={selectedConfig.withDetail}
-                      readOnly
-                    />
                   </div>
                 </div>
               </div>
             </div>
-          </>
-        )}
-      </div>
+          </div>
+
+          {/* Configuration Details */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {monitoring.layer === "bronze" ? (
+              <>
+                <div className="flex items-center gap-2 mb-4">
+                  <ArrowRight
+                    className={`w-4 h-4 ${
+                      darkMode ? "text-blue-400" : "text-blue-600"
+                    }`}
+                  />
+                  <h4
+                    className={`text-sm font-medium ${
+                      darkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
+                    {getSourceLabel(monitoring.layer)}
+                  </h4>
+                </div>
+                <div className="space-y-2">
+                  {monitoring?.details.map((detail) => {
+                    return (
+                      <div
+                        key={detail.id}
+                        className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                          darkMode
+                            ? "bg-gray-700/50 hover:bg-gray-700"
+                            : "bg-gray-50 hover:bg-gray-100"
+                        }`}
+                      >
+                        <div className={`w-6 h-6 rounded-md ${monitoring?.layer === "bronze" ? "bg-orange-700" : "bg-amber-500"} flex items-center justify-center text-white text-xs font-bold`}>
+                          {monitoring?.layer === "bronze" ? "R" : "B"}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p
+                            className={`text-sm truncate ${
+                              darkMode ? "text-gray-300" : "text-gray-900"
+                            }`}
+                          >
+                            {detail.schemas}.{detail.tableNameSource}
+                          </p>
+                          <p
+                            className={`text-xs capitalize ${
+                              darkMode ? "text-gray-500" : "text-gray-500"
+                            }`}
+                          >
+                            DB: {detail.dbSource}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-2 mb-4">
+                  <ArrowRight
+                    className={`w-4 h-4 ${
+                      darkMode ? "text-blue-400" : "text-blue-600"
+                    }`}
+                  />
+                  <h4
+                    className={`text-sm font-medium ${
+                      darkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
+                    {getSourceLabel(monitoring.layer)}
+                  </h4>
+                </div>
+                <div className="space-y-2">
+                  {monitoring?.details.map((detail) => {
+                    return (
+                      <div
+                        key={detail.id}
+                        className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                          darkMode
+                            ? "bg-gray-700/50 hover:bg-gray-700"
+                            : "bg-gray-50 hover:bg-gray-100"
+                        }`}
+                      >
+                        <div className="w-6 h-6 rounded-md bg-amber-500 flex items-center justify-center text-white text-xs font-bold">
+                          B
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p
+                            className={`text-sm truncate ${
+                              darkMode ? "text-gray-300" : "text-gray-900"
+                            }`}
+                          >
+                            {detail.schemas}.{detail.tableNameSource}
+                          </p>
+                          <p
+                            className={`text-xs capitalize ${
+                              darkMode ? "text-gray-500" : "text-gray-500"
+                            }`}
+                          >
+                            DB: {detail.dbSource}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

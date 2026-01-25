@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
-  MonitoringConfigurationData,
+  MonitoringConfiguration,
   MonitoringConfigurationParams,
   MonitoringDataRes,
 } from "../types/MonitoringConfigurations.types";
 import { monitoringConfigurationService } from "../api/MonitoringConfiguration.service";
+import { isAxiosError } from "axios";
 
 export function useMonitoringConfigurationData() {
   const [query, setQuery] = useState<MonitoringConfigurationParams>({
@@ -12,54 +13,72 @@ export function useMonitoringConfigurationData() {
   });
   const [data, setData] = useState<MonitoringDataRes | null>(null);
   const [loading, setLoading] = useState(false);
-  const appendMonitoring = (conn: MonitoringConfigurationData) => {
-    setData((prev) => {
-      if (!prev) return prev;
-      const newData: MonitoringConfigurationData[] = [];
 
-      newData.push(conn);
-      for (let index = 0; index < prev.data.length; index++) {
-        newData.push(prev.data[index]);
-      }
-
-      return {
-        ...prev,
-        data: newData,
-      };
-    });
-  };
-  const popConnection = async (monitor: MonitoringConfigurationData) => {
-    setData((prev) => {
-      if (!prev) return prev;
-      const newData: MonitoringConfigurationData[] = [];
-
-      for (let index = 0; index < prev.data.length; index++) {
-        if (prev.data[index].tableNameSource !== monitor.tableNameSource) {
-          newData.push(prev.data[index]);
-        }
-      }
-      return {
-        ...prev,
-        data: newData,
-      };
-    });
-  };
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await monitoringConfigurationService.getDataMonitoring(query);
+      setData(res);
+    } finally {
+      setLoading(false);
+    }
+  }, [query]);
 
   useEffect(() => {
-    setLoading(true);
-    monitoringConfigurationService
-      .getDataMonitoring(query)
-      .then((res) => {
-        setData(res);
-      })
-      .finally(() => setLoading(false));
-  }, [query]);
+    fetchData();
+  }, [fetchData]);
 
   return {
     data,
     loading,
     setQuery,
-    appendMonitoring,
-    popConnection,
+    refetch: fetchData,
   };
+}
+
+export function useCreateMonitoringConfiguration() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = async (payload: MonitoringConfiguration) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res =
+        await monitoringConfigurationService.insertDataMonitoring(payload);
+      return res;
+    } catch (err: unknown) {
+      if (isAxiosError(err)) {
+        setError(err?.response?.data?.message ?? "Something went wrong");
+      }
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+  return { submit, loading, error };
+}
+
+export function useDeleteMonitoringConfiguration() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const deleteMonitoringConfiguration = async (id: number | undefined) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await monitoringConfigurationService.deleteDataMonitoring(id);
+      return res;
+    } catch (err: unknown) {
+      if (isAxiosError(err)) {
+        setError(err?.response?.data.message ?? "Something went wrong");
+      }
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+  return { deleteMonitoringConfiguration, loading, error };
 }

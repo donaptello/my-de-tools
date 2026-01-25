@@ -33,9 +33,9 @@ export default function DropdownItem({
         ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-50"}`}
     >
       <div
-        className={`flex h-10 w-10 items-center justify-center rounded-full ${colorMap[color]}`}
+        className={`flex h-8 w-8 items-center justify-center rounded-full ${colorMap[color]}`}
       >
-        {into === "/monitoring" ? <Table2Icon /> : <ToolCaseIcon />}
+        {into === "/monitoring" ? <Table2Icon className="h-4 w-4" /> : <ToolCaseIcon className="h-4 w-4" />}
       </div>
 
       <Link
@@ -47,7 +47,7 @@ export default function DropdownItem({
         } flex flex-col`}
       >
         <span
-          className={`font-small ${
+          className={`text-sm ${
             darkMode
               ? "text-gray-200 after:bg-gray-400"
               : "text-gray-800 after:bg-gray-900"
@@ -55,7 +55,7 @@ export default function DropdownItem({
         >
           {title}
         </span>
-        <span className="text-sm text-gray-500">{description}</span>
+        <span className="text-xs text-gray-500">{description}</span>
       </Link>
     </div>
   );

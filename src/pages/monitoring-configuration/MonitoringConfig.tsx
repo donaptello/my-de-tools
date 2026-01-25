@@ -2,15 +2,15 @@ import { useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
 import { useEffect, useState } from "react";
 import {
-  useCreateConnection,
-  useDeleteConnection,
-  useUpdateConnection,
-} from "../../services/hooks/useConnection";
-import { useMonitoringConfigurationData } from "../../services/hooks/useMonitoringConfiguration";
+  useCreateMonitoringConfiguration,
+  useDeleteMonitoringConfiguration,
+  useMonitoringConfigurationData,
+} from "../../services/hooks/useMonitoringConfiguration";
 import MonitoringConfigurationList from "../../components/monitoring-configuration/MonitoringConfigurationList";
 import { MonitoringConfigurationData } from "../../services/types/MonitoringConfigurations.types";
 import ModalFormConfigurationTable from "../../components/modal/ModalFormConfigurationTable";
 import MonitoringConfigurationCard from "../../components/monitoring-configuration/MonitoringConfigurationCard";
+import ModalValidationDelete from "../../components/modal/ModalValidationDelete";
 
 export default function MonitoringConfiguration() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
@@ -19,18 +19,15 @@ export default function MonitoringConfiguration() {
   >();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
   const [showFormInput, setShowFormInput] = useState<boolean>(false);
-  const { deleteConnection } = useDeleteConnection();
+  const { deleteMonitoringConfiguration } = useDeleteMonitoringConfiguration();
   const {
     data: monitorings,
     loading: connectionLoading,
     setQuery,
-    appendMonitoring,
-    popConnection,
+    refetch,
   } = useMonitoringConfigurationData();
-  const { submit } = useCreateConnection();
-  const [isAdding, setIsAdding] = useState(false);
+  const { submit } = useCreateMonitoringConfiguration();
   const [isUpdate, setIsUpdate] = useState(false);
-  const { update } = useUpdateConnection();
 
   useEffect(() => {
     setTitle("RowCount Configuration");
@@ -44,37 +41,56 @@ export default function MonitoringConfiguration() {
           onSelect={(c) => {
             setSelected(c);
             setIsUpdate(false);
-            setIsAdding(false);
           }}
           onAdd={() => {
             setShowFormInput(true);
-            setSelected(undefined);
           }}
           loading={connectionLoading}
-          setQuery={(value: string, layer: string, flag: string) =>
+          setQuery={(value: string, layer: string, flag: string) => {
             setQuery({
               name: value,
               layer: layer,
               flag: flag,
               withDetail: true,
-            })
-          }
+            });
+            setSelected(undefined);
+          }}
           darkMode={darkMode}
         />
       </div>
 
       <div className="md:col-span-2 items-stretch">
-        <MonitoringConfigurationCard darkMode={darkMode} />
+        <MonitoringConfigurationCard
+          monitoring={selected}
+          setShowDeleteConfirm={(value) => setShowDeleteConfirm(value)}
+          darkMode={darkMode}
+        />
       </div>
       <div className="absolute">
         <ModalFormConfigurationTable
           darkMode={darkMode}
           showFormInput={showFormInput}
           setShowFormInput={(validate) => setShowFormInput(validate)}
-          onConfirm={async (conn) => {
-            if (conn !== undefined) {
-              // await deleteConnection(conn.id);
-              // await popConnection(conn);
+          onCreate={async (monn) => {
+            if (monn !== undefined) {
+              const res = await submit(monn);
+              if (res.statusCode === 201) {
+                await refetch();
+                setSelected(undefined);
+              }
+            }
+          }}
+          isUpdate={isUpdate}
+        />
+        <ModalValidationDelete
+          darkMode={darkMode}
+          showDeleteConfirm={showDeleteConfirm}
+          setShowDeleteConfirm={(value) => setShowDeleteConfirm(value)}
+          monitoring={selected}
+          onConfirmMonitoring={async (monn) => {
+            if (monn !== undefined && monn.id !== undefined) {
+              await deleteMonitoringConfiguration(monn.id);
+              await refetch();
               setSelected(undefined);
             }
           }}

@@ -78,29 +78,30 @@ export default function MonitoringConfigurationList({
         }`}
       >
         <div className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
-                <Search className="h-5 w-5 text-blue-600" />
-              </div>
-
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setSearch(value);
-                  setQuery?.(value, filters.layer, filters.flag);
-                }}
-                placeholder="Search Connection ..."
-                className={`flex-1 rounded-lg px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 ${
-                  darkMode
-                    ? "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-400 focus:ring-blue-900"
-                    : "text-gray-700 bg-white border border-gray-200 focus:border-blue-500 focus:ring-blue-100"
-                }`}
-              />
+          {/* Search Input - Full Width */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
+              <Search className="h-5 w-5 text-blue-600" />
             </div>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSearch(value);
+                setQuery?.(value, filters.layer, filters.flag);
+              }}
+              placeholder="Search monitoring configuration..."
+              className={`flex-1 rounded-lg px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 ${
+                darkMode
+                  ? "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-400 focus:ring-blue-900"
+                  : "text-gray-700 bg-white border border-gray-200 focus:border-blue-500 focus:ring-blue-100"
+              }`}
+            />
+          </div>
 
+          {/* Filters and Add Button Row */}
+          <div className="flex flex-wrap items-center gap-3">
             <select
               value={filters.layer}
               onChange={(e) => {
