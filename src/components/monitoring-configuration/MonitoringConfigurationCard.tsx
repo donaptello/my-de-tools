@@ -195,7 +195,7 @@ export default function MonitoringConfigurationCard({
                       {monitoring.columnDateName}
                     </span>
                   </div>
-                   <div className="flex justify-between">
+                  <div className="flex justify-between">
                     <span
                       className={darkMode ? "text-gray-400" : "text-gray-500"}
                     >
@@ -205,6 +205,18 @@ export default function MonitoringConfigurationCard({
                       className={darkMode ? "text-gray-300" : "text-gray-900"}
                     >
                       {monitoring.insertTime}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span
+                      className={darkMode ? "text-gray-400" : "text-gray-500"}
+                    >
+                      Data source label:
+                    </span>
+                    <span
+                      className={darkMode ? "text-gray-300" : "text-gray-900"}
+                    >
+                      {monitoring.dataSource}
                     </span>
                   </div>
                 </div>
@@ -241,7 +253,9 @@ export default function MonitoringConfigurationCard({
                             : "bg-gray-50 hover:bg-gray-100"
                         }`}
                       >
-                        <div className={`w-6 h-6 rounded-md ${monitoring?.layer === "bronze" ? "bg-orange-700" : "bg-amber-500"} flex items-center justify-center text-white text-xs font-bold`}>
+                        <div
+                          className={`w-6 h-6 rounded-md ${monitoring?.layer === "bronze" ? "bg-orange-700" : "bg-amber-500"} flex items-center justify-center text-white text-xs font-bold`}
+                        >
                           {monitoring?.layer === "bronze" ? "R" : "B"}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -259,6 +273,15 @@ export default function MonitoringConfigurationCard({
                           >
                             DB: {detail.dbSource}
                           </p>
+                          {detail.dataSource && (
+                            <p
+                              className={`text-xs capitalize ${
+                                darkMode ? "text-gray-500" : "text-gray-500"
+                              }`}
+                            >
+                              Data source label: {detail.dataSource}
+                            </p>
+                          )}
                         </div>
                       </div>
                     );
@@ -310,6 +333,15 @@ export default function MonitoringConfigurationCard({
                           >
                             DB: {detail.dbSource}
                           </p>
+                          {detail.dataSource && (
+                            <p
+                              className={`text-xs capitalize ${
+                                darkMode ? "text-gray-500" : "text-gray-500"
+                              }`}
+                            >
+                              Data source label: {detail.dataSource}
+                            </p>
+                          )}
                         </div>
                       </div>
                     );
