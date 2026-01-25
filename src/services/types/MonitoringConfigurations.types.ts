@@ -8,7 +8,7 @@ export interface MonitoringConfigurationParams {
 }
 
 export interface MonitoringConfigurationData {
-  id: number;
+  id?: number;
   tableNameSource: string;
   schemas: string;
   dbSource: string;
@@ -20,6 +20,7 @@ export interface MonitoringConfigurationData {
   layer: string;
   flag: string;
   insertTime: string;
+  withDetail?: boolean;
 }
 
 export type MonitoringDataRes = ApiResponse<MonitoringConfigurationData[]>;
