@@ -256,7 +256,7 @@ export default function MonitoringConfigurationList({
                         darkMode ? "text-gray-400" : "text-gray-500"
                       }`}
                     >
-                      {`DB: ${data.dbTarget}`}
+                      {`DB: ${filters.flag === 'target' ? data.dbTarget : data.dbSource}`}
                     </div>
                   </div>
 
