@@ -10,7 +10,9 @@ interface Props {
   darkMode: boolean;
   showFormInput: boolean;
   setShowFormInput: (value: boolean) => void;
+  setShowFormUpdate: (value: boolean) => void;
   onCreate: (conn: MonitoringConfiguration | undefined) => void;
+  onUpdate: (conn: MonitoringConfiguration | undefined) => void;
   isUpdate: boolean;
 }
 
@@ -19,7 +21,9 @@ export default function ModalFormConfigurationTable({
   darkMode,
   showFormInput,
   setShowFormInput,
+  setShowFormUpdate,
   onCreate,
+  onUpdate,
   isUpdate,
 }: Props) {
   type FormValues = {
@@ -56,7 +60,7 @@ export default function ModalFormConfigurationTable({
   const [errors, setErrors] = useState<FormErrors>();
 
   useEffect(() => {
-    if (monitoringData && showFormInput) {
+    if ((monitoringData && showFormInput) || (monitoringData && isUpdate)) {
       setForm({
         tableNameSource: monitoringData.tableNameSource || "",
         schemas: monitoringData.schemas || "",
@@ -72,7 +76,7 @@ export default function ModalFormConfigurationTable({
     } else {
       setForm(initialForm);
     }
-  }, [monitoringData, showFormInput, initialForm]);
+  }, [monitoringData, showFormInput, initialForm, isUpdate]);
 
   const update = (key: keyof FormValues, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -113,6 +117,7 @@ export default function ModalFormConfigurationTable({
     onCreate(monitoringPayload);
     setForm(initialForm);
     setShowFormInput(false);
+    setShowFormUpdate(false);
   };
 
   const handleUpdate = (e: React.FormEvent) => {
@@ -123,14 +128,15 @@ export default function ModalFormConfigurationTable({
       ...monitoringData,
       ...form,
     };
-    onCreate(updatedData);
+    onUpdate(updatedData);
     setForm(initialForm);
     setShowFormInput(false);
+    setShowFormUpdate(false);
   };
 
   return (
     <AnimatePresence>
-      {showFormInput && (
+      {(showFormInput || isUpdate) && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center"
           initial={{ opacity: 0 }}
@@ -453,6 +459,7 @@ export default function ModalFormConfigurationTable({
                     onClick={() => {
                       setForm(initialForm);
                       setShowFormInput(false);
+                      setShowFormUpdate(false);
                     }}
                     className={`border transition 
                 focus:outline-none focus:ring-2 font-medium px-3 py-2 rounded-md text-sm ${

@@ -5,12 +5,14 @@ interface MonitoringConfigurationCardProps {
   monitoring: MonitoringConfigurationData | undefined;
   setShowDeleteConfirm: (value: boolean) => void;
   darkMode: boolean;
+  setShowButtonUpdate: (value: boolean) => void;
 }
 
 export default function MonitoringConfigurationCard({
   monitoring,
   setShowDeleteConfirm,
   darkMode,
+  setShowButtonUpdate,
 }: MonitoringConfigurationCardProps) {
   const getLayerColor = (layer: string) => {
     switch (`${layer}_${darkMode}`) {
@@ -108,6 +110,7 @@ export default function MonitoringConfigurationCard({
               </div>
               <div className="flex gap-1">
                 <button
+                  onClick={() => setShowButtonUpdate(true)}
                   type="button"
                   className={`p-2 rounded-md transition-colors ${
                     darkMode

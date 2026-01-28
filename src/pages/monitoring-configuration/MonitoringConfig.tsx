@@ -64,13 +64,18 @@ export default function MonitoringConfiguration() {
           monitoring={selected}
           setShowDeleteConfirm={(value) => setShowDeleteConfirm(value)}
           darkMode={darkMode}
+          setShowButtonUpdate={(value) => {
+            setIsUpdate(value);
+          }}
         />
       </div>
       <div className="absolute">
         <ModalFormConfigurationTable
+          monitoringData={selected}
           darkMode={darkMode}
           showFormInput={showFormInput}
           setShowFormInput={(validate) => setShowFormInput(validate)}
+          setShowFormUpdate={(validate) => setIsUpdate(validate)}
           onCreate={async (monn) => {
             if (monn !== undefined) {
               const res = await submit(monn);
@@ -79,6 +84,9 @@ export default function MonitoringConfiguration() {
                 setSelected(undefined);
               }
             }
+          }}
+          onUpdate={async (monn) => {
+            console.info(monn);
           }}
           isUpdate={isUpdate}
         />
