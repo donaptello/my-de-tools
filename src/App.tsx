@@ -16,15 +16,13 @@ export default function App() {
       features: ["Tambah koneksi baru", "Monitor status real-time", "Konfigurasi jaringan"],
     },
     {
-      title: "Monitoring",
-      description: "Pantau performa sistem secara real-time. Lihat statistik server, analisis traffic, dan dapatkan notifikasi jika ada masalah pada sistem Anda.",
+      title: "Monitoring Row Count",
+      description: "Memantau total row table dari source dan target dengan statistik untuk mengetahui perbedaannya.",
       icon: Activity,
       href: "/monitoring",
-      features: ["Real-time status", "Server health", "Analytics dashboard"],
+      features: ["Row Different", "Row dashboard"],
       subMenus: [
         { name: "Real-time Status", icon: Activity, href: "/monitoring/realtime" },
-        { name: "Server Health", icon: Server, href: "/monitoring/health" },
-        { name: "Analytics", icon: BarChart3, href: "/monitoring/analytics" },
       ],
     },
   ];
@@ -39,8 +37,7 @@ export default function App() {
           Welcome back!
         </h1>
         <p className="text-lg text-muted-foreground">
-          Kelola koneksi dan pantau sistem Anda dari satu tempat. Pilih menu di
-          bawah untuk memulai.
+          Kelola table dan memantau total data table dari berbagai source target dengan level Medallion.
         </p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
