@@ -8,7 +8,7 @@ export interface MonitoringConfigurationParams {
 }
 
 export interface MonitoringConfigDeleteParams {
-    id?: number
+  id?: number;
 }
 
 export interface MonitoringConfiguration {
@@ -47,6 +47,12 @@ export interface MonitoringDelete {
   deleted: number;
 }
 
+export interface MonitoringUpdate {
+  data: MonitoringConfiguration;
+  row_updated: number;
+}
+
 export type MonitoringDataRes = ApiResponse<MonitoringConfigurationData[]>;
 export type MonitoringDataResInsert = ApiResponse<MonitoringConfiguration>;
 export type MonitoringDataResDelete = ApiResponse<MonitoringDelete>;
+export type MonitoringDataResUpdate = ApiResponse<MonitoringUpdate>;
