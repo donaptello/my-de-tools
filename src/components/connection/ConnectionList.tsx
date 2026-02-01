@@ -27,7 +27,6 @@ export default function ConnectionList({
   const [maxHeightStyle, setMaxHeightStyle] = useState<
     React.CSSProperties | undefined
   >(undefined);
-  
 
   useEffect(() => {
     function updateMaxHeight() {
@@ -43,8 +42,6 @@ export default function ConnectionList({
     return () => window.removeEventListener("resize", updateMaxHeight);
   }, []);
 
-  
-
   return (
     <div
       className={`rounded-xl p-3 ${
@@ -52,7 +49,7 @@ export default function ConnectionList({
       }  border border-transparent h-full rounded-xl shadow-sm p-5 transition hover:shadow-2xl hover:-translate-y-1`}
     >
       <div
-        className={`border-b p-4 ${
+        className={`flex flex-col gap-4 border-b p-4 ${
           darkMode ? "border-gray-700" : "border-gray-200"
         }`}
       >
@@ -78,21 +75,25 @@ export default function ConnectionList({
               }`}
             />
           </div>
+        </div>
 
-          <div className="ml-3 hidden sm:flex">
-            <button
-              type="button"
-              onClick={() => (typeof onAdd === "function" ? onAdd() : console.warn("onAdd not provided"))}
-              className={`inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
-                darkMode
-                  ? "bg-blue-600 text-white hover:bg-blue-500 focus:ring-blue-400"
-                  : "bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-200"
-              }`}
-            >
-              <Plus className="h-4 w-4" />
-              Add connection
-            </button>
-          </div>
+        <div className="flex w-full items-center">
+          <button
+            type="button"
+            onClick={() =>
+              typeof onAdd === "function"
+                ? onAdd()
+                : console.warn("onAdd not provided")
+            }
+            className={`w-full inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 ${
+              darkMode
+                ? "bg-blue-600 text-white hover:bg-blue-500 focus:ring-blue-400"
+                : "bg-blue-50 text-blue-700 hover:bg-blue-100 focus:ring-blue-200"
+            }`}
+          >
+            <Plus className="h-4 w-4" />
+            Add connection
+          </button>
         </div>
       </div>
 
@@ -103,127 +104,132 @@ export default function ConnectionList({
         role="list"
         aria-label="Connections"
       >
-        {loading ? Array.from({length: 10}).map((_, index) => {
-          
-          return (
-            <div
-              key={index}
-              role="listitem"
-              tabIndex={0}
-              aria-selected={false}
-              onKeyDown={undefined}
-              onClick={undefined}
-              className={`flex items-center gap-4 p-3 rounded-lg transition-shadow duration-150 focus:outline-none focus:ring-2 border-b last:border-b-0 ${
-                darkMode ? "border-gray-100/60" : "border-gray-800/30"
-              }`}
-            >
-              <div
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md font-medium ${
-                  darkMode
-                    ? "bg-blue-400 text-gray-200"
-                    : "bg-blue-50 text-blue-600"
-                }`}
-              >
-                <Skeleton />
-              </div>
-
-              <div className="flex-1 min-w-0">
+        {loading
+          ? Array.from({ length: 10 }).map((_, index) => {
+              return (
                 <div
-                  className={`text-sm w-2xl font-semibold ${
-                    darkMode ? "text-gray-100" : "text-gray-800"
+                  key={index}
+                  role="listitem"
+                  tabIndex={0}
+                  aria-selected={false}
+                  onKeyDown={undefined}
+                  onClick={undefined}
+                  className={`flex items-center gap-4 p-3 rounded-lg transition-shadow duration-150 focus:outline-none focus:ring-2 border-b last:border-b-0 ${
+                    darkMode ? "border-gray-100/60" : "border-gray-800/30"
                   }`}
                 >
-                  <Skeleton />
+                  <div
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md font-medium ${
+                      darkMode
+                        ? "bg-blue-400 text-gray-200"
+                        : "bg-blue-50 text-blue-600"
+                    }`}
+                  >
+                    <Skeleton />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div
+                      className={`text-sm w-2xl font-semibold ${
+                        darkMode ? "text-gray-100" : "text-gray-800"
+                      }`}
+                    >
+                      <Skeleton />
+                    </div>
+                    <div
+                      className={`mt-1 text-xs truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
+                      <Skeleton />
+                    </div>
+                  </div>
+
+                  <div className="ml-2 shrink-0 text-xs">
+                    <Skeleton />
+                  </div>
                 </div>
+              );
+            })
+          : connections?.map((conn) => {
+              const initials = conn.name
+                .split(" ")
+                .map((s) => s[0])
+                .slice(0, 2)
+                .join("")
+                .toUpperCase();
+
+              function handleKeyDown(e: React.KeyboardEvent) {
+                if (e.key === "Enter" || e.key === " ") onSelect(conn);
+              }
+
+              const isSelected = selectedId === conn.id;
+
+              return (
                 <div
-                  className={`mt-1 text-xs truncate ${
-                    darkMode ? "text-gray-400" : "text-gray-500"
+                  key={conn.id}
+                  role="listitem"
+                  tabIndex={0}
+                  aria-selected={isSelected}
+                  onKeyDown={handleKeyDown}
+                  onClick={() => onSelect(conn)}
+                  className={`flex items-center gap-4 p-3 rounded-lg transition-shadow duration-150 focus:outline-none focus:ring-2 border-b last:border-b-0 ${
+                    darkMode ? "border-gray-100/60" : "border-gray-800/30"
+                  } ${
+                    isSelected
+                      ? "ring-2 ring-blue-300 bg-blue-50 dark:bg-blue-900/30"
+                      : darkMode
+                        ? "hover:bg-gray-800"
+                        : "hover:bg-gray-50"
                   }`}
                 >
-                  <Skeleton />
+                  <div
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md font-medium ${
+                      darkMode
+                        ? "bg-blue-400 text-gray-200"
+                        : "bg-blue-50 text-blue-600"
+                    }`}
+                  >
+                    {initials}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div
+                      className={`text-sm font-semibold ${
+                        darkMode ? "text-gray-100" : "text-gray-800"
+                      }`}
+                    >
+                      {conn.name}
+                    </div>
+                    <div
+                      className={`text-xs truncate ${
+                        darkMode ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
+                      {conn.type}
+                    </div>
+                  </div>
+
+                  <div className="ml-2 shrink-0 text-xs">
+                    {isSelected ? (
+                      <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs">
+                        Selected
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-
-              <div className="ml-2 shrink-0 text-xs">
-                <Skeleton />
-              </div>
-            </div>
-          );
-        }) : connections?.map((conn) => {
-          const initials = conn.name
-            .split(" ")
-            .map((s) => s[0])
-            .slice(0, 2)
-            .join("")
-            .toUpperCase();
-
-          function handleKeyDown(e: React.KeyboardEvent) {
-            if (e.key === "Enter" || e.key === " ") onSelect(conn);
-          }
-
-          const isSelected = selectedId === conn.id;
-
-          return (
-            <div
-              key={conn.id}
-              role="listitem"
-              tabIndex={0}
-              aria-selected={isSelected}
-              onKeyDown={handleKeyDown}
-              onClick={() => onSelect(conn)}
-              className={`flex items-center gap-4 p-3 rounded-lg transition-shadow duration-150 focus:outline-none focus:ring-2 border-b last:border-b-0 ${
-                darkMode ? "border-gray-100/60" : "border-gray-800/30"
-              } ${
-                isSelected
-                  ? "ring-2 ring-blue-300 bg-blue-50 dark:bg-blue-900/30"
-                  : darkMode
-                  ? "hover:bg-gray-800"
-                  : "hover:bg-gray-50"
-              }`}
-            >
-              <div
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md font-medium ${
-                  darkMode
-                    ? "bg-blue-400 text-gray-200"
-                    : "bg-blue-50 text-blue-600"
-                }`}
-              >
-                {initials}
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <div
-                  className={`text-sm font-semibold ${
-                    darkMode ? "text-gray-100" : "text-gray-800"
-                  }`}
-                >
-                  {conn.name}
-                </div>
-                <div
-                  className={`text-xs truncate ${
-                    darkMode ? "text-gray-400" : "text-gray-500"
-                  }`}
-                >
-                  {conn.type}
-                </div>
-              </div>
-
-              <div className="ml-2 shrink-0 text-xs">
-                {isSelected ? (
-                  <span className="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs">
-                    Selected
-                  </span>
-                ) : null}
-              </div>
-            </div>
-          );
-        })}
+              );
+            })}
       </div>
 
       <div className="sm:hidden">
         <button
           aria-label="Add connection"
-          onClick={() => (typeof onAdd === "function" ? onAdd() : console.warn("onAdd not provided"))}
+          onClick={() =>
+            typeof onAdd === "function"
+              ? onAdd()
+              : console.warn("onAdd not provided")
+          }
           className="fixed bottom-6 right-4 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
         >
           <Plus className="h-5 w-5" />
