@@ -5,6 +5,7 @@ import {
   useCreateMonitoringConfiguration,
   useDeleteMonitoringConfiguration,
   useMonitoringConfigurationData,
+  useUpdateMonitoringConfiguration,
 } from "../../services/hooks/useMonitoringConfiguration";
 import MonitoringConfigurationList from "../../components/monitoring-configuration/MonitoringConfigurationList";
 import { MonitoringConfigurationData } from "../../services/types/MonitoringConfigurations.types";
@@ -27,6 +28,7 @@ export default function MonitoringConfiguration() {
     refetch,
   } = useMonitoringConfigurationData();
   const { submit } = useCreateMonitoringConfiguration();
+  const { update } = useUpdateMonitoringConfiguration();
   const [isUpdate, setIsUpdate] = useState(false);
 
   useEffect(() => {
@@ -85,8 +87,21 @@ export default function MonitoringConfiguration() {
               }
             }
           }}
-          onUpdate={async (monn) => {
-            console.info(monn);
+          onUpdate={async (id, monn) => {
+            if (monn !== undefined && id !== undefined) {
+              const res = await update(id, monn);
+              const resultData = res.data.data;
+              if (res.statusCode === 200) {
+                setSelected((prev) => {
+                  if (!prev) return prev;
+                  return {
+                    ...prev,
+                    ...resultData,
+                  };
+                });
+                refetch();
+              }
+            }
           }}
           isUpdate={isUpdate}
         />

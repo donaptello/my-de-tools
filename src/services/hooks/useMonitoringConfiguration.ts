@@ -60,6 +60,32 @@ export function useCreateMonitoringConfiguration() {
   return { submit, loading, error };
 }
 
+export function useUpdateMonitoringConfiguration() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const update = async (id: number, payload: MonitoringConfiguration) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await monitoringConfigurationService.updateDataMonitoring(
+        id,
+        payload,
+      );
+      return res;
+    } catch (err: unknown) {
+      if (isAxiosError(err)) {
+        setError(err?.response?.data?.message ?? "Something went wrong");
+      }
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+  return { update, loading, error };
+}
+
 export function useDeleteMonitoringConfiguration() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

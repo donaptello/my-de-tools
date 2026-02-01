@@ -11,8 +11,8 @@ interface Props {
   showFormInput: boolean;
   setShowFormInput: (value: boolean) => void;
   setShowFormUpdate: (value: boolean) => void;
-  onCreate: (conn: MonitoringConfiguration | undefined) => void;
-  onUpdate: (conn: MonitoringConfiguration | undefined) => void;
+  onCreate: (monn: MonitoringConfiguration | undefined) => void;
+  onUpdate: (id: number | undefined, monn: MonitoringConfiguration | undefined) => void;
   isUpdate: boolean;
 }
 
@@ -92,14 +92,8 @@ export default function ModalFormConfigurationTable({
     if (!form.schemas.trim()) newErrors.schemas = "Schemas is required";
     if (!form.dbSource.trim()) newErrors.dbSource = "DB Source is required";
     if (!form.dbTarget.trim()) newErrors.dbTarget = "DB Target is required";
-    if (!form.columnDateName.trim())
-      newErrors.columnDateName = "Column Date Name is required";
     if (!form.tableNameTarget.trim())
       newErrors.tableNameTarget = "Table Name Target is required";
-    if (!form.dataSourceColumnName.trim())
-      newErrors.dataSourceColumnName = "Data Source Column Name is required";
-    if (!form.dataSource.trim())
-      newErrors.dataSource = "Data Source is required";
     if (!form.layer) newErrors.layer = "Layer is required";
     if (!form.flag) newErrors.flag = "Flag is required";
     setErrors(newErrors);
@@ -128,7 +122,7 @@ export default function ModalFormConfigurationTable({
       ...monitoringData,
       ...form,
     };
-    onUpdate(updatedData);
+    onUpdate(monitoringData?.id, updatedData);
     setForm(initialForm);
     setShowFormInput(false);
     setShowFormUpdate(false);
