@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { LogIn, Moon, Sun } from "lucide-react";
 import DropdownItem from "../monitoring/DropdownItem";
 
 interface Props {
@@ -11,15 +11,20 @@ interface Props {
 
 export default function Navbar({ title, darkMode, setDarkMode }: Props) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   function handleLinkClick() {
     setOpen(false);
+  }
+
+  function handleLoginClick() {
+    navigate("/login");
   }
   return (
     <div className="relative min-h-12 mb-6">
       <div className="flex items-center justify-between">
         <h1
-          className={`text-2xl font-bold max-w-[40%] truncate ${
+          className={`text-2xl font-medium max-w-[40%] truncate ${
             darkMode ? "text-white" : "text-gray-800"
           }`}
         >
@@ -28,13 +33,23 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
 
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setDarkMode(!darkMode)}
-            className={`px-4 py-2 rounded-lg transition hover:scale-105 shrink-0 ${
+            onClick={handleLoginClick}
+            className={`px-2 py-2 rounded-lg transition hover:scale-105 shrink-0 ${
               darkMode ? "bg-gray-200 text-black" : "bg-gray-800 text-white"
             }`}
             aria-label="Toggle theme"
           >
-            {darkMode ? <Sun /> : <Moon />}
+            <LogIn className="p-1"/>
+          </button>
+
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className={`px-2 py-2 rounded-lg transition hover:scale-105 shrink-0 ${
+              darkMode ? "bg-gray-200 text-black" : "bg-gray-800 text-white"
+            }`}
+            aria-label="Toggle theme"
+          >
+            {darkMode ? <Sun className="p-1" /> : <Moon className="p-1" />}
           </button>
 
           <button
