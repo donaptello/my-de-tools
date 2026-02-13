@@ -9,7 +9,6 @@ export default function Login() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
 
   const handleLogin = async (email: string, password: string) => {
-    // TODO: Integrate with your API
     console.log("Login attempt:", { email, password });
     // Example: await loginAPI(email, password);
   };
@@ -27,9 +26,10 @@ export default function Login() {
           transition={{ duration: 0.6 }}
           className="flex items-center justify-center"
         >
-          <div className="w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 lg:p-10">
-            <LoginForm onSubmit={handleLogin} />
-          </div>
+          <LoginForm 
+            onSubmit={handleLogin} 
+            darkMode={darkMode}
+          />
         </motion.div>
       </div>
     </div>

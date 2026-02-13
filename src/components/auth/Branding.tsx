@@ -7,26 +7,25 @@ interface BrandingLoginProps {
 
 export default function BrandingLogin({ darkMode }: BrandingLoginProps) {
   const title = "Tools Management";
-  const description =
-    "Powerful tools management and monitoring platform for modern teams";
+  const description = "Manage store connections and monitor data flow between source and target systems.";
   const features = [
     {
       icon: Zap,
-      title: "Lightning Fast",
-      desc: "Optimized performance for real-time monitoring",
+      title: "Connection Setup",
+      desc: "Configure and maintain store connections.",
     },
     {
       icon: Lock,
-      title: "Secure by Default",
-      desc: "Enterprise-grade encryption and security",
+      title: "Source Monitoring",
+      desc: "Track data from source tables.",
     },
     {
       icon: BarChart3,
-      title: "Advanced Analytics",
-      desc: "Comprehensive insights and reporting tools",
+      title: "Target Monitoring",
+      desc: "Monitor target table synchronization.",
     },
   ];
-  
+
   return (
     <>
       <motion.div
@@ -42,14 +41,16 @@ export default function BrandingLogin({ darkMode }: BrandingLoginProps) {
           className="mb-16"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
-              <BarChart3 className="w-7 h-7 text-white" />
+            <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+              darkMode ? "bg-blue-900/40" : "bg-blue-100"
+            }`}>
+              <BarChart3 className={`w-7 h-7 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className={`text-3xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
               {title}
             </h1>
           </div>
-          <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+          <p className={`text-lg leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
             {description}
           </p>
         </motion.div>
@@ -67,15 +68,19 @@ export default function BrandingLogin({ darkMode }: BrandingLoginProps) {
               >
                 <motion.div
                   whileHover={{ scale: 1.1 }}
-                  className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors"
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                    darkMode 
+                      ? "bg-blue-900/30 group-hover:bg-blue-900/60" 
+                      : "bg-blue-100 group-hover:bg-blue-200"
+                  }`}
                 >
-                  <Icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <Icon className={`w-5 h-5 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
                 </motion.div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                  <h3 className={`font-semibold ${darkMode ? "text-white" : "text-gray-800"}`}>
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                     {feature.desc}
                   </p>
                 </div>
