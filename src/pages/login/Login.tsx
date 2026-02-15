@@ -4,14 +4,18 @@ import LoginForm from "../../components/auth/LoginForm";
 import { motion } from "framer-motion";
 import BrandingLogin from "../../components/auth/Branding";
 import { useEffect } from "react";
+import { useAuthLogin } from "../../services/hooks/useAuth";
 
 export default function Login() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
+  const { login, loading } = useAuthLogin();
 
   const handleLogin = async (email: string, password: string) => {
-    console.log("Login attempt:", { email, password });
-    // Example: await loginAPI(email, password);
+    const res = login(email, password);
+    const tokenAccess = (await res).accessToken;
+    console.log("Token:", tokenAccess);
   };
+
   useEffect(() => {
     setTitle("Login");
   }, [setTitle]);
@@ -26,9 +30,10 @@ export default function Login() {
           transition={{ duration: 0.6 }}
           className="flex items-center justify-center"
         >
-          <LoginForm 
-            onSubmit={handleLogin} 
+          <LoginForm
+            onSubmit={handleLogin}
             darkMode={darkMode}
+            isLoading={loading}
           />
         </motion.div>
       </div>
