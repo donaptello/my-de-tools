@@ -5,7 +5,6 @@ import ColumnSelector from "../../components/tools-tables/ColumnSelector";
 import SqlGenerator from "../../components/tools-tables/SqlGenerator";
 import { useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
-import { connectionDatas } from "../../services/mocks/Connections.mock";
 
 export default function ToolsTables() {
   const [selectedTable, setSelectedTable] = useState<string>("");
@@ -20,7 +19,7 @@ export default function ToolsTables() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-h-0 items-stretch">
       <TableSelector
-        connections={connectionDatas.data}
+        connections={[]}
         tables={Object.keys(tables)}
         schemas={[]}
         selectedTable={selectedTable}

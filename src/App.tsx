@@ -1,7 +1,7 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "./components/main/Layout";
 import { useEffect } from "react";
-import { Activity, ArrowRight, BarChart3, Server, Wifi } from "lucide-react";
+import { Activity, ArrowRight, Wifi } from "lucide-react";
 
 export default function App() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();

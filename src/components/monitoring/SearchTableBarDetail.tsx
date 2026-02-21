@@ -1,4 +1,3 @@
-import { Search } from "lucide-react";
 import { useEffect, useRef, useState, useMemo } from "react";
 
 import { MonitoringTableDetail } from "../../services/types/Monitoring.types";
@@ -15,14 +14,11 @@ export default function SearchTableDetailCard({
   darkMode,
   tableData = [],
   loading,
-  setQueryTableData,
-}: SearchTableCardProps) {
+  }: SearchTableCardProps) {
   const tableScrollRef = useRef<HTMLDivElement | null>(null);
   const [maxHeightStyle, setMaxHeightStyle] = useState<
     React.CSSProperties | undefined
   >(undefined);
-  const [search, setSearch] = useState("");
-
   const [sortBy, setSortBy] = useState<keyof MonitoringTableDetail | null>(null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
