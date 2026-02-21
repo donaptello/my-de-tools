@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { LogIn, Moon, Sun } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { LogIn, Moon, Sun, LogOut, User } from "lucide-react";
 import DropdownItem from "../monitoring/DropdownItem";
+import { useAuth } from "../../context/AuthContext";
 
 interface Props {
   title: string;
@@ -11,7 +12,10 @@ interface Props {
 
 export default function Navbar({ title, darkMode, setDarkMode }: Props) {
   const [open, setOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { isAuthenticated, logout, user } = useAuth();
 
   function handleLinkClick() {
     setOpen(false);
@@ -20,6 +24,31 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
   function handleLoginClick() {
     navigate("/login");
   }
+
+  function handleLogout() {
+    logout();
+    setProfileOpen(false);
+    navigate("/login");
+  }
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target as Node)
+      ) {
+        setProfileOpen(false);
+      }
+    }
+
+    if (profileOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [profileOpen]);
   return (
     <div className="relative min-h-12 mb-6">
       <div className="flex items-center justify-between">
@@ -32,15 +61,69 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
         </h1>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleLoginClick}
-            className={`px-2 py-2 rounded-lg transition hover:scale-105 shrink-0 ${
-              darkMode ? "bg-gray-200 text-black" : "bg-gray-800 text-white"
-            }`}
-            aria-label="Toggle theme"
-          >
-            <LogIn className="p-1"/>
-          </button>
+          {isAuthenticated ? (
+            <div className="relative" ref={profileRef}>
+              <button
+                onClick={() => setProfileOpen(!profileOpen)}
+                className={`px-2 py-2 rounded-lg transition hover:scale-105 shrink-0 flex items-center gap-2 ${
+                  darkMode ? "bg-gray-200 text-black" : "bg-gray-800 text-white"
+                }`}
+                aria-label="User profile"
+              >
+                <User className="p-1" />
+                <span className="text-sm font-medium truncate max-w-[100px]">
+                  {user?.username || "User"}
+                </span>
+                <svg
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    profileOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {profileOpen && (
+                <div
+                  className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg p-2 z-50 ${
+                    darkMode
+                      ? "bg-gray-800 border border-gray-700"
+                      : "bg-white border border-gray-200"
+                  }`}
+                >
+                  <button
+                    onClick={handleLogout}
+                    className={`w-full flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+                      darkMode
+                        ? "text-red-400 hover:bg-gray-700"
+                        : "text-red-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    <LogOut className="w-3 h-3" />
+                    <span className="text-sm">Logout</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={handleLoginClick}
+              className={`px-2 py-2 rounded-lg transition hover:scale-105 shrink-0 ${
+                darkMode ? "bg-gray-200 text-black" : "bg-gray-800 text-white"
+              }`}
+              aria-label="Login"
+            >
+              <LogIn className="p-1" />
+            </button>
+          )}
 
           <button
             onClick={() => setDarkMode(!darkMode)}
@@ -105,16 +188,20 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
           Home
         </Link>
 
-        <Link
-          to="/connection"
-          className={`${
-            darkMode
-              ? "text-gray-200 after:bg-gray-400"
-              : "text-gray-800 after:bg-gray-900"
-          } relative inline-block cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
-        >
-          Connection
-        </Link>
+        {user?.role == "ADMIN" ? (
+          <Link
+            to="/connection"
+            className={`${
+              darkMode
+                ? "text-gray-200 after:bg-gray-400"
+                : "text-gray-800 after:bg-gray-900"
+            } relative inline-block cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
+          >
+            Connection
+          </Link>
+        ) : (
+          <></>
+        )}
 
         <Link
           to="/tools"
@@ -211,7 +298,6 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
                 disabled={true}
                 darkMode={darkMode}
               />
-
             </div>
           </div>
         </div>

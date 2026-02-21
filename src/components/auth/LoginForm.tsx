@@ -6,31 +6,31 @@ interface LoginFormProps {
   onSubmit?: (email: string, password: string) => Promise<void>;
   darkMode: boolean;
   isLoading: boolean;
+  error: string;
 }
 
-export default function LoginForm({ onSubmit, darkMode, isLoading }: LoginFormProps) {
+export default function LoginForm({
+  onSubmit,
+  darkMode,
+  isLoading,
+  error,
+}: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
-    try {
-      if (onSubmit) {
-        await onSubmit(email, password);
-      }
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Login failed. Please try again.",
-      );
+    if (onSubmit) {
+      await onSubmit(email, password);
     }
   };
 
   return (
-    <div className={`${darkMode ? "bg-gray-800" : "bg-white"} w-full rounded-2xl p-8 lg:p-10 border border-transparent shadow-sm transition hover:shadow-2xl hover:-translate-y-1`}>
+    <div
+      className={`${darkMode ? "bg-gray-800" : "bg-white"} w-full rounded-2xl p-8 lg:p-10 border border-transparent shadow-sm transition hover:shadow-2xl hover:-translate-y-1`}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -92,9 +92,10 @@ export default function LoginForm({ onSubmit, darkMode, isLoading }: LoginFormPr
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className={`${darkMode ? 
-                  "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:ring-blue-900" : 
-                  "text-gray-700 bg-white border border-gray-200 focus:border-blue-400 focus:ring-blue-100"
+                className={`${
+                  darkMode
+                    ? "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:ring-blue-900"
+                    : "text-gray-700 bg-white border border-gray-200 focus:border-blue-400 focus:ring-blue-100"
                 } 
                   w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
               />
@@ -122,9 +123,11 @@ export default function LoginForm({ onSubmit, darkMode, isLoading }: LoginFormPr
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className={`${darkMode ? 
-                  "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-400 focus:ring-blue-900" : 
-                  "text-gray-700 bg-white border border-gray-200 focus:border-blue-500 focus:ring-blue-100"} 
+                className={`${
+                  darkMode
+                    ? "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-400 focus:ring-blue-900"
+                    : "text-gray-700 bg-white border border-gray-200 focus:border-blue-500 focus:ring-blue-100"
+                } 
                   w-full pl-10 pr-10 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
               />
               <button

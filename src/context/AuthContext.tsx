@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { User } from "../services/types/users.types";
+import { User } from "../services/types/Auth.types";
+import { parseJwt } from "../helpers/tokenParser";
 
 type AuthContextType = {
   user: User | null;
@@ -17,11 +18,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
 
-    if (storedToken && storedUser) {
+    if (storedToken) {
+      const decodeUser = parseJwt(storedToken);
+      
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      setUser(decodeUser);
     }
   }, []);
 
@@ -29,13 +31,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(user);
     setToken(token);
     localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
   };
 
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.clear();
+    localStorage.removeItem("token");
   };
 
   return (
