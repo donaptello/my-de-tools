@@ -189,16 +189,28 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
         </Link>
 
         {user?.role == "ADMIN" ? (
-          <Link
-            to="/connection"
-            className={`${
-              darkMode
-                ? "text-gray-200 after:bg-gray-400"
-                : "text-gray-800 after:bg-gray-900"
-            } relative inline-block cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
-          >
-            Connection
-          </Link>
+          <>
+            <Link
+              to="/connection"
+              className={`${
+                darkMode
+                  ? "text-gray-200 after:bg-gray-400"
+                  : "text-gray-800 after:bg-gray-900"
+              } relative inline-block cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
+            >
+              Connection
+            </Link>
+            <Link
+              to="/user-managements"
+              className={`${
+                darkMode
+                  ? "text-gray-200 after:bg-gray-400"
+                  : "text-gray-800 after:bg-gray-900"
+              } relative inline-block cursor-pointer after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100`}
+            >
+              Users
+            </Link>
+          </>
         ) : (
           <></>
         )}
