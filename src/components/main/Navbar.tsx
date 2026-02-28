@@ -53,7 +53,7 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
     <div className="relative min-h-12 mb-6">
       <div className="flex items-center justify-between">
         <h1
-          className={`text-2xl font-medium max-w-[40%] truncate ${
+          className={`text-xl font-medium max-w-[40%] truncate ${
             darkMode ? "text-white" : "text-gray-800"
           }`}
         >
@@ -176,7 +176,7 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
         </div>
       </div>
 
-      <nav className="absolute left-1/2 top-1/2 hidden sm:flex transform -translate-x-1/2 -translate-y-1/2 gap-6 text-lg">
+      <nav className="absolute left-1/2 top-1/2 hidden sm:flex transform -translate-x-1/2 -translate-y-1/2 gap-6 text-sm">
         <Link
           to="/"
           className={`${
