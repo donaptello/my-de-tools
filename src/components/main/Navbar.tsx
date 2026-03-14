@@ -303,11 +303,11 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
               />
 
               <DropdownItem
-                into="#"
-                title="Monitoring Hop"
-                description="Pending items"
+                into="/hop-management"
+                title="Hop Management"
+                description="Management Apache Hop"
                 color="yellow"
-                disabled={true}
+                disabled={false}
                 darkMode={darkMode}
               />
             </div>

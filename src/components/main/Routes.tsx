@@ -9,6 +9,7 @@ import MonitoringDetail from "../../pages/monitoring-detail/MonitoringDetail";
 import MonitoringConfiguration from "../../pages/monitoring-configuration/MonitoringConfig";
 import Login from "../../pages/login/Login";
 import UserManagement from "../../pages/user-managements/UserManagements";
+import HopManagement from "../../pages/hop-management/HopManagement";
 
 export default function AnimatedRoutes() {
   const location = useLocation();
@@ -70,6 +71,20 @@ export default function AnimatedRoutes() {
                 transition={{ duration: 0.3 }}
               >
                 <Connection />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/hop-management"
+            element={
+              <motion.div
+                className="h-full min-h-0"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <HopManagement />
               </motion.div>
             }
           />
