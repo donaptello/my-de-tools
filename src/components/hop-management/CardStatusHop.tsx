@@ -13,7 +13,7 @@ export default function CardStatusHop({
   const memoryPercent =
     ((hopStatus?.memoryUsed ?? 0) / (hopStatus?.memoryTotal ?? 1)) * 100;
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
+    <>
       {/* <div
         className={`rounded-xl border  p-4 shadow-sm transition hover:shadow-2xl hover:-translate-y-1 ${
           darkMode ? "bg-gray-800" : "border-gray-200 bg-white"
@@ -141,6 +141,6 @@ export default function CardStatusHop({
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
