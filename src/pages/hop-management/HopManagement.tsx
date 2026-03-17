@@ -2,13 +2,19 @@ import { useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
 import { useEffect } from "react";
 import CardStatusHop from "../../components/hop-management/CardStatusHop";
-import { useHopManagementStatus } from "../../services/hooks/useHopManagement";
+import {
+  useHopManagementStatus,
+  useHopOrcestration,
+} from "../../services/hooks/useHopManagement";
 import SummaryCardHop from "../../components/hop-management/SummaryCardHop";
 import { Activity, CheckCircle, GitBranch, XCircle } from "lucide-react";
+import TableHop from "../../components/hop-management/TableHop";
 
 export default function HopManagement() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
   const { data: status } = useHopManagementStatus();
+  const { data: pipelineData } = useHopOrcestration("Pipeline");
+  const { data: workflowData } = useHopOrcestration("Pipeline");
 
   useEffect(() => {
     setTitle("Hop Management");
@@ -20,7 +26,7 @@ export default function HopManagement() {
         <CardStatusHop darkMode={darkMode} hopStatus={status?.data} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <SummaryCardHop
           title="Pipeline Total"
           value={status?.data.pipelineStatus.total}
@@ -61,6 +67,24 @@ export default function HopManagement() {
           darkMode={darkMode}
           icon={<XCircle className="text-red-500" />}
           bgIcon="bg-red-100"
+        />
+      </div>
+
+      <div className="mb-6">
+        <TableHop
+          darkMode={darkMode}
+          data={pipelineData?.data}
+          title="Pipeline"
+          icon={<Activity className="text-gray-400" size={18} />}
+        />
+      </div>
+
+      <div className="mb-6">
+        <TableHop
+          darkMode={darkMode}
+          data={workflowData?.data}
+          title="Workflow"
+          icon={<GitBranch className="text-gray-400" size={18} />}
         />
       </div>
     </div>

@@ -28,4 +28,20 @@ export interface HopStatus {
   loadAvg: number;
 }
 
+export interface HopOrchestration {
+  id: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  duration: string;
+  type: string;
+}
+
+export interface HopOrcestrationParams {
+  id_pipe?: string;
+  name_pipe?: string;
+  size?: number;
+}
+
 export type HopStatusRes = ApiResponse<HopStatus>;
+export type HopOrchestrationRes = ApiResponse<HopOrchestration[]>;

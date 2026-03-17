@@ -48,7 +48,7 @@ export default function SummaryCardHop({
 
           {/* Stats */}
           {stats && (
-            <div className="flex items-center gap-3 mt-1 text-sm">
+            <div className="flex items-center gap-3 mt-1 text-xs">
               {stats.success !== undefined && (
                 <span className="flex items-center gap-1 text-green-500">
                   <CheckCircle size={14} />
