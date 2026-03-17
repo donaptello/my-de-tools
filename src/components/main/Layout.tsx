@@ -8,6 +8,7 @@ export type LayoutContextType = {
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
+  setDesc: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function Layout() {
@@ -28,6 +29,8 @@ function Layout() {
     return "Home";
   });
 
+  const [desc, setDesc] = useState<string>("");
+
   useEffect(() => {
     try {
       localStorage.setItem("dark-mode", darkMode ? "true" : "false");
@@ -46,10 +49,10 @@ function Layout() {
           darkMode ? "bg-gray-900" : "bg-gray-100"
         }`}
       >
-        <Navbar title={title} darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Navbar title={title} desc={desc} darkMode={darkMode} setDarkMode={setDarkMode} />
         <div className="grid grid-cols-1 flex-1 items-stretch">
           <main className="h-full min-h-0">
-            <Outlet context={{ darkMode, setDarkMode, title, setTitle }} />
+            <Outlet context={{ darkMode, setDarkMode, title, setTitle, setDesc }} />
           </main>
         </div>
         <Footers darkMode={darkMode} />

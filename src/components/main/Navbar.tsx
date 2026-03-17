@@ -7,10 +7,11 @@ import { useAuth } from "../../context/AuthContext";
 interface Props {
   title: string;
   darkMode: boolean;
+  desc?: string;
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Navbar({ title, darkMode, setDarkMode }: Props) {
+export default function Navbar({ title, desc, darkMode, setDarkMode }: Props) {
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -52,13 +53,20 @@ export default function Navbar({ title, darkMode, setDarkMode }: Props) {
   return (
     <div className="relative min-h-12 mb-6">
       <div className="flex items-center justify-between">
-        <h1
-          className={`text-xl font-medium max-w-[40%] truncate ${
-            darkMode ? "text-white" : "text-gray-800"
-          }`}
-        >
-          {title}
-        </h1>
+        <div className="max-w-[40%] truncate">
+          <h1
+            className={`text-xl font-semibold text-foreground ${
+              darkMode ? "text-gray-100" : "text-gray-800"
+            }`}
+          >
+            {title}
+          </h1>
+          <p
+            className={`text-sm text-muted-foreground ${darkMode ? "text-gray-200" : "text-gray-800"}`}
+          >
+            {desc}
+          </p>
+        </div>
 
         <div className="flex items-center gap-2">
           {isAuthenticated ? (
