@@ -33,6 +33,7 @@ export interface HopOrchestration {
   name: string;
   startDate: string;
   endDate: string;
+  status: string;
   duration: string;
   type: string;
 }
