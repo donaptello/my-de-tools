@@ -14,7 +14,7 @@ export default function HopManagement() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
   const { data: status } = useHopManagementStatus();
   const { data: pipelineData } = useHopOrcestration("Pipeline");
-  const { data: workflowData } = useHopOrcestration("Pipeline");
+  const { data: workflowData } = useHopOrcestration("Workflow");
 
   useEffect(() => {
     setTitle("Hop Management");
