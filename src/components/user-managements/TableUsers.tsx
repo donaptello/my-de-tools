@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { UsersData } from "../../services/types/users.types";
 import { Pencil, Trash2 } from "lucide-react";
+import { UsersData } from "../../services/types/Users.types";
 
 interface Props {
   userData?: UsersData[];

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { UserDataRes, UsersParams } from "../types/users.types";
 import { userService } from "../api/Users.service";
+import { UserDataRes, UsersParams } from "../types/Users.types";
+
 
 export function useUsers() {
   const [query, setQuery] = useState<UsersParams>({});

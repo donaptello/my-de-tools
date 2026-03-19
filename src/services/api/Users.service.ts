@@ -1,4 +1,4 @@
-import { UserDataRes, UsersParams } from "../types/users.types";
+import { UserDataRes, UsersParams } from "../types/Users.types";
 import { apiDeTools } from "./Http";
 
 export const userService = {
