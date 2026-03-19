@@ -1,12 +1,13 @@
-import { useState } from "react";
 import { HopOrchestration } from "../../services/types/HopManagement.types";
-import { Activity, AlertTriangle, Clock, GitBranch } from "lucide-react";
+import { Activity, AlertTriangle, Box, Clock, GitBranch } from "lucide-react";
+import Skeleton from "../main/Skleton";
 
 type TableHopProps = {
   darkMode: boolean;
   data: HopOrchestration[] | undefined;
   title: string;
   icon: React.ReactNode;
+  loading: boolean;
 };
 
 export default function TableHop({
@@ -14,9 +15,8 @@ export default function TableHop({
   data,
   title,
   icon,
+  loading,
 }: TableHopProps) {
-  const [withError, setWithError] = useState(true);
-
   const getBgStatus = (status: string) => {
     switch (status) {
       case "Stopped":
@@ -74,49 +74,102 @@ export default function TableHop({
 
           {/* BODY */}
           <tbody>
-            {data?.map((item, i) => (
-              <tr
-                key={i}
-                className={`border-t ${
-                  darkMode
-                    ? "border-gray-700 hover:bg-gray-700"
-                    : "border-gray-200 hover:bg-gray-50"
-                } transition`}
-              >
-                <td className="px-6 py-4 font-medium">{item.name}</td>
+            {data?.length != 0 && loading === false ? (
+              data?.map((item, i) => (
+                <tr
+                  key={i}
+                  className={`border-t ${
+                    darkMode
+                      ? "border-gray-700 hover:bg-gray-700"
+                      : "border-gray-200 hover:bg-gray-50"
+                  } transition`}
+                >
+                  <td className="px-6 py-4 font-medium">{item.name}</td>
 
-                <td className="px-6">
-                  <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-gray-700 w-fit">
-                    {item.type === "Pipeline" ? (
-                      <Activity size={14} />
-                    ) : (
-                      <GitBranch size={14} />
-                    )}
-                    {item.type}
-                  </span>
-                </td>
+                  <td className="px-6">
+                    <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-gray-700 w-fit">
+                      {item.type === "Pipeline" ? (
+                        <Activity size={14} />
+                      ) : (
+                        <GitBranch size={14} />
+                      )}
+                      {item.type}
+                    </span>
+                  </td>
 
-                <td className="px-6">
-                  <span
-                    className={`px-3 py-1 text-xs rounded-full ${getBgStatus(
-                      item.status,
-                    )}`}
-                  >
-                    {item.status}
-                  </span>
-                </td>
+                  <td className="px-6">
+                    <span
+                      className={`px-3 py-1 text-xs rounded-full ${getBgStatus(
+                        item.status,
+                      )}`}
+                    >
+                      {item.status}
+                    </span>
+                  </td>
 
-                <td className="px-6 text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <Clock size={14} />
-                    {item.duration}
+                  <td className="px-6 text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <Clock size={14} />
+                      {item.duration}
+                    </div>
+                  </td>
+
+                  <td className="px-6 text-gray-500">{item.startDate}</td>
+                  <td className="px-6 text-gray-500">{item.endDate}</td>
+                </tr>
+              ))
+            ) : data?.length != 0 && loading === true ? (
+              Array.from({ length: 10 }).map((_, index) => (
+                <tr
+                  key={index}
+                  className={`border-t ${
+                    darkMode
+                      ? "border-gray-700 hover:bg-gray-700"
+                      : "border-gray-200 hover:bg-gray-50"
+                  } transition`}
+                >
+                  <td className="px-6 py-4 font-medium">
+                    <Skeleton />
+                  </td>
+
+                  <td className="px-6">
+                    <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-gray-700 w-fit">
+                      <Skeleton />
+                    </span>
+                  </td>
+
+                  <td className="px-6">
+                    <span
+                      className={`px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-600`}
+                    >
+                      <Skeleton />
+                    </span>
+                  </td>
+
+                  <td className="px-6 text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <Clock size={14} />
+                    </div>
+                  </td>
+
+                  <td className="px-6 text-gray-500">
+                    <Skeleton />
+                  </td>
+                  <td className="px-6 text-gray-500">
+                    <Skeleton />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className="text-center p-4">
+                  <div className="flex justify-center items-center gap-2">
+                    <Box size={14} color="#999" />
+                    <span className="text-gray-500">No data found.</span>
                   </div>
                 </td>
-
-                <td className="px-6 text-gray-500">{item.startDate}</td>
-                <td className="px-6 text-gray-500">{item.endDate}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

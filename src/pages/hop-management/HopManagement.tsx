@@ -13,8 +13,8 @@ import TableHop from "../../components/hop-management/TableHop";
 export default function HopManagement() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
   const { data: status } = useHopManagementStatus();
-  const { data: pipelineData } = useHopOrcestration("Pipeline");
-  const { data: workflowData } = useHopOrcestration("Workflow");
+  const { data: pipelineData, loading:loadingPipeline } = useHopOrcestration("Pipeline");
+  const { data: workflowData, loading:loadingWorkflow } = useHopOrcestration("Workflow");
 
   useEffect(() => {
     setTitle("Hop Management");
@@ -76,6 +76,7 @@ export default function HopManagement() {
           data={pipelineData?.data}
           title="Pipeline"
           icon={<Activity className="text-gray-400" size={18} />}
+          loading={loadingPipeline}
         />
       </div>
 
@@ -85,6 +86,7 @@ export default function HopManagement() {
           data={workflowData?.data}
           title="Workflow"
           icon={<GitBranch className="text-gray-400" size={18} />}
+          loading={loadingWorkflow}
         />
       </div>
     </div>
