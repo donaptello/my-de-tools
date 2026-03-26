@@ -2,6 +2,7 @@ import { HopOrchestration } from "../../services/types/HopManagement.types";
 import { Activity, AlertTriangle, Box, Clock, GitBranch } from "lucide-react";
 import Skeleton from "../main/Skleton";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../../helpers/time";
 
 type TableHopProps = {
   darkMode: boolean;
@@ -48,7 +49,7 @@ export default function TableHop({
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm">
+          <button className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs">
             <AlertTriangle size={16} />
             Clear Log
           </button>
@@ -65,12 +66,12 @@ export default function TableHop({
             }`}
           >
             <tr className="text-gray-500">
-              <th className="px-6 py-3">Name</th>
-              <th className="px-6">Type</th>
-              <th className="px-6">Status</th>
-              <th className="px-6">Duration</th>
-              <th className="px-6">Start Date</th>
-              <th className="px-6">End Date</th>
+              <th className="px-6 font-medium py-3">Name</th>
+              <th className="px-6 font-medium">Type</th>
+              <th className="px-6 font-medium">Status</th>
+              <th className="px-6 font-medium">Duration</th>
+              <th className="px-6 font-medium">Start Date</th>
+              <th className="px-6 font-medium">End Date</th>
             </tr>
           </thead>
 
@@ -87,10 +88,10 @@ export default function TableHop({
                       : "border-gray-200 hover:bg-gray-50"
                   } transition hover:cursor-pointer`}
                 >
-                  <td className="px-6 py-4 font-medium">{item.name}</td>
+                  <td className="px-6 py-4 truncate max-w-52 font-medium">{item.name}</td>
 
                   <td className="px-6">
-                    <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-gray-700 w-fit">
+                    <span className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border border-gray-200 text-gray-700 w-fit">
                       {item.type === "Pipeline" ? (
                         <Activity size={14} />
                       ) : (
@@ -117,8 +118,8 @@ export default function TableHop({
                     </div>
                   </td>
 
-                  <td className="px-6 text-gray-500">{item.startDate}</td>
-                  <td className="px-6 text-gray-500">{item.endDate}</td>
+                  <td className="px-6 text-gray-500">{formatDate(item.startDate)}</td>
+                  <td className="px-6 text-gray-500">{formatDate(item.endDate)}</td>
                 </tr>
               ))
             ) : data?.length != 0 && loading === true ? (
