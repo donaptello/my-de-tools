@@ -8,6 +8,8 @@ import { LayoutContextType } from "../../components/main/Layout";
 import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import HeaderCard from "../../components/hop-management-detail/HeaderCard";
+import StatCard from "../../components/hop-management-detail/StatCard";
+import TableHopProcess from "../../components/hop-management-detail/TableHopProcess";
 
 export default function HopManagementDetail() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
@@ -34,6 +36,34 @@ export default function HopManagementDetail() {
         darkMode={darkMode}
         pipelineId={pipelineId}
         pipelineName={pipelineName}
+      />
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <StatCard
+          darkMode={darkMode}
+          statName="Total Read"
+          statValue={1376016}
+        />
+        <StatCard
+          darkMode={darkMode}
+          statName="Total Written"
+          statValue={0}
+        />
+        <StatCard
+          darkMode={darkMode}
+          statName="Transforms"
+          statValue={0}
+        />
+        <StatCard
+          darkMode={darkMode}
+          statName="Total Errors"
+          statValue={0}
+        />
+      </div>
+
+      <TableHopProcess 
+        darkMode={darkMode}
+        loading={false}
       />
     </div>
   );
