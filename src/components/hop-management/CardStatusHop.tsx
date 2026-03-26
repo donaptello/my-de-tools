@@ -86,14 +86,14 @@ export default function CardStatusHop({
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-lg bg-gray-100 p-4 text-center">
+          <div className="rounded-lg bg-gray-50 p-4 text-center">
             <p className="text-xs text-gray-500">Free</p>
             <p className="text-green-500 font-semibold">
               {hopStatus?.memoryFree.toFixed(2)} GB
             </p>
           </div>
 
-          <div className="rounded-lg bg-gray-100 p-4 text-center">
+          <div className="rounded-lg bg-gray-50 p-4 text-center">
             <p className="text-xs text-gray-500">Used</p>
             <p className="text-red-500 font-semibold">
               {hopStatus?.memoryUsed.toFixed(2)} GB
