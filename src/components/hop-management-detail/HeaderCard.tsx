@@ -1,6 +1,6 @@
 import { Activity, Clock, Code, FileText } from "lucide-react";
 
-interface Props {
+type HeaderCardProps = {
   darkMode: boolean;
   pipelineId: string | undefined;
   pipelineName: string | null;
@@ -26,11 +26,11 @@ export default function HeaderCard({
   darkMode,
   pipelineName,
   pipelineId,
-}: Props) {
+}: HeaderCardProps) {
   const statusStyle = statusConfig["ERROR"];
   return (
     <div
-      className={`rounded-xl border p-5 shadow-sm ${
+      className={`rounded-xl mb-6 border p-5 shadow-sm ${
         darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
       }`}
     >
@@ -56,7 +56,7 @@ export default function HeaderCard({
           <div className="text-left">
             <p className="text-xs text-gray-400">Status</p>
             <span
-              className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full font-medium ${statusStyle.className}`}
+              className={`inline-flex items-center text-xs px-3 py-0.5 rounded-full font-medium ${statusStyle.className}`}
             >
               ● {statusStyle.label}
             </span>
@@ -79,7 +79,7 @@ export default function HeaderCard({
 
           {/* ACTIONS */}
           <div className="flex gap-2">
-            <button className="flex items-center gap-1 px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-gray-100">
+            <button className="flex hover:cursor-not-allowed items-center gap-1 px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-gray-100">
               <FileText size={14} />
               View as XML
             </button>
