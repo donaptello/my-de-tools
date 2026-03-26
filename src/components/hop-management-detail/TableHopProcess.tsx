@@ -175,6 +175,16 @@ export default function TableHopProcess({
     },
   ];
   const formatter = new Intl.NumberFormat("de-DE");
+  const getBgStatus = (status: string) => {
+    switch (status) {
+      case "Stopped":
+        return "bg-red-500 text-white hover:bg-red-400";
+      case "Finished":
+        return "bg-blue-500 text-white hover:bg-blue-400";
+      default:
+        return "bg-green-500 text-white hover:bg-red-400";
+    }
+  };
   return (
     <div
       className={`flex-1 rounded-xl border shadow-sm ${
@@ -229,24 +239,30 @@ export default function TableHopProcess({
                     darkMode
                       ? "border-gray-700 hover:bg-gray-700"
                       : "border-gray-200 hover:bg-gray-50"
-                  } transition hover:cursor-pointer`}
+                  }`}
                 >
-                  <td className="px-6 py-4 font-medium">
+                  <td className="px-6 py-4 font-medium text-gray-500 text-xs">
                     {item.transformName}
                   </td>
-                  <td className="px-6 text-gray-500">{formatter.format(item.copy)}</td>
-                  <td className="px-6 text-gray-500">{formatter.format(item.linesRead)}</td>
-                  <td className="px-6 text-gray-500">{formatter.format(item.linesWritten)}</td>
-                  <td className="px-6 text-gray-500">{formatter.format(item.linesInput)}</td>
-                  <td className="px-6 text-gray-500">{formatter.format(item.linesOutput)}</td>
-                  <td className="px-6 text-gray-500">{formatter.format(item.linesUpdated)}</td>
-                  <td className="px-6 text-gray-500">{formatter.format(item.linesRejected)}</td>
-                  <td className="px-6 text-gray-500">{formatter.format(item.errors)}</td>
-                  <td className="px-6 text-gray-500">
-                    {item.statusDescription}
+                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.copy)}</td>
+                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesRead)}</td>
+                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesWritten)}</td>
+                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesInput)}</td>
+                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesOutput)}</td>
+                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesUpdated)}</td>
+                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesRejected)}</td>
+                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.errors)}</td>
+                  <td className="px-6 text-gray-500 text-xs">
+                    <span
+                      className={`px-3 py-1 text-xs rounded-full transition-colors ${getBgStatus(
+                        item.statusDescription
+                      )}`}
+                    >
+                      {item.statusDescription}
+                    </span>
                   </td>
-                  <td className="px-6 text-gray-500">{formatter.format(item.seconds)}s</td>
-                  <td className="px-6 text-gray-500">{item.speed}</td>
+                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.seconds)}s</td>
+                  <td className="px-6 text-gray-500 text-xs">{item.speed}</td>
                 </tr>
               ))
             ) : transformDetail?.length != 0 && loading === true ? (
