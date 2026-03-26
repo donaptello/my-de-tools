@@ -10,9 +10,12 @@ export function timeCheckerExpAuth(exp: number): boolean {
 }
 
 export function formatDate(
-  dateString: string,
+  dateString: string | undefined,
   type: string | undefined = undefined,
-): string {
+): string | null {
+  if (dateString === undefined) {
+    return null;
+  }
   const date = new Date(dateString);
 
   const yyyy = date.getFullYear();
@@ -25,6 +28,8 @@ export function formatDate(
 
   if (type !== undefined && type === "yy/mm/dd") {
     return `${dd}/${MM}/${yyyy}`;
+  } else if (type !== undefined && type === "HH.mm.ss") {
+    return `${HH}.${mm}.${ss}`;
   }
   return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
 }

@@ -1,179 +1,22 @@
 import { Box, Hash } from "lucide-react";
 import Skeleton from "../main/Skleton";
-import { HopPipelineDetail } from "../../services/types/HopManagement.types";
+import { HopTransformationDetails } from "../../services/types/HopManagement.types";
+import { formatDate } from "../../helpers/time";
 
 type TableHopProcessProps = {
   darkMode: boolean;
   loading: boolean;
+  transformDetail: HopTransformationDetails[] | undefined;
+  updatedAt: string | undefined;
 };
 
 export default function TableHopProcess({
   darkMode,
   loading,
+  transformDetail,
+  updatedAt
 }: TableHopProcessProps) {
-  const transformDetail: HopPipelineDetail[] = [
-    {
-      transformName: "Add a checksum",
-      copy: 0,
-      linesRead: 570883,
-      linesWritten: 570883,
-      linesInput: 0,
-      linesOutput: 0,
-      linesUpdated: 0,
-      linesRejected: 0,
-      inputBufferSize: 0,
-      outputBufferSize: 0,
-      errors: 0,
-      statusDescription: "Finished",
-      seconds: 1473.4,
-      speed: " 387",
-      priority: "-",
-      stopped: false,
-      paused: false,
-      logText:
-        "2026/02/26 06:24:51 - Add a checksum.0 - Finished processing (I=0, O=0, R=570883, W=570883, U=0, E=0)\n",
-      sampleRowMeta: null,
-      sampleRows: null,
-    },
-    {
-      transformName: "User defined Java expression",
-      copy: 0,
-      linesRead: 570883,
-      linesWritten: 570883,
-      linesInput: 0,
-      linesOutput: 0,
-      linesUpdated: 0,
-      linesRejected: 0,
-      inputBufferSize: 0,
-      outputBufferSize: 0,
-      errors: 0,
-      statusDescription: "Finished",
-      seconds: 1485.4,
-      speed: " 384",
-      priority: "-",
-      stopped: false,
-      paused: false,
-      logText:
-        "2026/02/26 06:25:03 - User defined Java expression.0 - Finished processing (I=0, O=0, R=570883, W=570883, U=0, E=0)\n",
-      sampleRowMeta: null,
-      sampleRows: null,
-    },
-    {
-      transformName: "Select values",
-      copy: 0,
-      linesRead: 570883,
-      linesWritten: 570883,
-      linesInput: 0,
-      linesOutput: 0,
-      linesUpdated: 0,
-      linesRejected: 0,
-      inputBufferSize: 0,
-      outputBufferSize: 0,
-      errors: 0,
-      statusDescription: "Finished",
-      seconds: 1449.1,
-      speed: " 394",
-      priority: "-",
-      stopped: false,
-      paused: false,
-      logText:
-        "2026/02/26 06:24:27 - Select values.0 - Finished processing (I=0, O=0, R=570883, W=570883, U=0, E=0)\n",
-      sampleRowMeta: null,
-      sampleRows: null,
-    },
-    {
-      transformName: "String operations",
-      copy: 0,
-      linesRead: 570883,
-      linesWritten: 570883,
-      linesInput: 0,
-      linesOutput: 0,
-      linesUpdated: 0,
-      linesRejected: 0,
-      inputBufferSize: 0,
-      outputBufferSize: 0,
-      errors: 0,
-      statusDescription: "Finished",
-      seconds: 1461.4,
-      speed: " 391",
-      priority: "-",
-      stopped: false,
-      paused: false,
-      logText:
-        "2026/02/26 06:24:39 - String operations.0 - Finished processing (I=0, O=0, R=570883, W=570883, U=0, E=0)\n",
-      sampleRowMeta: null,
-      sampleRows: null,
-    },
-    {
-      transformName: "Select values 2",
-      copy: 0,
-      linesRead: 570883,
-      linesWritten: 570883,
-      linesInput: 0,
-      linesOutput: 0,
-      linesUpdated: 0,
-      linesRejected: 0,
-      inputBufferSize: 0,
-      outputBufferSize: 0,
-      errors: 0,
-      statusDescription: "Finished",
-      seconds: 1497.6,
-      speed: " 381",
-      priority: "-",
-      stopped: false,
-      paused: false,
-      logText:
-        "2026/02/26 06:25:15 - Select values 2.0 - Finished processing (I=0, O=0, R=570883, W=570883, U=0, E=0)\n",
-      sampleRowMeta: null,
-      sampleRows: null,
-    },
-    {
-      transformName: "Insert / update",
-      copy: 0,
-      linesRead: 570883,
-      linesWritten: 570883,
-      linesInput: 570883,
-      linesOutput: 9091,
-      linesUpdated: 561792,
-      linesRejected: 0,
-      inputBufferSize: 0,
-      outputBufferSize: 0,
-      errors: 0,
-      statusDescription: "Finished",
-      seconds: 1508.9,
-      speed: " 378",
-      priority: "-",
-      stopped: false,
-      paused: false,
-      logText:
-        "2026/02/26 06:25:27 - Insert / update.0 - Finished processing (I=570883, O=9091, R=570883, W=570883, U=561792, E=0)\n",
-      sampleRowMeta: null,
-      sampleRows: null,
-    },
-    {
-      transformName: "bc30_header_raung",
-      copy: 0,
-      linesRead: 0,
-      linesWritten: 570883,
-      linesInput: 570883,
-      linesOutput: 0,
-      linesUpdated: 0,
-      linesRejected: 0,
-      inputBufferSize: 0,
-      outputBufferSize: 0,
-      errors: 0,
-      statusDescription: "Finished",
-      seconds: 1437,
-      speed: " 397",
-      priority: "-",
-      stopped: false,
-      paused: false,
-      logText:
-        "2026/02/26 06:24:15 - bc30_header_raung.0 - Finished reading query, closing connection.\n2026/02/26 06:24:15 - bc30_header_raung.0 - Finished processing (I=570883, O=0, R=0, W=570883, U=0, E=0)\n",
-      sampleRowMeta: null,
-      sampleRows: null,
-    },
-  ];
+  
   const formatter = new Intl.NumberFormat("de-DE");
   const getBgStatus = (status: string) => {
     switch (status) {
@@ -199,7 +42,7 @@ export default function TableHopProcess({
         </div>
 
         <div className="flex items-center gap-4">
-          <p className="text-xs text-gray-400">Updated: 21.09.50</p>
+          <p className="text-xs text-gray-400">Updated: {updatedAt !== undefined ? formatDate(updatedAt, "HH.mm.ss") : "21.09.50"}</p>
         </div>
       </div>
 

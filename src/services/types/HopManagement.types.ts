@@ -44,7 +44,7 @@ export interface HopOrcestrationParams {
   size?: number;
 }
 
-export interface HopPipelineDetail {
+export interface HopTransformationDetails {
   transformName: string;
   copy: number;
   linesRead: number;
@@ -67,5 +67,22 @@ export interface HopPipelineDetail {
   sampleRows: string | null;
 }
 
+export interface HopPipelineDetail {
+  id: string;
+  name: string | null;
+  status: string;
+  startDate: string;
+  endDate: string;
+  duration: string;
+  transformStatusList: HopTransformationDetails[];
+  totalRead: number;
+  totalWritten: number;
+  totalError: number;
+  totalTransform: number;
+  updatedAt: string;
+  type: string;
+}
+
 export type HopStatusRes = ApiResponse<HopStatus>;
 export type HopOrchestrationRes = ApiResponse<HopOrchestration[]>;
+export type HopPipelineDetailRes = ApiResponse<HopPipelineDetail[]>;

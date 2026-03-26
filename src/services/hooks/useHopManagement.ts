@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   HopOrcestrationParams,
   HopOrchestrationRes,
+  HopPipelineDetailRes,
   HopStatusRes,
 } from "../types/HopManagement.types";
 import { hopManagementService } from "../api/HopManagement.service";
@@ -44,4 +45,24 @@ export function useHopOrcestration(mode: string) {
     loading,
     setQuery,
   };
+}
+
+export function useHopPipelineDetail(pipelineId: string | undefined, pipelineName: string | null) {
+  const [data, setData] = useState<HopPipelineDetailRes | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    hopManagementService
+      .getPipelineDetail(pipelineName, pipelineId)
+      .then((res) => {
+        setData(res);
+      })
+      .finally(() => setLoading(false));
+  }, [pipelineId, pipelineName]);
+
+  return {
+    data, 
+    loading
+  }
 }

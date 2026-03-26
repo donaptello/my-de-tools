@@ -1,10 +1,24 @@
-import { Activity, CheckCircle, Clock, Code, FileText, RefreshCw, XCircle } from "lucide-react";
+import {
+  Activity,
+  CheckCircle,
+  Clock,
+  Code,
+  FileText,
+  RefreshCw,
+  XCircle,
+} from "lucide-react";
+import { formatDate } from "../../helpers/time";
 
 type HeaderCardProps = {
   darkMode: boolean;
   pipelineId: string | undefined;
   pipelineName: string | null;
-}
+  headerData: {
+    status: string | undefined;
+    startDate: string | undefined;
+    duration: string | undefined;
+  };
+};
 
 type StatusType = "SUCCESS" | "ERROR" | "RUNNING";
 const statusConfig: Record<StatusType, { label: string; className: string }> = {
@@ -26,8 +40,18 @@ export default function HeaderCard({
   darkMode,
   pipelineName,
   pipelineId,
+  headerData,
 }: HeaderCardProps) {
-  const statusStyle = statusConfig["ERROR"];
+  const getStatusConfig = (): StatusType => {
+    if (headerData.status === "Finished") {
+      return "SUCCESS";
+    } else if (headerData.status === "Running") {
+      return "RUNNING";
+    }
+    return "ERROR";
+  };
+
+  const statusStyle = statusConfig[`${getStatusConfig()}`];
   return (
     <div
       className={`rounded-xl mb-6 border p-5 shadow-sm ${
@@ -46,7 +70,9 @@ export default function HeaderCard({
             <h2 className="text-lg font-semibold text-gray-800">
               {pipelineName}
             </h2>
-            <p className="text-xs font-mono text-gray-400">ID: {pipelineId}</p>
+            <p className="text-xs font-mono text-gray-400">
+              ID: {pipelineId}
+            </p>
           </div>
         </div>
 
@@ -58,9 +84,15 @@ export default function HeaderCard({
             <span
               className={`inline-flex items-center text-xs px-3 py-0.5 rounded-full font-medium ${statusStyle.className}`}
             >
-              {statusStyle.label === "Finished" && <CheckCircle className="w-3 h-3 mr-1" />}
-              {statusStyle.label === "Error" && <XCircle className="w-3 h-3 mr-1" />}
-              {statusStyle.label === "Running" && <RefreshCw className="w-3 h-3 mr-1 animate-spin" />}
+              {statusStyle.label === "Finished" && (
+                <CheckCircle className="w-3 h-3 mr-1" />
+              )}
+              {statusStyle.label === "Error" && (
+                <XCircle className="w-3 h-3 mr-1" />
+              )}
+              {statusStyle.label === "Running" && (
+                <RefreshCw className="w-3 h-3 mr-1 animate-spin" />
+              )}
               {statusStyle.label}
             </span>
           </div>
@@ -68,7 +100,7 @@ export default function HeaderCard({
           {/* START DATE */}
           <div className="text-left">
             <p className="text-xs text-gray-400">Start Date</p>
-            <p className="text-sm text-gray-700">12/12/2026</p>
+            <p className="text-sm text-gray-700">{formatDate(headerData.startDate, "yy/mm/dd")}</p>
           </div>
 
           {/* DURATION */}
@@ -76,7 +108,7 @@ export default function HeaderCard({
             <p className="text-xs text-gray-400">Duration</p>
             <div className="flex items-center gap-1">
               <Clock size={14} className="text-gray-400" />
-              <p className="text-sm text-gray-700">1h</p>
+              <p className="text-sm text-gray-700">{headerData.duration}</p>
             </div>
           </div>
 

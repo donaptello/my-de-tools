@@ -10,13 +10,17 @@ import { ArrowLeft } from "lucide-react";
 import HeaderCard from "../../components/hop-management-detail/HeaderCard";
 import StatCard from "../../components/hop-management-detail/StatCard";
 import TableHopProcess from "../../components/hop-management-detail/TableHopProcess";
+import { useHopPipelineDetail } from "../../services/hooks/useHopManagement";
 
 export default function HopManagementDetail() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
   const { pipelineId } = useParams<{ pipelineId?: string }>();
   const pipelineName = searchParams.get("pipelineName");
+
+  const { data } = useHopPipelineDetail(pipelineId, pipelineName);
 
   useEffect(() => {
     setTitle("Hop Management Detail");
@@ -32,38 +36,45 @@ export default function HopManagementDetail() {
         Back to Dashboard
       </button>
 
-      <HeaderCard 
+      <HeaderCard
         darkMode={darkMode}
         pipelineId={pipelineId}
         pipelineName={pipelineName}
+        headerData={{
+          duration: data?.data[0].duration,
+          startDate: data?.data[0].startDate,
+          status: data?.data[0].status,
+        }}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <StatCard
           darkMode={darkMode}
           statName="Total Read"
-          statValue={1376016}
+          statValue={data?.data[0].totalRead}
         />
         <StatCard
           darkMode={darkMode}
           statName="Total Written"
-          statValue={0}
+          statValue={data?.data[0].totalWritten}
         />
         <StatCard
           darkMode={darkMode}
           statName="Transforms"
-          statValue={0}
+          statValue={data?.data[0].totalTransform}
         />
         <StatCard
           darkMode={darkMode}
           statName="Total Errors"
-          statValue={0}
+          statValue={data?.data[0].totalError}
         />
       </div>
 
-      <TableHopProcess 
+      <TableHopProcess
         darkMode={darkMode}
         loading={false}
+        transformDetail={data?.data[0].transformStatusList}
+        updatedAt={data?.data[0].updatedAt}
       />
     </div>
   );
