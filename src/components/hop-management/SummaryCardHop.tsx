@@ -37,7 +37,7 @@ export default function SummaryCardHop({
 
         {/* Content */}
         <div>
-          <p className="text-sm text-gray-500">{title}</p>
+          <p className="text-xs text-gray-500">{title}</p>
           <h2
             className={`text-2xl font-bold ${
               darkMode ? "text-white" : "text-gray-900"
