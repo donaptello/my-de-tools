@@ -1,4 +1,4 @@
-import { Activity, Clock, Code, FileText } from "lucide-react";
+import { Activity, CheckCircle, Clock, Code, FileText, RefreshCw, XCircle } from "lucide-react";
 
 type HeaderCardProps = {
   darkMode: boolean;
@@ -10,15 +10,15 @@ type StatusType = "SUCCESS" | "ERROR" | "RUNNING";
 const statusConfig: Record<StatusType, { label: string; className: string }> = {
   SUCCESS: {
     label: "Success",
-    className: "bg-green-100 text-green-600",
+    className: "bg-green-500 text-white",
   },
   ERROR: {
     label: "Error",
-    className: "bg-red-100 text-red-600",
+    className: "bg-red-500 text-white",
   },
   RUNNING: {
     label: "Running",
-    className: "bg-yellow-100 text-yellow-600",
+    className: "bg-yellow-500 text-white",
   },
 };
 
@@ -58,7 +58,10 @@ export default function HeaderCard({
             <span
               className={`inline-flex items-center text-xs px-3 py-0.5 rounded-full font-medium ${statusStyle.className}`}
             >
-              ● {statusStyle.label}
+              {statusStyle.label === "Finished" && <CheckCircle className="w-3 h-3 mr-1" />}
+              {statusStyle.label === "Error" && <XCircle className="w-3 h-3 mr-1" />}
+              {statusStyle.label === "Running" && <RefreshCw className="w-3 h-3 mr-1 animate-spin" />}
+              {statusStyle.label}
             </span>
           </div>
 
