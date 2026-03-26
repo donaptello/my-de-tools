@@ -1,6 +1,7 @@
 import { HopOrchestration } from "../../services/types/HopManagement.types";
 import { Activity, AlertTriangle, Box, Clock, GitBranch } from "lucide-react";
 import Skeleton from "../main/Skleton";
+import { useNavigate } from "react-router-dom";
 
 type TableHopProps = {
   darkMode: boolean;
@@ -17,6 +18,7 @@ export default function TableHop({
   icon,
   loading,
 }: TableHopProps) {
+  const navigate = useNavigate();
   const getBgStatus = (status: string) => {
     switch (status) {
       case "Stopped":
@@ -78,11 +80,12 @@ export default function TableHop({
               data?.map((item, i) => (
                 <tr
                   key={i}
+                  onClick={() => navigate(`/hop-management/${item.id}?pipelineName=${item.name}`)}
                   className={`border-t ${
                     darkMode
                       ? "border-gray-700 hover:bg-gray-700"
                       : "border-gray-200 hover:bg-gray-50"
-                  } transition`}
+                  } transition hover:cursor-pointer`}
                 >
                   <td className="px-6 py-4 font-medium">{item.name}</td>
 
