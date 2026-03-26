@@ -44,5 +44,28 @@ export interface HopOrcestrationParams {
   size?: number;
 }
 
+export interface HopPipelineDetail {
+  transformName: string;
+  copy: number;
+  linesRead: number;
+  linesWritten: number;
+  linesInput: number;
+  linesOutput: number;
+  linesUpdated: number;
+  linesRejected: number;
+  inputBufferSize: number;
+  outputBufferSize: number;
+  errors: number;
+  statusDescription: string;
+  seconds: number;
+  speed: string;
+  priority: string;
+  stopped: boolean;
+  paused: boolean;
+  logText: string;
+  sampleRowMeta: string | null;
+  sampleRows: string | null;
+}
+
 export type HopStatusRes = ApiResponse<HopStatus>;
 export type HopOrchestrationRes = ApiResponse<HopOrchestration[]>;
