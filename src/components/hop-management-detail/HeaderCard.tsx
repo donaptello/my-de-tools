@@ -131,13 +131,13 @@ export default function HeaderCard({
       <div className="mt-4">
         <div className="flex justify-between text-xs text-gray-400 mb-1">
           <span>Progress</span>
-          <span>75%</span>
+          <span>0%</span>
         </div>
 
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-            style={{ width: `75%` }}
+            style={{ width: `0%` }}
           />
         </div>
       </div>

@@ -9,6 +9,7 @@ import {
 import SummaryCardHop from "../../components/hop-management/SummaryCardHop";
 import { Activity, CheckCircle, GitBranch, XCircle } from "lucide-react";
 import TableHop from "../../components/hop-management/TableHop";
+import AutoRefresh from "../../components/hop-management/AutoRefresh";
 
 export default function HopManagement() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
@@ -22,6 +23,13 @@ export default function HopManagement() {
   });
   return (
     <div className="grid grid-cols-1 px-10 md:px-40 flex-1 items-stretch">
+      <div className="flex justify-end mb-6">
+        <AutoRefresh 
+          darkMode={darkMode}
+          onRefresh={() => { console.info("test")}}
+        />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6 items-stretch">
         <CardStatusHop darkMode={darkMode} hopStatus={status?.data} />
       </div>
