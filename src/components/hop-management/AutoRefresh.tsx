@@ -37,6 +37,7 @@ export default function AutoRefresh({ darkMode, onRefresh }: AutoRefreshProps) {
     return () => clearInterval(timer);
   }, [enabled, interval, onRefresh]);
 
+  console.info(darkMode);
   return (
     <div className="flex items-center gap-4">
       {/* TOGGLE */}

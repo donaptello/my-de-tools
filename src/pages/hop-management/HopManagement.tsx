@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CardStatusHop from "../../components/hop-management/CardStatusHop";
 import {
   useHopManagementStatus,
@@ -58,7 +58,11 @@ export default function HopManagement() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6 items-stretch">
-        <CardStatusHop darkMode={darkMode} hopStatus={status?.data} />
+        <CardStatusHop
+          loading={loadingStatus}
+          darkMode={darkMode}
+          hopStatus={status?.data}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

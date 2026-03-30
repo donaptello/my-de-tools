@@ -56,22 +56,35 @@ export function useHopOrcestration(mode: string) {
   };
 }
 
-export function useHopPipelineDetail(pipelineId: string | undefined, pipelineName: string | null) {
+export function useHopPipelineDetail(
+  pipelineId: string | undefined,
+  pipelineName: string | null,
+) {
   const [data, setData] = useState<HopPipelineDetailRes | null>(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    hopManagementService
-      .getPipelineDetail(pipelineName, pipelineId)
-      .then((res) => {
-        setData(res);
-      })
-      .finally(() => setLoading(false));
+  const fetchStatus = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await hopManagementService.getPipelineDetail(
+        pipelineName,
+        pipelineId,
+      );
+      setData(res);
+    } catch (error) {
+      console.error("Failed to fetch status:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [pipelineId, pipelineName]);
 
+  useEffect(() => {
+    fetchStatus();
+  }, [fetchStatus]);
+
   return {
-    data, 
-    loading
-  }
+    data,
+    loading,
+    refetch: fetchStatus
+  };
 }

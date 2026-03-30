@@ -21,7 +21,14 @@ export default function HopManagementDetail() {
   const { pipelineId } = useParams<{ pipelineId?: string }>();
   const pipelineName = searchParams.get("pipelineName");
 
-  const { data } = useHopPipelineDetail(pipelineId, pipelineName);
+  const { data, loading, refetch } = useHopPipelineDetail(
+    pipelineId,
+    pipelineName,
+  );
+
+  const handleRefresh = () => {
+    refetch();
+  };
 
   useEffect(() => {
     setTitle("Hop Management Detail");
@@ -40,7 +47,8 @@ export default function HopManagementDetail() {
         <AutoRefresh
           darkMode={darkMode}
           onRefresh={() => {
-            console.info("test");
+            console.log("On Running: ", Date.now());
+            handleRefresh();
           }}
         />
       </div>
@@ -81,7 +89,7 @@ export default function HopManagementDetail() {
 
       <TableHopProcess
         darkMode={darkMode}
-        loading={false}
+        loading={loading}
         transformDetail={data?.data[0].transformStatusList}
         updatedAt={data?.data[0].updatedAt}
       />

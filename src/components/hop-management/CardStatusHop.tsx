@@ -4,12 +4,15 @@ import { HopStatus } from "../../services/types/HopManagement.types";
 type CardStatusHopProps = {
   darkMode: boolean;
   hopStatus?: HopStatus | undefined;
+  loading: boolean;
 };
 
 export default function CardStatusHop({
   darkMode,
   hopStatus,
+  loading,
 }: CardStatusHopProps) {
+  console.info(loading);
   const memoryPercent =
     ((hopStatus?.memoryUsed ?? 0) / (hopStatus?.memoryTotal ?? 1)) * 100;
   return (
@@ -26,8 +29,13 @@ export default function CardStatusHop({
         }`}
       >
         <div className="flex items-center gap-2 mb-6">
-          <Server size={18} className={`text-muted-foreground ${darkMode ? "text-gray-400": ""}`} />
-          <h3 className={`tracking-tight text-sm font-medium flex items-center gap-2 ${darkMode ? "text-gray-200" : ""}`}>
+          <Server
+            size={18}
+            className={`text-muted-foreground ${darkMode ? "text-gray-400" : ""}`}
+          />
+          <h3
+            className={`tracking-tight text-sm font-medium flex items-center gap-2 ${darkMode ? "text-gray-200" : ""}`}
+          >
             Hop Server
           </h3>
         </div>
@@ -64,8 +72,13 @@ export default function CardStatusHop({
         }`}
       >
         <div className="flex items-center gap-2 mb-4">
-          <HardDrive size={18} className={`text-muted-foreground ${darkMode ? "text-gray-400": ""}`} />
-          <h3 className={`tracking-tight text-sm font-medium flex items-center gap-2 ${darkMode ? "text-gray-200" : ""}`}>
+          <HardDrive
+            size={18}
+            className={`text-muted-foreground ${darkMode ? "text-gray-400" : ""}`}
+          />
+          <h3
+            className={`tracking-tight text-sm font-medium flex items-center gap-2 ${darkMode ? "text-gray-200" : ""}`}
+          >
             Memory Usage
           </h3>
         </div>
@@ -109,8 +122,13 @@ export default function CardStatusHop({
         }`}
       >
         <div className="flex items-center gap-2 mb-6">
-          <Cpu size={18} className={`text-muted-foreground ${darkMode ? "text-gray-400": ""}`} />
-          <h3 className={`tracking-tight text-sm font-medium flex items-center gap-2 ${darkMode ? "text-gray-200" : ""}`}>
+          <Cpu
+            size={18}
+            className={`text-muted-foreground ${darkMode ? "text-gray-400" : ""}`}
+          />
+          <h3
+            className={`tracking-tight text-sm font-medium flex items-center gap-2 ${darkMode ? "text-gray-200" : ""}`}
+          >
             CPU Info
           </h3>
         </div>
