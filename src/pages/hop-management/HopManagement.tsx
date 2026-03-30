@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CardStatusHop from "../../components/hop-management/CardStatusHop";
 import {
   useHopManagementStatus,
@@ -13,9 +13,37 @@ import AutoRefresh from "../../components/hop-management/AutoRefresh";
 
 export default function HopManagement() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
-  const { data: status } = useHopManagementStatus();
-  const { data: pipelineData, loading:loadingPipeline } = useHopOrcestration("Pipeline");
-  const { data: workflowData, loading:loadingWorkflow } = useHopOrcestration("Workflow");
+  const [searchPipeline, setSearchPipeline] = useState("");
+  const [sizePipeline, setPageSizePipeline] = useState(10);
+  const [searchWorkflow, setSearchWorkflow] = useState("");
+  const [sizeWorkflow, setPageSizeWorkflow] = useState(10);
+  const {
+    data: status,
+    loading: loadingStatus,
+    refetch,
+  } = useHopManagementStatus();
+  const {
+    data: pipelineData,
+    loading: loadingPipeline,
+    setQuery: setQueryPipeline,
+  } = useHopOrcestration("Pipeline");
+  const {
+    data: workflowData,
+    loading: loadingWorkflow,
+    setQuery: setQueryWorkflow,
+  } = useHopOrcestration("Workflow");
+
+  const handleRefresh = () => {
+    setQueryPipeline((prev) => ({
+      ...prev,
+      _refresh: Date.now(),
+    }));
+    setQueryWorkflow((prev) => ({
+      ...prev,
+      _refresh: Date.now(),
+    }));
+    refetch();
+  };
 
   useEffect(() => {
     setTitle("Hop Management");
@@ -24,9 +52,12 @@ export default function HopManagement() {
   return (
     <div className="grid grid-cols-1 px-10 md:px-40 flex-1 items-stretch">
       <div className="flex justify-end mb-6">
-        <AutoRefresh 
+        <AutoRefresh
           darkMode={darkMode}
-          onRefresh={() => { console.info("test")}}
+          onRefresh={() => {
+            console.log("On Running: ", Date.now());
+            handleRefresh();
+          }}
         />
       </div>
 
@@ -81,20 +112,32 @@ export default function HopManagement() {
       <div className="mb-6">
         <TableHop
           darkMode={darkMode}
+          mode="Pipeline"
           data={pipelineData?.data}
           title="Pipeline"
           icon={<Activity className="text-gray-400" size={18} />}
           loading={loadingPipeline}
+          onSearch={(searchName, size) => {
+            setQueryPipeline({ search_name: searchName, size: size });
+            setSearchPipeline(searchName);
+            setPageSizePipeline(size);
+          }}
         />
       </div>
 
       <div className="mb-6">
         <TableHop
           darkMode={darkMode}
+          mode="Workflow"
           data={workflowData?.data}
           title="Workflow"
           icon={<GitBranch className="text-gray-400" size={18} />}
           loading={loadingWorkflow}
+          onSearch={(searchName, size) => {
+            setQueryWorkflow({ search_name: searchName, size: size });
+            setSearchWorkflow(searchName);
+            setPageSizeWorkflow(size);
+          }}
         />
       </div>
     </div>

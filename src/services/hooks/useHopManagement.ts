@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   HopOrcestrationParams,
   HopOrchestrationRes,
@@ -11,17 +11,26 @@ export function useHopManagementStatus() {
   const [data, setData] = useState<HopStatusRes | null>(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    hopManagementService
-      .getStatus()
-      .then((res) => setData(res))
-      .finally(() => setLoading(false));
+  const fetchStatus = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await hopManagementService.getStatus();
+      setData(res);
+    } catch (error) {
+      console.error("Failed to fetch status:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchStatus();
+  }, [fetchStatus]);
 
   return {
     data,
     loading,
+    refetch: fetchStatus,
   };
 }
 

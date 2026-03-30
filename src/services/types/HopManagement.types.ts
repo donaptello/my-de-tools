@@ -41,6 +41,7 @@ export interface HopOrchestration {
 export interface HopOrcestrationParams {
   id_pipe?: string;
   name_pipe?: string;
+  search_name?: string;
   size?: number;
 }
 

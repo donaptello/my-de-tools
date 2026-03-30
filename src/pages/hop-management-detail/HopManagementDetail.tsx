@@ -11,6 +11,7 @@ import HeaderCard from "../../components/hop-management-detail/HeaderCard";
 import StatCard from "../../components/hop-management-detail/StatCard";
 import TableHopProcess from "../../components/hop-management-detail/TableHopProcess";
 import { useHopPipelineDetail } from "../../services/hooks/useHopManagement";
+import AutoRefresh from "../../components/hop-management/AutoRefresh";
 
 export default function HopManagementDetail() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
@@ -28,13 +29,21 @@ export default function HopManagementDetail() {
   });
   return (
     <div className="grid grid-cols-1 px-10 md:px-40 flex-1 items-stretch">
-      <button
-        onClick={() => navigate("/hop-management")}
-        className="flex items-center gap-2 text-sm font-medium hover:cursor-pointer text-blue-500 hover:text-blue-400 transition-colors mb-6"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Dashboard
-      </button>
+      <div className="flex justify-between mb-6">
+        <button
+          onClick={() => navigate("/hop-management")}
+          className="flex items-center gap-2 text-sm font-medium hover:cursor-pointer text-blue-500 hover:text-blue-400 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Dashboard
+        </button>
+        <AutoRefresh
+          darkMode={darkMode}
+          onRefresh={() => {
+            console.info("test");
+          }}
+        />
+      </div>
 
       <HeaderCard
         darkMode={darkMode}
