@@ -13,10 +13,6 @@ import AutoRefresh from "../../components/hop-management/AutoRefresh";
 
 export default function HopManagement() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
-  const [searchPipeline, setSearchPipeline] = useState("");
-  const [sizePipeline, setPageSizePipeline] = useState(10);
-  const [searchWorkflow, setSearchWorkflow] = useState("");
-  const [sizeWorkflow, setPageSizeWorkflow] = useState(10);
   const {
     data: status,
     loading: loadingStatus,
@@ -119,8 +115,6 @@ export default function HopManagement() {
           loading={loadingPipeline}
           onSearch={(searchName, size) => {
             setQueryPipeline({ search_name: searchName, size: size });
-            setSearchPipeline(searchName);
-            setPageSizePipeline(size);
           }}
         />
       </div>
@@ -135,8 +129,6 @@ export default function HopManagement() {
           loading={loadingWorkflow}
           onSearch={(searchName, size) => {
             setQueryWorkflow({ search_name: searchName, size: size });
-            setSearchWorkflow(searchName);
-            setPageSizeWorkflow(size);
           }}
         />
       </div>
