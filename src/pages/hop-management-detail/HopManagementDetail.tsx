@@ -26,6 +26,15 @@ export default function HopManagementDetail() {
     pipelineName,
   );
 
+  const progressPercentage = (): number => {
+    const readValue = data?.data?.[0]?.totalRead ?? 0;
+    const writtenValue = data?.data?.[0]?.totalWritten ?? 0;
+
+    if (readValue === 0) return 0;
+
+    return (writtenValue / readValue) * 100;
+  };
+
   const handleRefresh = () => {
     refetch();
   };
@@ -61,6 +70,7 @@ export default function HopManagementDetail() {
           duration: data?.data[0].duration,
           startDate: data?.data[0].startDate,
           status: data?.data[0].status,
+          progress: progressPercentage(),
         }}
       />
 
