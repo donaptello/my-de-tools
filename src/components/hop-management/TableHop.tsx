@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { HopOrchestration } from "../../services/types/HopManagement.types";
-import {
-  Activity,
-  AlertTriangle,
-  Box,
-  Clock,
-  GitBranch,
-} from "lucide-react";
+import { Activity, AlertTriangle, Box, Clock, GitBranch } from "lucide-react";
 import Skeleton from "../main/Skleton";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../helpers/time";
@@ -18,7 +12,7 @@ type TableHopProps = {
   title: string;
   icon: React.ReactNode;
   loading: boolean;
-  onSearch: (searchName: string, size: number) => void;
+  onSearch: (searchName: string, size: number, status: string, order: string, orderBy: string) => void;
 };
 
 export default function TableHop({
@@ -33,6 +27,10 @@ export default function TableHop({
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [pageSize, setPageSize] = useState(10);
+  const [status, setStatus] = useState("All");
+  const [order, setOrder] = useState("desc");
+  const [orderBy, setOrderBy] = useState("startDate");
+
   const getBgStatus = (status: string) => {
     switch (status) {
       case "Stopped":
@@ -67,40 +65,94 @@ export default function TableHop({
             value={pageSize}
             onChange={(e) => {
               setPageSize(Number(e.target.value));
-              onSearch(search, Number(e.target.value));
+              onSearch(search, Number(e.target.value), status, order, orderBy);
             }}
             className={`${
               darkMode
                 ? "bg-gray-700 text-white border-gray-600"
                 : "bg-white text-black border-gray-200"
-            } border rounded-xl px-2 py-2 text-xs`}
+            } border rounded-lg px-2 py-2 text-xs`}
           >
             <option value={10}>10</option>
             <option value={25}>25</option>
             <option value={50}>50</option>
             <option value={100}>100</option>
           </select>
+
+          {/* Dropdown Status */}
+          <select
+            value={status}
+            onChange={(e) => {
+              setStatus(e.target.value);
+              onSearch(search, pageSize, e.target.value, order, orderBy);
+            }}
+            className={`${
+              darkMode
+                ? "bg-gray-700 text-white border-gray-600"
+                : "bg-white text-black border-gray-200"
+            } border rounded-lg px-2 py-2 text-xs`}
+          >
+            <option value="All">All</option>
+            <option value="Finished">Finished</option>
+            <option value="Finished (with errors)">Finished (with errors)</option>
+            <option value="Running">Running</option>
+            <option value="Halting">Halting</option>
+          </select>
+
+          {/* Dropdown OrderBy */}
+          <select
+            value={orderBy}
+            onChange={(e) => {
+              setOrderBy(e.target.value);
+              onSearch(search, pageSize, status, order, e.target.value);
+            }}
+            className={`${
+              darkMode
+                ? "bg-gray-700 text-white border-gray-600"
+                : "bg-white text-black border-gray-200"
+            } border rounded-lg px-2 py-2 text-xs`}
+          >
+            <option value="startDate">Start Date</option>
+            <option value="durationRaw">Duration</option>
+          </select>
+
+          {/* Dropdown Order asc/desc */}
+          <select
+            value={order}
+            onChange={(e) => {
+              setOrder(e.target.value);
+              onSearch(search, pageSize, status, e.target.value, orderBy);
+            }}
+            className={`${
+              darkMode
+                ? "bg-gray-700 text-white border-gray-600"
+                : "bg-white text-black border-gray-200"
+            } border rounded-lg px-2 py-2 text-xs`}
+          >
+            <option value="asc">ASC</option>
+            <option value="desc">DESC</option>
+          </select>
+
+
           {/* Search Name */}
           <div
-            className={`${
-              darkMode ? "border-gray-700" : "border-gray-200"
-            }`}
+            className={`${darkMode ? "border-gray-700" : "border-gray-200"}`}
           >
-              <input
-                type="text"
-                placeholder={`Search ${mode}...`}
-                value={search}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  setSearch(v);
-                  onSearch(v, pageSize);
-                }}
-                className={`flex-1 rounded-lg px-4 py-2 text-xs placeholder-gray-400 focus:outline-none focus:ring-2 ${
-                  darkMode
-                    ? "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-400 focus:ring-blue-900"
-                    : "text-gray-700 bg-white border border-gray-200 focus:border-blue-500 focus:ring-blue-100"
-                }`}
-              />
+            <input
+              type="text"
+              placeholder={`Search ${mode}...`}
+              value={search}
+              onChange={(e) => {
+                const v = e.target.value;
+                setSearch(v);
+                onSearch(v, pageSize, status, order, orderBy);
+              }}
+              className={`flex-1 rounded-lg px-4 py-2 text-xs placeholder-gray-400 focus:outline-none focus:ring-2 ${
+                darkMode
+                  ? "text-gray-200 bg-gray-700 border border-gray-600 focus:border-blue-400 focus:ring-blue-900"
+                  : "text-gray-700 bg-white border border-gray-200 focus:border-blue-500 focus:ring-blue-100"
+              }`}
+            />
           </div>
           {/* Button Clear Log */}
           <button className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs">

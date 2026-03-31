@@ -91,7 +91,7 @@ export default function CardStatusHop({
 
         <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-4">
           <div
-            className="h-full bg-blue-500"
+            className="h-full bg-blue-500 transition-all duration-500 ease-out"
             style={{ width: `${memoryPercent}%` }}
           />
         </div>
@@ -150,7 +150,7 @@ export default function CardStatusHop({
 
             <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
               <div
-                className="h-full bg-blue-500"
+                className="h-full bg-blue-500 transition-all duration-500 ease-out"
                 style={{ width: `${hopStatus?.loadAvg}%` }}
               />
             </div>

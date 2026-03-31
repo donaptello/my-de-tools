@@ -123,8 +123,8 @@ export default function HopManagement() {
           title="Pipeline"
           icon={<Activity className="text-gray-400" size={18} />}
           loading={loadingPipeline}
-          onSearch={(searchName, size) => {
-            setQueryPipeline({ search_name: searchName, size: size });
+          onSearch={(searchName, size, status, order, orderBy) => {
+            setQueryPipeline({ search_name: searchName, size: size, status: status, order: order, orderBy: orderBy });
           }}
         />
       </div>
@@ -137,8 +137,8 @@ export default function HopManagement() {
           title="Workflow"
           icon={<GitBranch className="text-gray-400" size={18} />}
           loading={loadingWorkflow}
-          onSearch={(searchName, size) => {
-            setQueryWorkflow({ search_name: searchName, size: size });
+          onSearch={(searchName, size, status, order, orderBy) => {
+            setQueryWorkflow({ search_name: searchName, size: size, status: status, order: order, orderBy: orderBy });
           }}
         />
       </div>

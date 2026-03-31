@@ -43,6 +43,9 @@ export interface HopOrcestrationParams {
   name_pipe?: string;
   search_name?: string;
   size?: number;
+  status?: string;
+  order?: string;
+  orderBy?: string;
 }
 
 export interface HopTransformationDetails {
