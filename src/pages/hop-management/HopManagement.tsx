@@ -41,6 +41,12 @@ export default function HopManagement() {
     refetch();
   };
 
+  const errorPipeline: number = status?.data.pipelineStatus?.totalError ?? 0;
+  const errorWorkflow: number = status?.data.workflowStatus.totalError ?? 0;
+
+  const finishedPipeline: number = (status?.data.pipelineStatus?.totalFinished ?? 0 - errorPipeline)
+  const finishedWorkflow: number = (status?.data.workflowStatus?.totalFinished ?? 0 - errorWorkflow)
+
   useEffect(() => {
     setTitle("Hop Management");
     setDesc("Apache Hop monitoring overview");
@@ -73,7 +79,7 @@ export default function HopManagement() {
           icon={<Activity className="text-blue-500" />}
           bgIcon="bg-blue-100"
           stats={{
-            success: status?.data.pipelineStatus.totalFinished,
+            success: finishedPipeline,
             running: status?.data.pipelineStatus.totalRunning,
             error: status?.data.pipelineStatus.totalError,
           }}
@@ -86,7 +92,7 @@ export default function HopManagement() {
           icon={<GitBranch className="text-blue-500" />}
           bgIcon="bg-blue-100"
           stats={{
-            success: status?.data.workflowStatus.totalFinished,
+            success: finishedWorkflow,
             running: status?.data.workflowStatus.totalRunning,
             error: status?.data.workflowStatus.totalError,
           }}
@@ -94,7 +100,7 @@ export default function HopManagement() {
 
         <SummaryCardHop
           title="Total Finished"
-          value={197}
+          value={finishedPipeline + finishedWorkflow}
           darkMode={darkMode}
           icon={<CheckCircle className="text-green-500" />}
           bgIcon="bg-green-100"
@@ -102,7 +108,7 @@ export default function HopManagement() {
 
         <SummaryCardHop
           title="Total Error"
-          value={0}
+          value={errorPipeline + errorWorkflow}
           darkMode={darkMode}
           icon={<XCircle className="text-red-500" />}
           bgIcon="bg-red-100"
