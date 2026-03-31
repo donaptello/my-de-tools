@@ -15,7 +15,7 @@ const intervalLabels: Record<IntervalOption, string> = {
   300: "5m",
 };
 
-export default function AutoRefresh({ darkMode, onRefresh }: AutoRefreshProps) {
+export default function AutoRefresh({ onRefresh }: AutoRefreshProps) {
   const [enabled, setEnabled] = useState(false);
   const [interval, setIntervalValue] = useState<IntervalOption>(5);
   const [time, setTime] = useState(new Date());
@@ -37,7 +37,6 @@ export default function AutoRefresh({ darkMode, onRefresh }: AutoRefreshProps) {
     return () => clearInterval(timer);
   }, [enabled, interval, onRefresh]);
 
-  console.info(darkMode);
   return (
     <div className="flex items-center gap-4">
       {/* TOGGLE */}

@@ -9,10 +9,8 @@ type CardStatusHopProps = {
 
 export default function CardStatusHop({
   darkMode,
-  hopStatus,
-  loading,
+  hopStatus
 }: CardStatusHopProps) {
-  console.info(loading);
   const memoryPercent =
     ((hopStatus?.memoryUsed ?? 0) / (hopStatus?.memoryTotal ?? 1)) * 100;
   return (
