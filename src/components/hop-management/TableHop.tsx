@@ -234,7 +234,7 @@ export default function TableHop({
                     {formatDate(item.startDate)}
                   </td>
                   <td className="px-6 text-gray-500">
-                    {formatDate(item.endDate)}
+                    {formatDate(item.endDate || new Date().toISOString())}
                   </td>
                 </tr>
               ))
