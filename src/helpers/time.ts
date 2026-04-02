@@ -11,25 +11,45 @@ export function timeCheckerExpAuth(exp: number): boolean {
 
 export function formatDate(
   dateString: string | undefined,
-  type: string | undefined = undefined,
+  type?: string,
 ): string | null {
-  if (dateString === undefined) {
-    return null;
-  }
+  if (!dateString) return null;
+
   const date = new Date(dateString);
 
-  const yyyy = date.getFullYear();
-  const MM = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDay()).padStart(2, "0");
+  // ambil bagian date (WIB)
+  const dateParts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
 
-  const HH = String(date.getHours()).padStart(2, "0");
-  const mm = String(date.getMinutes()).padStart(2, "0");
-  const ss = String(date.getSeconds()).padStart(2, "0");
+  // ambil bagian time (WIB)
+  const timeParts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Jakarta",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
 
-  if (type !== undefined && type === "yy/mm/dd") {
+  const get = (parts: Intl.DateTimeFormatPart[], type: string) =>
+    parts.find((p) => p.type === type)?.value || "00";
+
+  const yyyy = get(dateParts, "year");
+  const MM = get(dateParts, "month");
+  const dd = get(dateParts, "day");
+
+  const HH = get(timeParts, "hour");
+  const mm = get(timeParts, "minute");
+  const ss = get(timeParts, "second");
+
+  if (type === "yy/mm/dd") {
     return `${dd}/${MM}/${yyyy}`;
-  } else if (type !== undefined && type === "HH.mm.ss") {
+  } else if (type === "HH.mm.ss") {
     return `${HH}.${mm}.${ss}`;
   }
+
   return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
 }
