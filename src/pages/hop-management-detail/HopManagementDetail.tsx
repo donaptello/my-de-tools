@@ -12,6 +12,7 @@ import StatCard from "../../components/hop-management-detail/StatCard";
 import TableHopProcess from "../../components/hop-management-detail/TableHopProcess";
 import { useHopPipelineDetail } from "../../services/hooks/useHopManagement";
 import AutoRefresh from "../../components/hop-management/AutoRefresh";
+import LoggingHop from "../../components/hop-management-detail/LoggingCard";
 
 export default function HopManagementDetail() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
@@ -97,12 +98,22 @@ export default function HopManagementDetail() {
         />
       </div>
 
-      <TableHopProcess
-        darkMode={darkMode}
-        loading={loading}
-        transformDetail={data?.data[0].transformStatusList}
-        updatedAt={data?.data[0].updatedAt}
-      />
+      <div className="mb-6">
+        <TableHopProcess
+          darkMode={darkMode}
+          loading={loading}
+          transformDetail={data?.data[0].transformStatusList}
+          updatedAt={data?.data[0].updatedAt}
+        />
+      </div>
+
+      <div className="mb-6">
+        <LoggingHop 
+          darkMode={darkMode}
+          loading={loading}
+          loggingString={data?.data[0].loggingString}
+        />
+      </div>
     </div>
   );
 }
