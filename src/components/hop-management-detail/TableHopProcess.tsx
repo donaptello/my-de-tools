@@ -68,6 +68,7 @@ export default function TableHopProcess({
               <th className="px-6 font-medium">Status</th>
               <th className="px-6 font-medium">Time</th>
               <th className="px-6 font-medium">Speed</th>
+              <th className="px-6 font-medium">Priority</th>
             </tr>
           </thead>
 
@@ -105,6 +106,7 @@ export default function TableHopProcess({
                   </td>
                   <td className="px-6 text-gray-500 text-xs">{formatter.format(item.seconds)}s</td>
                   <td className="px-6 text-gray-500 text-xs">{item.speed}</td>
+                  <td className="px-6 text-gray-500 text-xs">{item.priority}</td>
                 </tr>
               ))
             ) : (

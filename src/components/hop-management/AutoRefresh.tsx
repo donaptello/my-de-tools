@@ -1,23 +1,34 @@
 import { RefreshCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 
+type IntervalConfig = Record<number, string>;
 type AutoRefreshProps = {
   darkMode: boolean;
   onRefresh: () => void;
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
+  intervals?: IntervalConfig;
+  defaultInterval?: number;
 };
 
-type IntervalOption = 5 | 10 | 30 | 60 | 300;
-const intervalLabels: Record<IntervalOption, string> = {
-  5: "5s",
-  10: "10s",
-  30: "30s",
-  60: "1m",
-  300: "5m",
-};
+export default function AutoRefresh({
+  onRefresh,
+  enabled,
+  setEnabled,
+  intervals = {
+    5: "5s",
+    10: "10s",
+    30: "30s",
+    60: "1m",
+    300: "5m",
+  },
+  defaultInterval = 5,
+}: AutoRefreshProps) {
+  const intervalKeys = Object.keys(intervals).map(Number);
 
-export default function AutoRefresh({ onRefresh }: AutoRefreshProps) {
-  const [enabled, setEnabled] = useState(false);
-  const [interval, setIntervalValue] = useState<IntervalOption>(5);
+  const [interval, setIntervalValue] = useState<number>(
+    intervalKeys.includes(defaultInterval) ? defaultInterval : intervalKeys[0],
+  );
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -59,22 +70,22 @@ export default function AutoRefresh({ onRefresh }: AutoRefreshProps) {
       {/* INTERVAL OPTIONS */}
       {enabled && (
         <div className="flex bg-gray-100 rounded-full border border-gray-300 p-1">
-          {(Object.keys(intervalLabels) as unknown as IntervalOption[]).map(
-            (key) => (
-              <button
-                key={key}
-                onClick={() => {
-                  setIntervalValue(key);
-                  console.log(typeof key, key);
-                }}
-                className={`px-3 py-1 text-xs rounded-full transition ${
-                  Number(interval) === Number(key) ? "bg-blue-500 text-white" : "text-gray-600"
-                }`}
-              >
-                {intervalLabels[key]}
-              </button>
-            ),
-          )}
+          {intervalKeys.map((key) => (
+            <button
+              key={key}
+              onClick={() => {
+                setIntervalValue(key);
+                console.log(typeof key, key);
+              }}
+              className={`px-3 py-1 text-xs rounded-full transition ${
+                Number(interval) === Number(key)
+                  ? "bg-blue-500 text-white"
+                  : "text-gray-600"
+              }`}
+            >
+              {intervals[key]}
+            </button>
+          ))}
         </div>
       )}
 

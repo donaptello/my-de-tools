@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CardStatusHop from "../../components/hop-management/CardStatusHop";
 import {
   useHopManagementStatus,
@@ -13,6 +13,7 @@ import AutoRefresh from "../../components/hop-management/AutoRefresh";
 
 export default function HopManagement() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
+  const [enabled, setEnabled] = useState(false);
   const {
     data: status,
     loading: loadingStatus,
@@ -60,6 +61,8 @@ export default function HopManagement() {
             console.log("On Running: ", Date.now());
             handleRefresh();
           }}
+          enabled={enabled}
+          setEnabled={(value) => setEnabled(value)}
         />
       </div>
 

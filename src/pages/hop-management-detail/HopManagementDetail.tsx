@@ -5,7 +5,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import HeaderCard from "../../components/hop-management-detail/HeaderCard";
 import StatCard from "../../components/hop-management-detail/StatCard";
@@ -17,6 +17,7 @@ import LoggingHop from "../../components/hop-management-detail/LoggingCard";
 export default function HopManagementDetail() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
   const [searchParams] = useSearchParams();
+  const [enabled, setEnabled] = useState(false);
   const navigate = useNavigate();
 
   const { pipelineId } = useParams<{ pipelineId?: string }>();
@@ -37,7 +38,16 @@ export default function HopManagementDetail() {
   };
 
   const handleRefresh = () => {
-    refetch();
+    if (
+      data?.data[0].status === "Finished" ||
+      data?.data[0].status === "Finished (with errors)"
+    ) {
+      setEnabled(false);
+    }
+
+    if (enabled) {
+      refetch();
+    }
   };
 
   useEffect(() => {
@@ -60,6 +70,16 @@ export default function HopManagementDetail() {
             console.log("On Running: ", Date.now());
             handleRefresh();
           }}
+          enabled={enabled}
+          setEnabled={(value) => setEnabled(value)}
+          intervals={{
+            1: "1s",
+            5: "5s",
+            10: "10s",
+            30: "30s",
+            60: "1m",
+          }}
+          defaultInterval={1}
         />
       </div>
 
@@ -108,7 +128,7 @@ export default function HopManagementDetail() {
       </div>
 
       <div className="mb-6">
-        <LoggingHop 
+        <LoggingHop
           darkMode={darkMode}
           loading={loading}
           loggingString={data?.data[0].loggingString}
