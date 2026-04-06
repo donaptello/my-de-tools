@@ -75,6 +75,7 @@ export interface HopPipelineDetail {
   id: string;
   name: string | null;
   status: string;
+  loggingString: string;
   startDate: string;
   endDate: string;
   duration: string;
