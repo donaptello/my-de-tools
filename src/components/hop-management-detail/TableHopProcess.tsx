@@ -1,5 +1,4 @@
 import { Box, Hash } from "lucide-react";
-import Skeleton from "../main/Skleton";
 import { HopTransformationDetails } from "../../services/types/HopManagement.types";
 import { formatDate } from "../../helpers/time";
 
@@ -106,58 +105,6 @@ export default function TableHopProcess({
                   </td>
                   <td className="px-6 text-gray-500 text-xs">{formatter.format(item.seconds)}s</td>
                   <td className="px-6 text-gray-500 text-xs">{item.speed}</td>
-                </tr>
-              ))
-            ) : transformDetail?.length != 0 && loading === true ? (
-              Array.from({ length: 10 }).map((_, index) => (
-                <tr
-                  key={index}
-                  className={`border-t ${
-                    darkMode
-                      ? "border-gray-700 hover:bg-gray-700"
-                      : "border-gray-200 hover:bg-gray-50"
-                  } transition`}
-                >
-                  <td className="px-6 py-4 font-medium">
-                    <Skeleton />
-                  </td>
-
-                  <td className="px-6">
-                    <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-gray-700 w-fit">
-                      <Skeleton />
-                    </span>
-                  </td>
-
-                  <td className="px-6">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
                 </tr>
               ))
             ) : (
