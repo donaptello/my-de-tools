@@ -3,6 +3,7 @@ import { LayoutContextType } from "../../components/main/Layout";
 import { useEffect, useState } from "react";
 import CardStatusHop from "../../components/hop-management/CardStatusHop";
 import {
+  useDeleteHopLog,
   useHopManagementStatus,
   useHopOrcestration,
 } from "../../services/hooks/useHopManagement";
@@ -10,9 +11,12 @@ import SummaryCardHop from "../../components/hop-management/SummaryCardHop";
 import { Activity, CheckCircle, GitBranch, XCircle } from "lucide-react";
 import TableHop from "../../components/hop-management/TableHop";
 import AutoRefresh from "../../components/hop-management/AutoRefresh";
+import ModalLogDelete from "../../components/modal/ModalLogDelete";
 
 export default function HopManagement() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null);
   const [enabled, setEnabled] = useState(false);
   const {
     data: status,
@@ -41,12 +45,15 @@ export default function HopManagement() {
     }));
     refetch();
   };
+  const { deleteLog } = useDeleteHopLog();
 
   const errorPipeline: number = status?.data.pipelineStatus?.totalError ?? 0;
   const errorWorkflow: number = status?.data.workflowStatus.totalError ?? 0;
 
-  const finishedPipeline: number = (status?.data.pipelineStatus?.totalFinished ?? 0 - errorPipeline)
-  const finishedWorkflow: number = (status?.data.workflowStatus?.totalFinished ?? 0 - errorWorkflow)
+  const finishedPipeline: number =
+    status?.data.pipelineStatus?.totalFinished ?? 0 - errorPipeline;
+  const finishedWorkflow: number =
+    status?.data.workflowStatus?.totalFinished ?? 0 - errorWorkflow;
 
   useEffect(() => {
     setTitle("Hop Management");
@@ -127,7 +134,17 @@ export default function HopManagement() {
           icon={<Activity className="text-gray-400" size={18} />}
           loading={loadingPipeline}
           onSearch={(searchName, size, status, order, orderBy) => {
-            setQueryPipeline({ search_name: searchName, size: size, status: status, order: order, orderBy: orderBy });
+            setQueryPipeline({
+              search_name: searchName,
+              size: size,
+              status: status,
+              order: order,
+              orderBy: orderBy,
+            });
+          }}
+          setShowDeleteConfirm={(mode, value) => {
+            setSelected(mode);
+            setShowDeleteConfirm(value);
           }}
         />
       </div>
@@ -141,10 +158,34 @@ export default function HopManagement() {
           icon={<GitBranch className="text-gray-400" size={18} />}
           loading={loadingWorkflow}
           onSearch={(searchName, size, status, order, orderBy) => {
-            setQueryWorkflow({ search_name: searchName, size: size, status: status, order: order, orderBy: orderBy });
+            setQueryWorkflow({
+              search_name: searchName,
+              size: size,
+              status: status,
+              order: order,
+              orderBy: orderBy,
+            });
+          }}
+          setShowDeleteConfirm={(mode, value) => {
+            setSelected(mode);
+            setShowDeleteConfirm(value);
           }}
         />
       </div>
+
+      <ModalLogDelete
+        selected={selected}
+        darkMode={darkMode}
+        showDeleteConfirm={showDeleteConfirm}
+        setShowDeleteConfirm={(value) => setShowDeleteConfirm(value)}
+        onConfirm={async (mode, withError) => {
+          if (mode != null) {
+            await deleteLog(mode, withError);
+            setSelected(null);
+            setShowDeleteConfirm(false);
+          }
+        }}
+      />
     </div>
   );
 }

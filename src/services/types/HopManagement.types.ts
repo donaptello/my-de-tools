@@ -88,6 +88,11 @@ export interface HopPipelineDetail {
   type: string;
 }
 
+export interface DeleteTypes {
+  totalDelete: number;
+}
+
 export type HopStatusRes = ApiResponse<HopStatus>;
 export type HopOrchestrationRes = ApiResponse<HopOrchestration[]>;
 export type HopPipelineDetailRes = ApiResponse<HopPipelineDetail[]>;
+export type HopDeleteRes = ApiResponse<DeleteTypes>;

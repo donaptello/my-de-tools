@@ -1,4 +1,5 @@
 import {
+  HopDeleteRes,
   HopOrcestrationParams,
   HopOrchestrationRes,
   HopPipelineDetailRes,
@@ -26,6 +27,16 @@ export const hopManagementService = {
       .get(
         `v1/hop/orchestration/Pipeline?id_pipe=${pipelineId}&name_pipe=${pipelineName}`,
       )
+      .then((res) => res.data);
+  },
+  async deleteLogApacheHop(
+    mode: string,
+    withError: boolean,
+  ): Promise<HopDeleteRes> {
+    return apiDeTools
+      .delete(`v1/hop/orchestration/${mode}`, {
+        params: { with_error: withError },
+      })
       .then((res) => res.data);
   },
 };

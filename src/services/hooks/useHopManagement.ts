@@ -6,6 +6,7 @@ import {
   HopStatusRes,
 } from "../types/HopManagement.types";
 import { hopManagementService } from "../api/HopManagement.service";
+import { isAxiosError } from "axios";
 
 export function useHopManagementStatus() {
   const [data, setData] = useState<HopStatusRes | null>(null);
@@ -85,6 +86,32 @@ export function useHopPipelineDetail(
   return {
     data,
     loading,
-    refetch: fetchStatus
+    refetch: fetchStatus,
   };
+}
+
+export function useDeleteHopLog() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const deleteLog = async (mode: string, withError: boolean) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await hopManagementService.deleteLogApacheHop(
+        mode,
+        withError,
+      );
+      return res;
+    } catch (err: unknown) {
+      if (isAxiosError(err)) {
+        setError(err?.response?.data.message ?? "Something went wrong");
+      }
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+  return {deleteLog, loading, error}
 }

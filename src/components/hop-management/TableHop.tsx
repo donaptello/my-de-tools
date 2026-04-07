@@ -13,6 +13,7 @@ type TableHopProps = {
   icon: React.ReactNode;
   loading: boolean;
   onSearch: (searchName: string, size: number, status: string, order: string, orderBy: string) => void;
+  setShowDeleteConfirm: (mode: string, value: boolean) => void;
 };
 
 export default function TableHop({
@@ -23,6 +24,7 @@ export default function TableHop({
   icon,
   loading,
   onSearch,
+  setShowDeleteConfirm,
 }: TableHopProps) {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -155,7 +157,9 @@ export default function TableHop({
             />
           </div>
           {/* Button Clear Log */}
-          <button className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs">
+          <button 
+            onClick={() => setShowDeleteConfirm(mode, true)}
+            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs">
             <AlertTriangle size={16} />
             Clear Log
           </button>
