@@ -3,8 +3,10 @@ import {
   CheckCircle,
   Clock,
   Code,
-  FileText,
+  Play,
   RefreshCw,
+  Square,
+  Trash,
   XCircle,
 } from "lucide-react";
 import { formatDate } from "../../helpers/time";
@@ -71,9 +73,7 @@ export default function HeaderCard({
             <h2 className="text-lg font-semibold text-gray-800">
               {pipelineName}
             </h2>
-            <p className="text-xs font-mono text-gray-400">
-              ID: {pipelineId}
-            </p>
+            <p className="text-xs font-mono text-gray-400">ID: {pipelineId}</p>
           </div>
         </div>
 
@@ -101,7 +101,9 @@ export default function HeaderCard({
           {/* START DATE */}
           <div className="text-left">
             <p className="text-xs text-gray-400">Start Date</p>
-            <p className="text-sm text-gray-700">{formatDate(headerData.startDate, "yy/mm/dd")}</p>
+            <p className="text-sm text-gray-700">
+              {formatDate(headerData.startDate, "yy/mm/dd")}
+            </p>
           </div>
 
           {/* DURATION */}
@@ -115,15 +117,42 @@ export default function HeaderCard({
 
           {/* ACTIONS */}
           <div className="flex gap-2">
-            <button className="flex hover:cursor-not-allowed items-center gap-1 px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-gray-100">
-              <FileText size={14} />
-              View as XML
-            </button>
-
             <button className="flex items-center gap-1 px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-gray-100">
               <Code size={14} />
               View as JSON
             </button>
+            <div className="flex gap-1">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // onPlay(item);
+                }}
+                disabled={headerData.status === "Running"}
+                className="text-green-600 px-2 py-2 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Play size={16} />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // onStop(item);
+                }}
+                disabled={headerData.status !== "Running"}
+                className="text-orange-600 px-2 py-2 rounded-full hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Square size={16} />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // onDelete(item);
+                }}
+                disabled={headerData.status === "Running"}
+                className="text-red-600 px-2 py-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Trash size={16} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
