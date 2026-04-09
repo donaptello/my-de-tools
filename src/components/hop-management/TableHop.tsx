@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { HopOrchestration } from "../../services/types/HopManagement.types";
-import { Activity, AlertTriangle, Box, Clock, GitBranch } from "lucide-react";
+import {
+  Activity,
+  AlertTriangle,
+  Box,
+  Clock,
+  GitBranch,
+  Play,
+  Square,
+  Trash,
+} from "lucide-react";
 import Skeleton from "../main/Skleton";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../helpers/time";
@@ -12,7 +21,13 @@ type TableHopProps = {
   title: string;
   icon: React.ReactNode;
   loading: boolean;
-  onSearch: (searchName: string, size: number, status: string, order: string, orderBy: string) => void;
+  onSearch: (
+    searchName: string,
+    size: number,
+    status: string,
+    order: string,
+    orderBy: string,
+  ) => void;
   setShowDeleteConfirm: (mode: string, value: boolean) => void;
 };
 
@@ -96,7 +111,9 @@ export default function TableHop({
           >
             <option value="All">All</option>
             <option value="Finished">Finished</option>
-            <option value="Finished (with errors)">Finished (with errors)</option>
+            <option value="Finished (with errors)">
+              Finished (with errors)
+            </option>
             <option value="Running">Running</option>
             <option value="Halting">Halting</option>
           </select>
@@ -135,7 +152,6 @@ export default function TableHop({
             <option value="desc">DESC</option>
           </select>
 
-
           {/* Search Name */}
           <div
             className={`${darkMode ? "border-gray-700" : "border-gray-200"}`}
@@ -157,9 +173,10 @@ export default function TableHop({
             />
           </div>
           {/* Button Clear Log */}
-          <button 
+          <button
             onClick={() => setShowDeleteConfirm(mode, true)}
-            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs">
+            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs"
+          >
             <AlertTriangle size={16} />
             Clear Log
           </button>
@@ -182,6 +199,7 @@ export default function TableHop({
               <th className="px-6 font-medium">Duration</th>
               <th className="px-6 font-medium">Start Date</th>
               <th className="px-6 font-medium">End Date</th>
+              <th className="px-6 font-medium">Actions</th>
             </tr>
           </thead>
 
@@ -240,6 +258,19 @@ export default function TableHop({
                   <td className="px-6 text-gray-500">
                     {formatDate(item.endDate || new Date().toISOString())}
                   </td>
+                  <td className="px-6">
+                    <div className="flex gap-3">
+                      <button className="text-green-400 rounded-full bg-green-100 hover:bg-green-500 transition-colors p-1.5">
+                        <Play size={16} fill="#2fd65b"/>
+                      </button>
+                      <button className="text-red-400 rounded-full bg-red-100 hover:bg-red-500 transition-colors p-1.5">
+                        <Square size={16} fill="#f76963" />
+                      </button>
+                      <button className="text-red-400 rounded-full bg-red-100 hover:bg-red-500 transition-colors p-1.5">
+                        <Trash size={16} fill="#f76963" />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))
             ) : data?.length != 0 && loading === true ? (
@@ -280,6 +311,9 @@ export default function TableHop({
                     <Skeleton />
                   </td>
                   <td className="px-6 text-gray-500">
+                    <Skeleton />
+                  </td>
+                  <td>
                     <Skeleton />
                   </td>
                 </tr>
