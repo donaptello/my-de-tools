@@ -50,10 +50,12 @@ export default function TableHop({
 
   const getBgStatus = (status: string) => {
     switch (status) {
-      case "Stopped":
-        return "bg-yellow-100 text-yellow-600";
-      case "Finished":
+      case "Running":
         return "bg-blue-100 text-blue-600";
+      case "Finished":
+        return "bg-green-100 text-green-600";
+      case "Halting":
+        return "bg-red-100 text-red-800";
       default:
         return "bg-red-100 text-red-600";
     }
