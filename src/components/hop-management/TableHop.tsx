@@ -259,15 +259,36 @@ export default function TableHop({
                     {formatDate(item.endDate || new Date().toISOString())}
                   </td>
                   <td className="px-6">
-                    <div className="flex gap-3">
-                      <button className="text-green-400 rounded-full bg-green-100 hover:bg-green-500 transition-colors p-1.5">
-                        <Play size={16} fill="#2fd65b"/>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // onPlay(item);
+                        }}
+                        disabled={item.status === "Running"}
+                        className="text-green-600 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Play size={16} />
                       </button>
-                      <button className="text-red-400 rounded-full bg-red-100 hover:bg-red-500 transition-colors p-1.5">
-                        <Square size={16} fill="#f76963" />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // onStop(item);
+                        }}
+                        disabled={item.status !== "Running"}
+                        className="text-orange-600 rounded-full hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Square size={16} />
                       </button>
-                      <button className="text-red-400 rounded-full bg-red-100 hover:bg-red-500 transition-colors p-1.5">
-                        <Trash size={16} fill="#f76963" />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // onDelete(item);
+                        }}
+                        disabled={item.status === "Running"}
+                        className="text-red-600 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Trash size={16} />
                       </button>
                     </div>
                   </td>
