@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import {
+  HopOptionsParams,
   HopOrcestrationParams,
   HopOrchestrationRes,
   HopPipelineDetailRes,
@@ -113,5 +114,29 @@ export function useDeleteHopLog() {
       setLoading(false);
     }
   };
-  return {deleteLog, loading, error}
+  return { deleteLog, loading, error };
+}
+
+export function useOptionHopMode() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const optionsMode = async (params: HopOptionsParams) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await hopManagementService.optionsModeHop(params);
+      return res;
+    } catch (err: unknown) {
+      if (isAxiosError(err)) {
+        setError(err.response?.data.message ?? "Something went wrong");
+      }
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { optionsMode, loading, error };
 }

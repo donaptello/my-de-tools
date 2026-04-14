@@ -21,6 +21,13 @@ type HeaderCardProps = {
     duration: string | undefined;
     progress: number;
   };
+  pipelineMode: string | null;
+  onOptions: (
+    id_pipe: string,
+    name_pipe: string,
+    mode: string,
+    options: string,
+  ) => void;
 };
 
 type StatusType = "SUCCESS" | "ERROR" | "RUNNING";
@@ -43,7 +50,9 @@ export default function HeaderCard({
   darkMode,
   pipelineName,
   pipelineId,
+  pipelineMode,
   headerData,
+  onOptions,
 }: HeaderCardProps) {
   const getStatusConfig = (): StatusType => {
     if (headerData.status === "Finished") {
@@ -125,7 +134,7 @@ export default function HeaderCard({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  // onPlay(item);
+                  onOptions(pipelineId ?? "", pipelineName ?? "", pipelineMode ?? "", "start");
                 }}
                 disabled={headerData.status === "Running"}
                 className="text-green-600 px-2 py-2 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -135,7 +144,7 @@ export default function HeaderCard({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  // onStop(item);
+                  onOptions(pipelineId ?? "", pipelineName ?? "", pipelineMode ?? "", "stop");
                 }}
                 disabled={headerData.status !== "Running"}
                 className="text-orange-600 px-2 py-2 rounded-full hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -145,7 +154,7 @@ export default function HeaderCard({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  // onDelete(item);
+                  onOptions(pipelineId ?? "", pipelineName ?? "", pipelineMode ?? "", "remove");
                 }}
                 disabled={headerData.status === "Running"}
                 className="text-red-600 px-2 py-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"

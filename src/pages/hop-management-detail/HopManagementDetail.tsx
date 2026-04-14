@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 import HeaderCard from "../../components/hop-management-detail/HeaderCard";
 import StatCard from "../../components/hop-management-detail/StatCard";
 import TableHopProcess from "../../components/hop-management-detail/TableHopProcess";
-import { useHopPipelineDetail } from "../../services/hooks/useHopManagement";
+import { useHopPipelineDetail, useOptionHopMode } from "../../services/hooks/useHopManagement";
 import AutoRefresh from "../../components/hop-management/AutoRefresh";
 import LoggingHop from "../../components/hop-management-detail/LoggingCard";
 
@@ -19,9 +19,11 @@ export default function HopManagementDetail() {
   const [searchParams] = useSearchParams();
   const [enabled, setEnabled] = useState(false);
   const navigate = useNavigate();
+  const { optionsMode } = useOptionHopMode();
 
   const { pipelineId } = useParams<{ pipelineId?: string }>();
   const pipelineName = searchParams.get("pipelineName");
+  const pipelineMode = searchParams.get("mode");
 
   const { data, loading, refetch } = useHopPipelineDetail(
     pipelineId,
@@ -93,6 +95,17 @@ export default function HopManagementDetail() {
           status: data?.data[0].status,
           progress: progressPercentage(),
         }}
+        onOptions={(id_pipe, name_pipe, mode, options) => {
+          if (id_pipe !== null) {
+              optionsMode({
+                id_pipe: id_pipe,
+                name_pipe: name_pipe,
+                mode: mode,
+                options: options,
+              });
+            }
+        }}
+        pipelineMode={pipelineMode}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

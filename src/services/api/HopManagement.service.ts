@@ -1,5 +1,7 @@
 import {
   HopDeleteRes,
+  HopOptionsParams,
+  HopOptionsRes,
   HopOrcestrationParams,
   HopOrchestrationRes,
   HopPipelineDetailRes,
@@ -36,6 +38,13 @@ export const hopManagementService = {
     return apiDeTools
       .delete(`v1/hop/orchestration/${mode}`, {
         params: { with_error: withError },
+      })
+      .then((res) => res.data);
+  },
+  async optionsModeHop(params: HopOptionsParams): Promise<HopOptionsRes> {
+    return apiDeTools
+      .get(`v1/hop/orchestration/${params.mode}/${params.options}`, {
+        params: { id_pipe: params.id_pipe, name_pipe: params.name_pipe },
       })
       .then((res) => res.data);
   },

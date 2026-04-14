@@ -6,6 +6,7 @@ import {
   useDeleteHopLog,
   useHopManagementStatus,
   useHopOrcestration,
+  useOptionHopMode,
 } from "../../services/hooks/useHopManagement";
 import SummaryCardHop from "../../components/hop-management/SummaryCardHop";
 import { Activity, CheckCircle, GitBranch, XCircle } from "lucide-react";
@@ -18,6 +19,7 @@ export default function HopManagement() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [enabled, setEnabled] = useState(false);
+  const { optionsMode } = useOptionHopMode();
   const {
     data: status,
     loading: loadingStatus,
@@ -142,6 +144,16 @@ export default function HopManagement() {
               orderBy: orderBy,
             });
           }}
+          onOptions={(id_pipe, name_pipe, mode, options) => {
+            if (id_pipe !== null) {
+              optionsMode({
+                id_pipe: id_pipe,
+                name_pipe: name_pipe,
+                mode: mode,
+                options: options,
+              });
+            }
+          }}
           setShowDeleteConfirm={(mode, value) => {
             setSelected(mode);
             setShowDeleteConfirm(value);
@@ -165,6 +177,16 @@ export default function HopManagement() {
               order: order,
               orderBy: orderBy,
             });
+          }}
+          onOptions={(id_pipe, name_pipe, mode, options) => {
+            if (id_pipe !== null) {
+              optionsMode({
+                id_pipe: id_pipe,
+                name_pipe: name_pipe,
+                mode: mode,
+                options: options,
+              });
+            }
           }}
           setShowDeleteConfirm={(mode, value) => {
             setSelected(mode);

@@ -28,6 +28,12 @@ type TableHopProps = {
     order: string,
     orderBy: string,
   ) => void;
+  onOptions: (
+    id_pipe: string,
+    name_pipe: string,
+    mode: string,
+    options: string,
+  ) => void;
   setShowDeleteConfirm: (mode: string, value: boolean) => void;
 };
 
@@ -39,6 +45,7 @@ export default function TableHop({
   icon,
   loading,
   onSearch,
+  onOptions,
   setShowDeleteConfirm,
 }: TableHopProps) {
   const navigate = useNavigate();
@@ -213,7 +220,7 @@ export default function TableHop({
                   key={i}
                   onClick={() =>
                     navigate(
-                      `/hop-management/${item.id}?pipelineName=${item.name}`,
+                      `/hop-management/${item.id}?pipelineName=${item.name}&mode=${mode}`,
                     )
                   }
                   className={`border-t ${
@@ -265,7 +272,7 @@ export default function TableHop({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          // onPlay(item);
+                          onOptions(item.id, item.name, mode, "start");
                         }}
                         disabled={item.status === "Running"}
                         className="text-green-600 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -275,7 +282,7 @@ export default function TableHop({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          // onStop(item);
+                          onOptions(item.id, item.name, mode, "stop");
                         }}
                         disabled={item.status !== "Running"}
                         className="text-orange-600 rounded-full hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -285,7 +292,7 @@ export default function TableHop({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          // onDelete(item);
+                          onOptions(item.id, item.name, mode, "remove");
                         }}
                         disabled={item.status === "Running"}
                         className="text-red-600 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
