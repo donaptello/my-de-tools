@@ -10,7 +10,6 @@ import {
   Square,
   Trash,
 } from "lucide-react";
-import Skeleton from "../main/Skleton";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../helpers/time";
 
@@ -214,8 +213,8 @@ export default function TableHop({
 
           {/* BODY */}
           <tbody>
-            {data?.length != 0 && loading === false ? (
-              data?.map((item, i) => (
+            {data && data.length > 0 ? (
+              data.map((item, i) => (
                 <tr
                   key={i}
                   onClick={() =>
@@ -227,7 +226,7 @@ export default function TableHop({
                     darkMode
                       ? "border-gray-700 hover:bg-gray-700"
                       : "border-gray-200 hover:bg-gray-50"
-                  } transition hover:cursor-pointer`}
+                  } transition hover:cursor-pointer ${loading ? "opacity-75" : ""}`}
                 >
                   <td className="px-6 py-4 truncate max-w-52 font-medium">
                     {item.name}
@@ -274,7 +273,7 @@ export default function TableHop({
                           e.stopPropagation();
                           onOptions(item.id, item.name, mode, "start");
                         }}
-                        disabled={item.status === "Running"}
+                        disabled={item.status === "Running" || loading}
                         className="text-green-600 rounded-full hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Play size={16} />
@@ -284,7 +283,7 @@ export default function TableHop({
                           e.stopPropagation();
                           onOptions(item.id, item.name, mode, "stop");
                         }}
-                        disabled={item.status !== "Running"}
+                        disabled={item.status !== "Running" || loading}
                         className="text-orange-600 rounded-full hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Square size={16} />
@@ -294,7 +293,7 @@ export default function TableHop({
                           e.stopPropagation();
                           onOptions(item.id, item.name, mode, "remove");
                         }}
-                        disabled={item.status === "Running"}
+                        disabled={item.status === "Running" || loading}
                         className="text-red-600 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors p-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Trash size={16} />
@@ -303,54 +302,9 @@ export default function TableHop({
                   </td>
                 </tr>
               ))
-            ) : data?.length != 0 && loading === true ? (
-              Array.from({ length: 10 }).map((_, index) => (
-                <tr
-                  key={index}
-                  className={`border-t ${
-                    darkMode
-                      ? "border-gray-700 hover:bg-gray-700"
-                      : "border-gray-200 hover:bg-gray-50"
-                  } transition`}
-                >
-                  <td className="px-6 py-4 font-medium">
-                    <Skeleton />
-                  </td>
-
-                  <td className="px-6">
-                    <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-gray-700 w-fit">
-                      <Skeleton />
-                    </span>
-                  </td>
-
-                  <td className="px-6">
-                    <span
-                      className={`px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-600`}
-                    >
-                      <Skeleton />
-                    </span>
-                  </td>
-
-                  <td className="px-6 text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <Clock size={14} />
-                    </div>
-                  </td>
-
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td className="px-6 text-gray-500">
-                    <Skeleton />
-                  </td>
-                  <td>
-                    <Skeleton />
-                  </td>
-                </tr>
-              ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center p-4">
+                <td colSpan={7} className="text-center p-4">
                   <div className="flex justify-center items-center gap-2">
                     <Box size={14} color="#999" />
                     <span className="text-gray-500">No data found.</span>

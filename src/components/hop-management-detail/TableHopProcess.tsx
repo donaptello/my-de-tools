@@ -27,6 +27,9 @@ export default function TableHopProcess({
         return "bg-green-500 text-white hover:bg-red-400";
     }
   };
+
+  const hasTransformDetails = Array.isArray(transformDetail) && transformDetail.length > 0;
+
   return (
     <div
       className={`flex-1 rounded-xl border shadow-sm ${
@@ -40,8 +43,13 @@ export default function TableHopProcess({
           <h2 className="font-medium text-base">Transform Detail</h2>
         </div>
 
-        <div className="flex items-center gap-4">
-          <p className="text-xs text-gray-400">Updated: {updatedAt !== undefined ? formatDate(updatedAt, "HH.mm.ss") : "21.09.50"}</p>
+        <div className="flex flex-col items-end gap-1">
+          <p className="text-xs text-gray-400">
+            Updated: {updatedAt !== undefined ? formatDate(updatedAt, "HH.mm.ss") : "21.09.50"}
+          </p>
+          {loading && (
+            <p className="text-xs text-blue-400">Refreshing...</p>
+          )}
         </div>
       </div>
 
@@ -74,8 +82,8 @@ export default function TableHopProcess({
 
           {/* BODY */}
           <tbody>
-            {transformDetail?.length != 0 && loading === false ? (
-              transformDetail?.map((item, i) => (
+            {hasTransformDetails ? (
+              transformDetail.map((item, i) => (
                 <tr
                   key={i}
                   className={`border-t ${
@@ -111,7 +119,7 @@ export default function TableHopProcess({
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center p-4">
+                <td colSpan={13} className="text-center p-4">
                   <div className="flex justify-center items-center gap-2">
                     <Box size={14} color="#999" />
                     <span className="text-gray-500">
