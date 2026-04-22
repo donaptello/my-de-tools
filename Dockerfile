@@ -1,5 +1,5 @@
-# Build stage
-FROM node:20-alpine AS build
+# Stage 1: Build
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
@@ -9,11 +9,17 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Serve via nginx
-FROM nginx:alpine
+# Stage 2: Runtime
+FROM node:24-alpine
 
-COPY --from=build /app/build /usr/share/nginx/html
+WORKDIR /app
 
-EXPOSE 80
+# Install serve secara global
+RUN npm install -g serve
 
-CMD ["nginx", "-g", "daemon off;"]
+# Copy hasil build
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 5173
+
+CMD ["serve", "-s", "dist", "-l", "5173"]
