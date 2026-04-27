@@ -79,6 +79,7 @@ export interface HopPipelineDetail {
   startDate: string;
   endDate: string;
   duration: string;
+  progressPercentage: number;
   transformStatusList: HopTransformationDetails[];
   totalRead: number;
   totalWritten: number;
