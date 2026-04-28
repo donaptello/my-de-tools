@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: https://github.com/donaptello/de-tools-api.git
+    container_name: de-tools-backend
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    ports:
+      - "8567:8567"
+    expose:
+      - "8567"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+    container_name: de-tools-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
