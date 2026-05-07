@@ -20,7 +20,7 @@ export default function CardHome({
       } ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"}`}
     >
       <div className="flex items-start justify-between mb-3">
-        <div className="w-11 h-11 rounded-lg bg-gray-100 flex items-center justify-center">
+        <div className={`w-11 h-11 rounded-lg ${darkMode ? "bg-blue-900/40" : "bg-gray-100"} flex items-center justify-center`}>
           {icon}
         </div>
         {disabled ? (
@@ -29,8 +29,8 @@ export default function CardHome({
           </span>
         ) : null}
       </div>
-      <h3 className="font-medium text-gray-800 mb-1">{title}</h3>
-      <p className="text-sm font-light text-gray-500">{description}</p>
+      <h3 className={`font-medium ${darkMode? "text-gray-100": "text-gray-800"} mb-1`}>{title}</h3>
+      <p className={`text-sm font-light ${darkMode? "text-gray-300": "text-gray-500"}`}>{description}</p>
     </div>
   );
 }

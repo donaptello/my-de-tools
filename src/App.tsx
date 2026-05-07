@@ -62,7 +62,12 @@ export default function App() {
         isTime: true,
       },
     ],
-    [dataPipelineStatus?.data.success, dataPipelineStatus?.data.total, dataHopStatus?.data.pipelineStatus.totalFinished, dataHopStatus?.data.uptime],
+    [
+      dataPipelineStatus?.data.success,
+      dataPipelineStatus?.data.total,
+      dataHopStatus?.data.pipelineStatus.totalFinished,
+      dataHopStatus?.data.uptime,
+    ],
   );
 
   const [animatedStats, setAnimatedStats] = useState<string[]>(
@@ -152,12 +157,16 @@ export default function App() {
         />
         <div className="max-w-7xl mx-auto px-6 py-20 md:py-28">
           <div className="max-w-4xl">
-            <h1 className="text-4xl md:text-6xl text-gray-800 font-bold tracking-tight text-foreground mb-5 leading-tight">
+            <h1
+              className={`text-4xl md:text-6xl ${darkMode ? "text-gray-100" : "text-gray-800"} font-bold tracking-tight text-foreground mb-5 leading-tight`}
+            >
               Monitoring & Row Count Table
               <br />
               <span className="text-blue-500">Data Warehouse</span>
             </h1>
-            <p className="text-gray-500 md:text-lg font-light mb-8 max-w-2xl leading-relaxed">
+            <p
+              className={`${darkMode ? "text-gray-400" : "text-gray-500"} md:text-lg font-light mb-8 max-w-2xl leading-relaxed`}
+            >
               Satu dashboard untuk memantau eksekusi pipeline, menganalisis log
               error, membandingkan row count, dan menjelajahi struktur file ETL
               Anda secara real-time.
@@ -173,7 +182,7 @@ export default function App() {
               </button>
               <button
                 onClick={() => navigate("/monitoring")}
-                className="gap-2 group inline-flex cursor-pointer items-center rounded-xl px-9 py-3 text-sm font-medium transition focus:outline-none focus:ring-2 border border-gray-300 bg-gray-100 text-gray-500 hover:bg-gray-100 focus:ring-gray-200"
+                className={`gap-2 group inline-flex cursor-pointer items-center rounded-xl px-9 py-3 text-sm font-medium transition focus:outline-none focus:ring-2 border ${darkMode ? "border-gray-600 bg-gray-900 text-gray-500 hover:bg-gray-800 focus:ring-gray-800" : "border-gray-300 bg-gray-100 text-gray-500 hover:bg-gray-100 focus:ring-gray-200"}`}
               >
                 <Table className="w-4 h-4" />
                 Buka Row Count
@@ -184,17 +193,29 @@ export default function App() {
         </div>
       </section>
 
-      <section className="bg-white bg-card/40 -mx-6 px-6">
+      <section
+        className={`${darkMode ? "bg-gray-800" : "bg-white"} bg-card/40 -mx-6 px-6`}
+      >
         <div className="max-w-7xl mx-auto px-6 py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {stats.map((s, index) => (
               <div key={s.label} className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
-                  <s.icon className="w-5 h-5 text-blue-500" />
+                <div
+                  className={`w-10 h-10 rounded-lg ${darkMode ? "bg-blue-900/40" : "bg-blue-100"} flex items-center justify-center shrink-0`}
+                >
+                  <s.icon
+                    className={`w-5 h-5 ${darkMode ? "text-blue-400" : "text-blue-600"}`}
+                  />
                 </div>
                 <div>
-                  <p className="text-xs">{s.label}</p>
-                  <p className="text-xl font-semibold">
+                  <p
+                    className={`text-xs ${darkMode ? "text-gray-200" : "text-gray-800"}`}
+                  >
+                    {s.label}
+                  </p>
+                  <p
+                    className={`text-xl ${darkMode ? "text-gray-200" : "text-gray-800"} font-semibold`}
+                  >
                     {animatedStats[index]}
                   </p>
                 </div>
@@ -206,10 +227,14 @@ export default function App() {
 
       <section className="max-w-7xl mx-auto px-6 py-16">
         <div className="mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
-            Semua yang Anda butuhkan untuk Informasi Data Warehouse
+          <h2
+            className={`text-2xl md:text-3xl font-bold ${darkMode ? "text-gray-100" : "text-gray-800"} mb-2`}
+          >
+            Kebutuhan untuk Informasi Data Warehouse
           </h2>
-          <p className="text-gray-500 font-light">
+          <p
+            className={`${darkMode ? "text-gray-400" : "text-gray-500"} font-light`}
+          >
             Tools terintegrasi operasional data pipeline harian.
           </p>
         </div>
@@ -219,7 +244,11 @@ export default function App() {
               darkMode={darkMode}
               title={f.title}
               description={f.desc}
-              icon={<f.icon className="w-5 h-5 text-blue-500" />}
+              icon={
+                <f.icon
+                  className={`w-5 h-5 ${darkMode ? "text-blue-400" : "text-blue-600"}`}
+                />
+              }
               disabled={f.disabled}
             />
           ))}
@@ -227,7 +256,9 @@ export default function App() {
       </section>
 
       {/* Quick Access */}
-      <section className="border border-gray-200 bg-gray-50/40 -mx-6">
+      <section
+        className={`border-t ${darkMode ? "border-gray-600 bg-gray-800/40" : "border-gray-200 bg-gray-50/40"} -mx-6`}
+      >
         <div className="max-w-7xl mx-auto px-6 py-14">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
@@ -239,15 +270,23 @@ export default function App() {
               }`}
             >
               <div className="flex items-start justify-between mb-3">
-                <div className="w-11 h-11 rounded-lg bg-blue-100 flex items-center justify-center">
-                  <LineChart className="w-5 h-5 text-blue-500" />
+                <div
+                  className={`w-11 h-11 rounded-lg ${darkMode ? "bg-blue-900/40" : "bg-blue-100"} flex items-center justify-center`}
+                >
+                  <LineChart
+                    className={`w-5 h-5 ${darkMode ? "text-blue-400" : "text-blue-500"}`}
+                  />
                 </div>
                 <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-blue-300 group-hover:translate-x-1 transition-all" />
               </div>
-              <h3 className="font-semibold text-gray-800 mb-1">
+              <h3
+                className={`font-semibold ${darkMode ? "text-gray-100" : "text-gray-800"} mb-1`}
+              >
                 Hop Monitoring
               </h3>
-              <p className="text-sm text-gray-500">
+              <p
+                className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-500"}`}
+              >
                 Lihat status real-time, log eksekusi, dan kesehatan server
                 Apache Hop.
               </p>
@@ -262,17 +301,21 @@ export default function App() {
               } cursor-not-allowed opacity-70`}
             >
               <div className="flex items-start justify-between mb-3">
-                <div className="w-11 h-11 rounded-lg bg-blue-100 flex items-center justify-center">
-                  <FolderTree className="w-5 h-5 text-blue-500" />
+                <div className={`w-11 h-11 rounded-lg ${darkMode ? "bg-blue-900/40" : "bg-blue-100"} flex items-center justify-center`}>
+                  <FolderTree className={`w-5 h-5 ${darkMode ? "text-blue-400" : "text-blue-500"}`} />
                 </div>
-                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
+                <span className={`text-xs font-semibold uppercase tracking-[0.16em] ${darkMode ? "text-gray-300": "text-gray-500"}`}>
                   Coming Soon
                 </span>
               </div>
-              <h3 className="font-semibold text-gray-800 mb-1">
+              <h3
+                className={`font-semibold ${darkMode ? "text-gray-100" : "text-gray-800"} mb-1`}
+              >
                 Root File Directory
               </h3>
-              <p className="text-sm text-gray-500 font-light">
+              <p
+                className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-500"}`}
+              >
                 Jelajahi file .hpl dan visualisasikan graph pipeline.
               </p>
             </button>
