@@ -9,6 +9,23 @@ export function timeCheckerExpAuth(exp: number): boolean {
   return false;
 }
 
+export function convertUpTimeToMinutes(value: string | undefined): number {
+  
+  if (value === undefined) {
+    return 0;
+  }
+  
+  const match = value.match(/(\d+)h\s*(\d+)m/);
+  if (!match) {
+    throw new Error("Format not match, use format 'Xh Ym'");
+  }
+
+  const hours = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
+
+  return hours * 60 + minutes;
+}
+
 export function formatDate(
   dateString: string | undefined,
   type?: string,

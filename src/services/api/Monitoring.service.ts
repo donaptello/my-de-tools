@@ -1,4 +1,5 @@
 import {
+  MonitoringPipelineStatusRes,
   MonitoringTableDetailRes,
   MonitoringTableParams,
   MonitoringTotalDataRes,
@@ -28,4 +29,9 @@ export const monitoringService = {
       })
       .then((res) => res.data);
   },
+  async getPipelineStatus(): Promise<MonitoringPipelineStatusRes> {
+    return apiDeTools
+      .get("/v1/monitoring/widget/status_pipeline")
+      .then((res) => res.data);
+  }
 };

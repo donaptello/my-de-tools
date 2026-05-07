@@ -1,105 +1,284 @@
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "./components/main/Layout";
-import { useEffect } from "react";
-import { Activity, ArrowRight, Wifi } from "lucide-react";
+import {
+  Activity,
+  ArrowRight,
+  CheckCircle2,
+  Database,
+  FolderTree,
+  Gauge,
+  GitBranch,
+  LineChart,
+  ShieldCheck,
+  Table,
+  Workflow,
+  Zap,
+} from "lucide-react";
+import CardHome from "./components/home/CardHome";
+import { useMonitoringPipelineStatus } from "./services/hooks/useMonitoring";
+import { useHopManagementStatus } from "./services/hooks/useHopManagement";
+import { convertUpTimeToMinutes } from "./helpers/time";
 
 export default function App() {
   const { darkMode, setTitle } = useOutletContext<LayoutContextType>();
+  const { data: dataPipelineStatus } = useMonitoringPipelineStatus();
+  const { data: dataHopStatus } = useHopManagementStatus();
   const navigate = useNavigate();
+  setTitle("Home");
 
-  const menuItems = [
+  const percentage = (success: number, total: number) => {
+    return (success / total) * 100;
+  };
+  const stats = useMemo(
+    () => [
+      {
+        label: "Pipeline Aktif",
+        value: `${dataPipelineStatus?.data.success ?? 0}`,
+        icon: Activity,
+        countTo: dataPipelineStatus?.data.success ?? 0,
+      },
+      {
+        label: "Hop Pipeline Success",
+        value: `${dataHopStatus?.data.pipelineStatus.totalFinished ?? 0}`,
+        icon: GitBranch,
+        countTo: dataHopStatus?.data.pipelineStatus.totalFinished ?? 0,
+      },
+      {
+        label: "Success Rate Pipeline",
+        value: `${percentage(dataPipelineStatus?.data.success ?? 0, dataPipelineStatus?.data.total ?? 0)}%`,
+        icon: CheckCircle2,
+        countTo: percentage(
+          dataPipelineStatus?.data.success ?? 0,
+          dataPipelineStatus?.data.total ?? 0,
+        ),
+        suffix: "%",
+      },
+      {
+        label: "Uptime",
+        value: dataHopStatus?.data.uptime,
+        icon: Zap,
+        countTo: convertUpTimeToMinutes(dataHopStatus?.data.uptime),
+        isTime: true,
+      },
+    ],
+    [dataPipelineStatus?.data.success, dataPipelineStatus?.data.total, dataHopStatus?.data.pipelineStatus.totalFinished, dataHopStatus?.data.uptime],
+  );
+
+  const [animatedStats, setAnimatedStats] = useState<string[]>(
+    stats.map((stat) => {
+      if (stat.isTime) return "0h 0m";
+      if (stat.suffix) return `0${stat.suffix}`;
+      return "0";
+    }),
+  );
+
+  useEffect(() => {
+    const duration = 800;
+    const start = performance.now();
+
+    const animate = (timestamp: number) => {
+      const progress = Math.min((timestamp - start) / duration, 1);
+
+      setAnimatedStats(
+        stats.map((stat) => {
+          if (stat.isTime) {
+            const totalMinutes = Math.round(stat.countTo * progress);
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            return `${hours}h ${minutes}m`;
+          }
+          const value = stat.countTo * progress;
+          const formatted = Number.isInteger(stat.countTo)
+            ? Math.round(value)
+            : value.toFixed(1);
+          return `${formatted}${stat.suffix ?? ""}`;
+        }),
+      );
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, [stats]);
+
+  const features = [
     {
-      title: "Connection",
-      description: "Kelola dan pantau semua koneksi server Anda. Tambah koneksi baru, lihat status koneksi yang aktif, dan konfigurasi pengaturan jaringan dengan mudah.",
-      icon: Wifi,
-      href: "/connection",
-      features: ["Tambah koneksi baru", "Monitor status real-time", "Konfigurasi jaringan"],
+      icon: Activity,
+      title: "Real-time Monitoring",
+      desc: "Pantau status pipeline & workflow secara langsung dengan auto-refresh interval.",
     },
     {
-      title: "Monitoring Row Count",
-      description: "Memantau total row table dari source dan target dengan statistik untuk mengetahui perbedaannya.",
-      icon: Activity,
-      href: "/monitoring",
-      features: ["Row Different", "Row dashboard"],
-      subMenus: [
-        { name: "Real-time Status", icon: Activity, href: "/monitoring/realtime" },
-      ],
+      icon: Workflow,
+      title: "Pipeline Visualization",
+      desc: "Visualisasi graph file .hpl dengan node interaktif berbasis React Flow.",
+      disabled: true,
+    },
+    {
+      icon: Database,
+      title: "Row Count Comparison",
+      desc: "Bandingkan jumlah baris antar tabel sumber dan target dengan mudah.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Error Tracking",
+      desc: "Identifikasi pipeline gagal beserta pesan error untuk diagnosa cepat.",
+    },
+    {
+      icon: Gauge,
+      title: "Server Health",
+      desc: "Pantau memory, CPU, threads, dan uptime Hop Server.",
+    },
+    {
+      icon: FolderTree,
+      title: "File Directory",
+      desc: "Jelajahi struktur folder dan preview konfigurasi pipeline.",
+      disabled: true,
     },
   ];
 
-  useEffect(() => {
-    setTitle("Home");
-  }, [setTitle]);
   return (
-    <div className="grid grid-cols-1 p-11 flex-1 items-stretch">
-      <div className="max-w-2xl mb-12 animate-fade-in">
-        <h1 className="text-4xl font-bold text-foreground mb-4">
-          Welcome back!
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Kelola table dan memantau total data table dari berbagai source target dengan level Medallion.
-        </p>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {menuItems.map((item, index) => (
-              <div
-                key={item.title}
-                className={`${darkMode ? "bg-gray-800" : "border-gray-200 bg-white"} group relative overflow-hidden bg-card duration-300 rounded-xl border  p-4 shadow-sm transition hover:shadow-2xl hover:-translate-y-1`}
-                style={{ animationDelay: `${(index + 1) * 0.15}s` }}
+    <div className="min-h-screen border-border">
+      <section className="overflow-hidden -mx-6 px-6">
+        <div
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 0)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-6 py-20 md:py-28">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-6xl text-gray-800 font-bold tracking-tight text-foreground mb-5 leading-tight">
+              Monitoring & Row Count Table
+              <br />
+              <span className="text-blue-500">Data Warehouse</span>
+            </h1>
+            <p className="text-gray-500 md:text-lg font-light mb-8 max-w-2xl leading-relaxed">
+              Satu dashboard untuk memantau eksekusi pipeline, menganalisis log
+              error, membandingkan row count, dan menjelajahi struktur file ETL
+              Anda secara real-time.
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => navigate("/hop-management")}
+                className="gap-2 group cursor-pointer inline-flex items-center rounded-xl px-9 py-3 text-sm font-medium transition focus:outline-none focus:ring-2 bg-blue-500 text-white hover:bg-blue-400 focus:ring-blue-300"
               >
-                {/* Icon */}
-                <div className="mb-6 inline-flex rounded-xl bg-primary/10 p-4 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <item.icon className="h-8 w-8" />
+                <Activity className="w-4 h-4" />
+                Buka Hop Monitoring
+                <ArrowRight className="w-4 h-4 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+              </button>
+              <button
+                onClick={() => navigate("/monitoring")}
+                className="gap-2 group inline-flex cursor-pointer items-center rounded-xl px-9 py-3 text-sm font-medium transition focus:outline-none focus:ring-2 border border-gray-300 bg-gray-100 text-gray-500 hover:bg-gray-100 focus:ring-gray-200"
+              >
+                <Table className="w-4 h-4" />
+                Buka Row Count
+                <ArrowRight className="w-4 h-4 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white bg-card/40 -mx-6 px-6">
+        <div className="max-w-7xl mx-auto px-6 py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {stats.map((s, index) => (
+              <div key={s.label} className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+                  <s.icon className="w-5 h-5 text-blue-500" />
                 </div>
-
-                {/* Title & Description */}
-                <h2 className="text-2xl font-bold text-foreground mb-3">
-                  {item.title}
-                </h2>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {item.description}
-                </p>
-
-                {/* Features List */}
-                <ul className="space-y-2 mb-8">
-                  {item.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Sub Menus (if any) */}
-                {item.subMenus && (
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {item.subMenus.map((sub) => (
-                      <button
-                        key={sub.name}
-                        onClick={() => navigate(sub.href)}
-                        className="inline-flex items-center gap-2 rounded-lg bg-secondary px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary/80 hover:text-foreground"
-                      >
-                        <sub.icon className="h-4 w-4" />
-                        {sub.name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* Action Button */}
-                <button
-                  onClick={() => navigate(item.href)}
-                  className="group/btn bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  Buka {item.title}
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                </button>
-
-                {/* Decorative gradient */}
-                <div className="absolute -bottom-20 -right-20 h-40 w-40 rounded-full bg-primary/5 transition-transform duration-500 group-hover:scale-150" />
+                <div>
+                  <p className="text-xs">{s.label}</p>
+                  <p className="text-xl font-semibold">
+                    {animatedStats[index]}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-6 py-16">
+        <div className="mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+            Semua yang Anda butuhkan untuk Informasi Data Warehouse
+          </h2>
+          <p className="text-gray-500 font-light">
+            Tools terintegrasi operasional data pipeline harian.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {features.map((f) => (
+            <CardHome
+              darkMode={darkMode}
+              title={f.title}
+              description={f.desc}
+              icon={<f.icon className="w-5 h-5 text-blue-500" />}
+              disabled={f.disabled}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Quick Access */}
+      <section className="border border-gray-200 bg-gray-50/40 -mx-6">
+        <div className="max-w-7xl mx-auto px-6 py-14">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button
+              onClick={() => navigate("/hop-management")}
+              className={`rounded-xl text-left border p-6 transition group hover:border-blue-300 ${
+                darkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-white border-gray-200"
+              }`}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-11 h-11 rounded-lg bg-blue-100 flex items-center justify-center">
+                  <LineChart className="w-5 h-5 text-blue-500" />
+                </div>
+                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-blue-300 group-hover:translate-x-1 transition-all" />
+              </div>
+              <h3 className="font-semibold text-gray-800 mb-1">
+                Hop Monitoring
+              </h3>
+              <p className="text-sm text-gray-500">
+                Lihat status real-time, log eksekusi, dan kesehatan server
+                Apache Hop.
+              </p>
+            </button>
+
+            <button
+              disabled
+              className={`rounded-xl text-left border p-6 transition group ${
+                darkMode
+                  ? "bg-gray-800 border-gray-700"
+                  : "bg-white border-gray-200"
+              } cursor-not-allowed opacity-70`}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-11 h-11 rounded-lg bg-blue-100 flex items-center justify-center">
+                  <FolderTree className="w-5 h-5 text-blue-500" />
+                </div>
+                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
+                  Coming Soon
+                </span>
+              </div>
+              <h3 className="font-semibold text-gray-800 mb-1">
+                Root File Directory
+              </h3>
+              <p className="text-sm text-gray-500 font-light">
+                Jelajahi file .hpl dan visualisasikan graph pipeline.
+              </p>
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

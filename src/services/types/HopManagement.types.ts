@@ -23,7 +23,7 @@ export interface HopStatus {
   memoryUsed: number;
   cpuCores: number;
   cpuProcessTime: number;
-  uptime: number;
+  uptime: string;
   threadCount: number;
   loadAvg: number;
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  MonitoringPipelineStatusRes,
   MonitoringTableDetailRes,
   MonitoringTableParams,
   MonitoringTotalDataRes,
@@ -73,6 +74,26 @@ export function useMonitoringData() {
     setLoading(true);
     monitoringService
       .getTotalData()
+      .then((res) => {
+        setData(res);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  return {
+    data,
+    loading,
+  };
+}
+
+export function useMonitoringPipelineStatus() {
+  const [data, setData] = useState<MonitoringPipelineStatusRes | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    monitoringService
+      .getPipelineStatus()
       .then((res) => {
         setData(res);
       })

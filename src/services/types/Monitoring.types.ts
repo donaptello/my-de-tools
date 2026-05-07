@@ -42,6 +42,13 @@ export interface MonitoringTableParams {
   limit?: number;
 }
 
+export interface MonitoringPipelineStatus {
+  success: number;
+  failed: number;
+  total: number;
+}
+
 export type MonitoringTotalDataRes = ApiResponse<MonitoringTotalData>;
 export type MonitoringTotalTableRes = ApiResponse<MonitoringTable[]>;
 export type MonitoringTableDetailRes = ApiResponse<MonitoringTableDetailMap>;
+export type MonitoringPipelineStatusRes = ApiResponse<MonitoringPipelineStatus>;
