@@ -2,6 +2,7 @@ version: "3.9"
 
 services:
   backend:
+    image: de-tools-backend:latest
     build:
       context: https://github.com/donaptello/de-tools-api.git
     container_name: de-tools-backend
@@ -12,14 +13,15 @@ services:
     expose:
       - "8567"
     volumes:
-      - resources:/app/resources
+      - /Users/nathan/Documents/Volume/De-tools-BE:/app/resources
     restart: unless-stopped
 
   frontend:
+    image: de-tools-frontend:latest
     build:
       context: .
       args:
-        VITE_DE_TOOLS_API: http://localhost:8567
+        VITE_DE_TOOLS_API: http://10.242.245.51:8567
         VITE_SECRET_KEY: testing
         VITE_ALGORITM_KEY: HS256
     container_name: de-tools-frontend
