@@ -37,6 +37,9 @@ export default function StatCard({
       }
       return "text-red-400";
     }
+    if (darkMode) {
+      return "text-gray-200";
+    }
     return "";
   };
   return (
@@ -46,7 +49,7 @@ export default function StatCard({
       } ${redBorderError()}`}
     >
       <div className="items-center text-center space-y-1">
-        <p className="text-xs text-gray-500">{statName}</p>
+        <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{statName}</p>
         <span className={`font-semibold text-xl ${textRed()}`}>
           {statValue !== undefined ? formatter.format(statValue) : 0}
         </span>

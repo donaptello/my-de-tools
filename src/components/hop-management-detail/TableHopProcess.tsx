@@ -39,17 +39,18 @@ export default function TableHopProcess({
       {/* HEADER */}
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Hash size={16} className="text-gray-500" />
-          <h2 className="font-medium text-base">Transform Detail</h2>
+          <Hash size={16} className={`${darkMode ? "text-gray-200": "text-gray-500"}`} />
+          <h2 className={`${darkMode ? "text-gray-200" : "text-gray-500"} font-medium text-base`}>Transform Detail</h2>
         </div>
 
         <div className="flex flex-col items-end gap-1">
-          <p className="text-xs text-gray-400">
+          <p className={`text-xs ${darkMode ? "text-gray-300" : "text-gray-400"}`}>
+            {loading && (
+              <span>Refreshing... </span>
+            )}
             Updated: {updatedAt !== undefined ? formatDate(updatedAt, "HH.mm.ss") : "21.09.50"}
           </p>
-          {loading && (
-            <p className="text-xs text-blue-400">Refreshing...</p>
-          )}
+          
         </div>
       </div>
 
@@ -61,7 +62,7 @@ export default function TableHopProcess({
               darkMode ? "border-gray-700" : "border-gray-200 bg-gray-50"
             }`}
           >
-            <tr className="text-gray-500 text-xs">
+            <tr className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>
               <th className="px-6 py-3 font-medium text-blue-500">
                 Transform Name
               </th>
@@ -88,22 +89,22 @@ export default function TableHopProcess({
                   key={i}
                   className={`border-t ${
                     darkMode
-                      ? "border-gray-700 hover:bg-gray-700"
-                      : "border-gray-200 hover:bg-gray-50"
+                      ? "border-gray-700 hover:bg-gray-700 text-gray-400"
+                      : "border-gray-200 hover:bg-gray-50 text-gray-500"
                   }`}
                 >
-                  <td className="px-6 py-4 font-medium text-gray-500 text-xs">
+                  <td className="px-6 py-4 font-medium  text-xs">
                     {item.transformName}
                   </td>
-                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.copy)}</td>
-                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesRead)}</td>
-                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesWritten)}</td>
-                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesInput)}</td>
-                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesOutput)}</td>
-                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesUpdated)}</td>
-                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.linesRejected)}</td>
-                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.errors)}</td>
-                  <td className="px-6 text-gray-500 text-xs">
+                  <td className="px-6 text-xs">{formatter.format(item.copy)}</td>
+                  <td className="px-6 text-xs">{formatter.format(item.linesRead)}</td>
+                  <td className="px-6 text-xs">{formatter.format(item.linesWritten)}</td>
+                  <td className="px-6 text-xs">{formatter.format(item.linesInput)}</td>
+                  <td className="px-6 text-xs">{formatter.format(item.linesOutput)}</td>
+                  <td className="px-6 text-xs">{formatter.format(item.linesUpdated)}</td>
+                  <td className="px-6 text-xs">{formatter.format(item.linesRejected)}</td>
+                  <td className="px-6 text-xs">{formatter.format(item.errors)}</td>
+                  <td className="px-6 text-xs">
                     <span
                       className={`px-3 py-1 text-xs rounded-full transition-colors ${getBgStatus(
                         item.statusDescription
@@ -112,9 +113,9 @@ export default function TableHopProcess({
                       {item.statusDescription}
                     </span>
                   </td>
-                  <td className="px-6 text-gray-500 text-xs">{formatter.format(item.seconds)}s</td>
-                  <td className="px-6 text-gray-500 text-xs">{item.speed}</td>
-                  <td className="px-6 text-gray-500 text-xs">{item.priority}</td>
+                  <td className="px-6 text-xs">{formatter.format(item.seconds)}s</td>
+                  <td className="px-6 text-xs">{item.speed}</td>
+                  <td className="px-6 text-xs">{item.priority}</td>
                 </tr>
               ))
             ) : (

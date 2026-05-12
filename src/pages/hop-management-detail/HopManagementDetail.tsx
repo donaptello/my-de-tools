@@ -18,6 +18,7 @@ export default function HopManagementDetail() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
   const [searchParams] = useSearchParams();
   const [enabled, setEnabled] = useState(true);
+  const [clickButton, setClickButton] = useState(false);
   const navigate = useNavigate();
   const { optionsMode } = useOptionHopMode();
 
@@ -41,6 +42,11 @@ export default function HopManagementDetail() {
     if (enabled) {
       refetch();
     }
+
+    if (clickButton) {
+      refetch();
+      setClickButton(false);
+    }
   };
 
   useEffect(() => {
@@ -61,6 +67,7 @@ export default function HopManagementDetail() {
           darkMode={darkMode}
           onRefresh={() => {
             console.log("On Running: ", Date.now());
+            setClickButton(true);
             handleRefresh();
           }}
           enabled={enabled}

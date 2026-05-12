@@ -31,20 +31,7 @@ type HeaderCardProps = {
 };
 
 type StatusType = "SUCCESS" | "ERROR" | "RUNNING";
-const statusConfig: Record<StatusType, { label: string; className: string }> = {
-  SUCCESS: {
-    label: "Success",
-    className: "bg-green-500 text-white",
-  },
-  ERROR: {
-    label: "Error",
-    className: "bg-red-500 text-white",
-  },
-  RUNNING: {
-    label: "Running",
-    className: "bg-yellow-500 text-white",
-  },
-};
+
 
 export default function HeaderCard({
   darkMode,
@@ -63,6 +50,21 @@ export default function HeaderCard({
     return "ERROR";
   };
 
+  const statusConfig: Record<StatusType, { label: string; className: string }> = {
+    SUCCESS: {
+      label: "Success",
+      className: `${darkMode ? "bg-green-700 text-green-200" :"bg-green-500 text-white"}`,
+    },
+    ERROR: {
+      label: "Error",
+      className: `${darkMode ? "bg-red-700 text-red-200" :"bg-red-500 text-white"}`,
+    },
+    RUNNING: {
+      label: "Running",
+      className: `${darkMode ? "bg-yellow-700 text-yellow-200" :"bg-yellow-500 text-white"}`,
+    },
+  };
+
   const statusStyle = statusConfig[`${getStatusConfig()}`];
   return (
     <div
@@ -74,12 +76,12 @@ export default function HeaderCard({
       <div className="flex justify-between items-start">
         {/* LEFT */}
         <div className="flex items-start gap-3">
-          <div className="bg-blue-100 p-3 rounded-xl">
-            <Activity className="text-blue-500" size={20} />
+          <div className={`${darkMode ? "bg-blue-900/40" : "bg-blue-100"} p-3 rounded-xl`}>
+            <Activity className={`${darkMode ? "text-blue-400": "text-blue-500"}`} size={20} />
           </div>
 
           <div>
-            <h2 className="text-lg font-semibold text-gray-800">
+            <h2 className={`text-lg font-semibold ${darkMode ? "text-gray-300" : "text-gray-800"}`}>
               {pipelineName}
             </h2>
             <p className="text-xs font-mono text-gray-400">ID: {pipelineId}</p>
@@ -109,8 +111,8 @@ export default function HeaderCard({
 
           {/* START DATE */}
           <div className="text-left">
-            <p className="text-xs text-gray-400">Start Date</p>
-            <p className="text-sm text-gray-700">
+            <p className={`text-xs text-gray-400`}>Start Date</p>
+            <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               {formatDate(headerData.startDate, "yy/mm/dd")}
             </p>
           </div>
@@ -120,13 +122,13 @@ export default function HeaderCard({
             <p className="text-xs text-gray-400">Duration</p>
             <div className="flex items-center gap-1">
               <Clock size={14} className="text-gray-400" />
-              <p className="text-sm text-gray-700">{headerData.duration}</p>
+              <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>{headerData.duration}</p>
             </div>
           </div>
 
           {/* ACTIONS */}
           <div className="flex gap-2">
-            <button className="flex items-center gap-1 px-3 py-1.5 border border-gray-200 rounded-lg text-sm bg-gray-100">
+            <button className={`flex items-center gap-1 px-3 py-1.5 border ${darkMode ? "border-gray-600 bg-gray-800 text-gray-200" :"text-gray-800 border-gray-200 bg-gray-100"} rounded-lg text-sm`}>
               <Code size={14} />
               View as JSON
             </button>
@@ -173,9 +175,9 @@ export default function HeaderCard({
           <span>{headerData.progress}%</span>
         </div>
 
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className={`w-full ${darkMode ? "bg-gray-700/80" : "bg-gray-200"} rounded-full h-2`}>
           <div
-            className="bg-blue-500 h-2 rounded-full transition-all duration-300 ease-out"
+            className={`${darkMode ? "bg-blue-600" :"bg-blue-500"} h-2 rounded-full transition-all duration-300 ease-out`}
             style={{ width: `${headerData.progress}%` }}
           />
         </div>
