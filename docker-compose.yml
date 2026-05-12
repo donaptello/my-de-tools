@@ -2,6 +2,7 @@ version: "3.9"
 
 services:
   backend:
+    platform: linux/amd64
     image: de-tools-backend:latest
     build:
       context: https://github.com/donaptello/de-tools-api.git
@@ -17,6 +18,7 @@ services:
     restart: unless-stopped
 
   frontend:
+    platform: linux/amd64
     image: de-tools-frontend:latest
     build:
       context: .
