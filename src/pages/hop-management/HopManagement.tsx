@@ -88,8 +88,8 @@ export default function HopManagement() {
           title="Pipeline Total"
           value={status?.data.pipelineStatus.total}
           darkMode={darkMode}
-          icon={<Activity className="text-blue-500" />}
-          bgIcon="bg-blue-100"
+          icon={<Activity className={`${darkMode ? "text-blue-400": "text-blue-500"}`} />}
+          bgIcon={`${darkMode ? "bg-blue-900/40" : "bg-blue-100"}`}
           stats={{
             success: finishedPipeline,
             running: status?.data.pipelineStatus.totalRunning,
@@ -101,8 +101,8 @@ export default function HopManagement() {
           title="Workflow Total"
           value={status?.data.workflowStatus.total}
           darkMode={darkMode}
-          icon={<GitBranch className="text-blue-500" />}
-          bgIcon="bg-blue-100"
+          icon={<GitBranch className={`${darkMode ? "text-blue-400": "text-blue-500"}`} />}
+          bgIcon={`${darkMode ? "bg-blue-900/40" : "bg-blue-100"}`}
           stats={{
             success: finishedWorkflow,
             running: status?.data.workflowStatus.totalRunning,
@@ -114,16 +114,16 @@ export default function HopManagement() {
           title="Total Finished"
           value={finishedPipeline + finishedWorkflow}
           darkMode={darkMode}
-          icon={<CheckCircle className="text-green-500" />}
-          bgIcon="bg-green-100"
+          icon={<CheckCircle className={`${darkMode ? "text-green-400": "text-green-500"}`}/>}
+          bgIcon={`${darkMode ? "bg-green-900/40" : "bg-green-100"}`}
         />
 
         <SummaryCardHop
           title="Total Error"
           value={errorPipeline + errorWorkflow}
           darkMode={darkMode}
-          icon={<XCircle className="text-red-500" />}
-          bgIcon="bg-red-100"
+          icon={<XCircle className={`${darkMode ? "text-red-400": "text-red-500"}`} />}
+          bgIcon={`${darkMode ? "bg-red-900/40" : "bg-red-100"}`}
         />
       </div>
 

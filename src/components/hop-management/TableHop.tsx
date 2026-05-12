@@ -57,13 +57,13 @@ export default function TableHop({
   const getBgStatus = (status: string) => {
     switch (status) {
       case "Running":
-        return "bg-blue-100 text-blue-600";
+        return `${darkMode ? "bg-blue-700 text-blue-200" :"bg-blue-100 text-blue-600"}`;
       case "Finished":
-        return "bg-green-100 text-green-600";
+        return `${darkMode ? "bg-green-700 text-green-200": "bg-green-100 text-green-600"}`;
       case "Halting":
-        return "bg-red-100 text-red-800";
+        return `${darkMode ? "bg-red-700 text-red-200" : "bg-red-100 text-red-800"}`;
       default:
-        return "bg-red-100 text-red-600";
+        return `${darkMode ? "bg-red-700 text-red-200" : "bg-red-100 text-red-600"}`;
     }
   };
 
@@ -77,7 +77,7 @@ export default function TableHop({
       <div className="p-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {icon}
-          <h2 className="font-semibold text-lg">{title}</h2>
+          <h2 className={`${darkMode ? "text-gray-200" : "text-gray-700"} font-semibold text-lg`}>{title}</h2>
 
           <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
             {data?.length}
@@ -200,7 +200,7 @@ export default function TableHop({
               darkMode ? "border-gray-700" : "border-gray-200"
             }`}
           >
-            <tr className="text-gray-500">
+            <tr className={`${darkMode? "text-gray-200" : "text-gray-500"}`}>
               <th className="px-6 font-medium py-3">Name</th>
               <th className="px-6 font-medium">Type</th>
               <th className="px-6 font-medium">Status</th>
@@ -226,14 +226,14 @@ export default function TableHop({
                     darkMode
                       ? "border-gray-700 hover:bg-gray-700"
                       : "border-gray-200 hover:bg-gray-50"
-                  } transition hover:cursor-pointer ${loading ? "opacity-75" : ""}`}
+                  } transition ${darkMode ? "text-gray-300" : "text-gray-700"} hover:cursor-pointer ${loading ? "opacity-75" : ""}`}
                 >
                   <td className="px-6 py-4 truncate max-w-52 font-medium">
                     {item.name}
                   </td>
 
                   <td className="px-6">
-                    <span className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border border-gray-200 text-gray-700 w-fit">
+                    <span className={`flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full ${darkMode ? "bg-gray-800 border border-gray-600 text-gray-200" : "bg-white border border-gray-200 text-gray-700"} w-fit`}>
                       {item.type === "Pipeline" ? (
                         <Activity size={14} />
                       ) : (
@@ -253,17 +253,17 @@ export default function TableHop({
                     </span>
                   </td>
 
-                  <td className="px-6 text-gray-500">
+                  <td className={`px-6 ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
                     <div className="flex items-center gap-1">
                       <Clock size={14} />
                       {item.duration}
                     </div>
                   </td>
 
-                  <td className="px-6 text-gray-500">
+                  <td className={`px-6 ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
                     {formatDate(item.startDate)}
                   </td>
-                  <td className="px-6 text-gray-500">
+                  <td className={`px-6 ${darkMode ? "text-gray-300" : "text-gray-500"}`}>
                     {formatDate(item.endDate || new Date().toISOString())}
                   </td>
                   <td className="px-6">
@@ -307,7 +307,7 @@ export default function TableHop({
                 <td colSpan={7} className="text-center p-4">
                   <div className="flex justify-center items-center gap-2">
                     <Box size={14} color="#999" />
-                    <span className="text-gray-500">No data found.</span>
+                    <span>No data found.</span>
                   </div>
                 </td>
               </tr>

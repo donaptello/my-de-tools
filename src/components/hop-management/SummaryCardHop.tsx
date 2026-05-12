@@ -27,17 +27,15 @@ export default function SummaryCardHop({
         darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
       }`}
     >
-      <div className="flex items-center gap-4">
-        {/* Icon */}
+      <div className={`flex items-center gap-4`}>
         <div
           className={`h-12 w-12 flex items-center justify-center rounded-xl ${bgIcon}`}
         >
           {icon}
         </div>
 
-        {/* Content */}
         <div>
-          <p className="text-xs text-gray-500">{title}</p>
+          <p className={`text-xs ${darkMode ? "text-gray-400" :"text-gray-500"}`}>{title}</p>
           <h2
             className={`text-2xl font-bold ${
               darkMode ? "text-white" : "text-gray-900"
@@ -46,8 +44,7 @@ export default function SummaryCardHop({
             {value}
           </h2>
 
-          {/* Stats */}
-          {stats && (
+          {stats ? (
             <div className="flex items-center gap-3 mt-1 text-xs">
               {stats.success !== undefined && (
                 <span className="flex items-center gap-1 text-green-500">
@@ -67,6 +64,10 @@ export default function SummaryCardHop({
                   {stats.error}
                 </span>
               )}
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 mt-1 text-xs">
+              <br/>
             </div>
           )}
         </div>
