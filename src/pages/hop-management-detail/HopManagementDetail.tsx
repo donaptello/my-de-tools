@@ -17,7 +17,7 @@ import LoggingHop from "../../components/hop-management-detail/LoggingCard";
 export default function HopManagementDetail() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
   const [searchParams] = useSearchParams();
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
   const navigate = useNavigate();
   const { optionsMode } = useOptionHopMode();
 
