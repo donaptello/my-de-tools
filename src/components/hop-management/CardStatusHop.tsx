@@ -40,25 +40,25 @@ export default function CardStatusHop({
 
         <div className="space-y-4 text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-500 text-xs">Status</span>
-            <span className="px-3 py-0.5 text-xs rounded-full bg-green-100 text-green-600">
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>Status</span>
+            <span className={`px-3 py-0.5 text-xs rounded-full ${darkMode ? "bg-green-600 text-green-200" : "bg-green-100 text-green-600"}`}>
               {hopStatus?.statusHop}
             </span>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-gray-500 text-xs">Uptime</span>
-            <span>{hopStatus?.uptime}</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>Uptime</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"}`}>{hopStatus?.uptime}</span>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-gray-500 text-xs">Threads</span>
-            <span>{hopStatus?.cpuCores}</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>Threads</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"}`}>{hopStatus?.cpuCores}</span>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-gray-500 text-xs">Load Avg</span>
-            <span>{hopStatus?.loadAvg}</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>Load Avg</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"}`}>{hopStatus?.loadAvg}</span>
           </div>
         </div>
       </div>
@@ -82,31 +82,31 @@ export default function CardStatusHop({
         </div>
 
         <div className="flex justify-between text-sm mb-2">
-          <span className="text-gray-500 text-xs">Used</span>
-          <span className="text-xs">
+          <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>Used</span>
+          <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>
             {hopStatus?.memoryUsed.toFixed(2)} /{" "}
             {hopStatus?.memoryTotal.toFixed(2)} GB
           </span>
         </div>
 
-        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-4">
+        <div className={`w-full h-2 ${darkMode ? "bg-gray-700/80" : "bg-gray-200"} rounded-full overflow-hidden mb-4`}>
           <div
-            className="h-full bg-blue-500 transition-all duration-500 ease-out"
+            className={`h-full ${darkMode ? "bg-blue-600" :"bg-blue-500"} transition-all duration-500 ease-out`}
             style={{ width: `${memoryPercent}%` }}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-lg bg-gray-50 p-4 text-center">
+          <div className={`rounded-lg ${darkMode ? "bg-gray-900/50" : "bg-gray-50"} p-4 text-center`}>
             <p className="text-xs text-gray-500">Free</p>
-            <p className="text-green-500 font-semibold">
+            <p className={`${darkMode ? "text-green-600/80": "text-green-500"} font-semibold`}>
               {hopStatus?.memoryFree.toFixed(2)} GB
             </p>
           </div>
 
-          <div className="rounded-lg bg-gray-50 p-4 text-center">
+          <div className={`rounded-lg ${darkMode ? "bg-gray-900/50": "bg-gray-50"} p-4 text-center`}>
             <p className="text-xs text-gray-500">Used</p>
-            <p className="text-red-500 font-semibold">
+            <p className={`${darkMode ? "text-red-800/90" : "text-red-500"} font-semibold`}>
               {hopStatus?.memoryUsed.toFixed(2)} GB
             </p>
           </div>
@@ -133,24 +133,24 @@ export default function CardStatusHop({
 
         <div className="space-y-4 text-sm">
           <div className="flex justify-between items-center">
-            <span className="text-gray-500 text-xs">Cores</span>
-            <span className="text-3xl font-bold">{hopStatus?.cpuCores}</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>Cores</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-3xl font-bold`}>{hopStatus?.cpuCores}</span>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-gray-500 text-xs">Load Average</span>
-            <span>{hopStatus?.loadAvg}</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>Load Average</span>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-500"}`}>{hopStatus?.loadAvg}</span>
           </div>
 
           <div>
             <div className="flex justify-between text-sm mb-1">
-              <span className="text-gray-500 text-xs">CPU Load</span>
-              <span>{hopStatus?.cpuCores}%</span>
+              <span className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs`}>CPU Load</span>
+              <span className={`${darkMode ? "text-gray-400" : "text-gray-500"}`}>{hopStatus?.cpuCores}%</span>
             </div>
 
-            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className={`w-full h-2 ${darkMode ? "bg-gray-700/80" : "bg-gray-200"} rounded-full overflow-hidden`}>
               <div
-                className="h-full bg-blue-500 transition-all duration-500 ease-out"
+                className={`h-full ${darkMode ? "bg-blue-600" :"bg-blue-500"} transition-all duration-500 ease-out`}
                 style={{ width: `${hopStatus?.loadAvg}%` }}
               />
             </div>
