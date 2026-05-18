@@ -145,7 +145,7 @@ export default function CardStatusHop({
           <div>
             <div className="flex justify-between text-sm mb-1">
               <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>CPU Load</span>
-              <span className={`${darkMode ? "text-gray-300" : "text-gray-500"}`}>{hopStatus?.cpuCores}%</span>
+              <span className={`${darkMode ? "text-gray-300" : "text-gray-500"}`}>{hopStatus?.loadAvg}%</span>
             </div>
 
             <div className={`w-full h-2 ${darkMode ? "bg-gray-700/80" : "bg-gray-200"} rounded-full overflow-hidden`}>
