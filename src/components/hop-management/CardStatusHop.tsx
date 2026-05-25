@@ -15,11 +15,6 @@ export default function CardStatusHop({
     ((hopStatus?.memoryUsed ?? 0) / (hopStatus?.memoryTotal ?? 1)) * 100;
   return (
     <>
-      {/* <div
-        className={`rounded-xl border  p-4 shadow-sm transition hover:shadow-2xl hover:-translate-y-1 ${
-          darkMode ? "bg-gray-800" : "border-gray-200 bg-white"
-        }`}
-      > */}
       {/* Hop Server */}
       <div
         className={`rounded-xl border p-5 shadow-sm ${

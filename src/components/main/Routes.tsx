@@ -11,6 +11,7 @@ import Login from "../../pages/login/Login";
 import UserManagement from "../../pages/user-managements/UserManagements";
 import HopManagement from "../../pages/hop-management/HopManagement";
 import HopManagementDetail from "../../pages/hop-management-detail/HopManagementDetail";
+import HopManagementDir from "../../pages/hop-management-dir/HopManagementDir";
 
 export default function AnimatedRoutes() {
   const location = useLocation();
@@ -72,6 +73,20 @@ export default function AnimatedRoutes() {
                 transition={{ duration: 0.3 }}
               >
                 <Connection />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/hop-directory"
+            element={
+              <motion.div
+                className="h-full min-h-0"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <HopManagementDir />
               </motion.div>
             }
           />

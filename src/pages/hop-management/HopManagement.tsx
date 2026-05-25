@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { LayoutContextType } from "../../components/main/Layout";
 import { useEffect, useState } from "react";
 import CardStatusHop from "../../components/hop-management/CardStatusHop";
@@ -9,7 +9,13 @@ import {
   useOptionHopMode,
 } from "../../services/hooks/useHopManagement";
 import SummaryCardHop from "../../components/hop-management/SummaryCardHop";
-import { Activity, CheckCircle, GitBranch, XCircle } from "lucide-react";
+import {
+  Activity,
+  CheckCircle,
+  GitBranch,
+  HardDrive,
+  XCircle,
+} from "lucide-react";
 import TableHop from "../../components/hop-management/TableHop";
 import AutoRefresh from "../../components/hop-management/AutoRefresh";
 import ModalLogDelete from "../../components/modal/ModalLogDelete";
@@ -20,6 +26,7 @@ export default function HopManagement() {
   const [selected, setSelected] = useState<string | null>(null);
   const [enabled, setEnabled] = useState(false);
   const { optionsMode } = useOptionHopMode();
+  const navigate = useNavigate();
   const {
     data: status,
     loading: loadingStatus,
@@ -63,7 +70,27 @@ export default function HopManagement() {
   });
   return (
     <div className="grid grid-cols-1 px-10 md:px-40 flex-1 items-stretch">
-      <div className="flex justify-end mb-6">
+      <div className="flex justify-between mb-6">
+        <div className="inline-flex items-center rounded-2xl">
+          {/* ACTIVE */}
+          <button
+            onClick={() => navigate("/hop-management")}
+            className={`flex items-center gap-2 rounded-l-xl ${darkMode ? "bg-blue-900/40 border-gray-700 text-blue-400" : "bg-blue-500 border-gray-200 text-white"} border-t border-l border-b px-3 py-1.5 text-xs transition-al cursor-pointer`}
+          >
+            <Activity className="h-3 w-3" />
+            <span>Pipeline Dashboard</span>
+          </button>
+
+          {/* INACTIVE */}
+          <button
+            onClick={() => navigate("/hop-directory")}
+            className={`flex items-center gap-2 rounded-r-xl px-3 py-1.5 text-xs ${darkMode ? "text-gray-400 hover:text-gray-100 border-gray-700" : "text-gray-500 border-gray-200 hover:text-gray-800"} border-t border-r border-b transition-all cursor-pointer`}
+          >
+            <HardDrive className="h-3 w-3" />
+            <span>File Directory</span>
+          </button>
+        </div>
+
         <AutoRefresh
           darkMode={darkMode}
           onRefresh={() => {
@@ -88,7 +115,11 @@ export default function HopManagement() {
           title="Pipeline Total"
           value={status?.data.pipelineStatus.total}
           darkMode={darkMode}
-          icon={<Activity className={`${darkMode ? "text-blue-400": "text-blue-500"}`} />}
+          icon={
+            <Activity
+              className={`${darkMode ? "text-blue-400" : "text-blue-500"}`}
+            />
+          }
           bgIcon={`${darkMode ? "bg-blue-900/40" : "bg-blue-100"}`}
           stats={{
             success: finishedPipeline,
@@ -101,7 +132,11 @@ export default function HopManagement() {
           title="Workflow Total"
           value={status?.data.workflowStatus.total}
           darkMode={darkMode}
-          icon={<GitBranch className={`${darkMode ? "text-blue-400": "text-blue-500"}`} />}
+          icon={
+            <GitBranch
+              className={`${darkMode ? "text-blue-400" : "text-blue-500"}`}
+            />
+          }
           bgIcon={`${darkMode ? "bg-blue-900/40" : "bg-blue-100"}`}
           stats={{
             success: finishedWorkflow,
@@ -114,7 +149,11 @@ export default function HopManagement() {
           title="Total Finished"
           value={finishedPipeline + finishedWorkflow}
           darkMode={darkMode}
-          icon={<CheckCircle className={`${darkMode ? "text-green-400": "text-green-500"}`}/>}
+          icon={
+            <CheckCircle
+              className={`${darkMode ? "text-green-400" : "text-green-500"}`}
+            />
+          }
           bgIcon={`${darkMode ? "bg-green-900/40" : "bg-green-100"}`}
         />
 
@@ -122,7 +161,11 @@ export default function HopManagement() {
           title="Total Error"
           value={errorPipeline + errorWorkflow}
           darkMode={darkMode}
-          icon={<XCircle className={`${darkMode ? "text-red-400": "text-red-500"}`} />}
+          icon={
+            <XCircle
+              className={`${darkMode ? "text-red-400" : "text-red-500"}`}
+            />
+          }
           bgIcon={`${darkMode ? "bg-red-900/40" : "bg-red-100"}`}
         />
       </div>
