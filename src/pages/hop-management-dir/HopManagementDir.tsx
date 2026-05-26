@@ -2,15 +2,18 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import ExplorerCard from "../../components/hop-management-dir/DirectoryCard";
 import { LayoutContextType } from "../../components/main/Layout";
 import { Activity, HardDrive } from "lucide-react";
+import { useEffect } from "react";
 
 export default function HopManagementDir() {
   const navigate = useNavigate();
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
-  setTitle("Hop Management Directory");
-  setDesc("Apache Hop Directory Viewer");
 
+  useEffect(() => {
+    setTitle("Hop Management Directory");
+    setDesc("Apache Hop directory viewer");
+  });
   return (
-    <div className="grid grid-cols-1 px-10 md:px-40 flex-1 items-stretch">
+    <div className="flex flex-col px-10 md:px-40 flex-1 h-full">
       <div className="flex justify-start mb-6">
         <div className="inline-flex items-center rounded-2xl">
           {/* ACTIVE */}
@@ -33,8 +36,14 @@ export default function HopManagementDir() {
         </div>
       </div>
 
-      <div>
-        <ExplorerCard />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 flex-1 min-h-0">
+        <div className="md:col-span-1 h-full min-h-0">
+          <ExplorerCard />
+        </div>
+
+        <div className="md:col-span-3 border h-full overflow-hidden">
+            Graph Node 
+        </div>
       </div>
     </div>
   );

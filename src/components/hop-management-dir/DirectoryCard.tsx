@@ -2,7 +2,11 @@ import {
   ChevronDown,
   Folder,
   FileCode2,
+  FolderTree,
+  ChevronRight,
+  FolderOpen,
 } from "lucide-react";
+import { useState } from "react";
 
 type TreeNode = {
   name: string;
@@ -11,9 +15,9 @@ type TreeNode = {
 };
 
 const data = [
-  "pipelines/dim_entitas_backup10022026.hpl",
-  "pipelines/dim_entitas(cleaning).hpl",
-  "pipelines/dim_entitas.hpl",
+  "pipelines/entitas/dim_entitas(cleaning).hpl",
+  "pipelines/entitas/dim_entitas.hpl",
+  "pipelines/backup/dim_entitas_backup10022026.hpl",
 ];
 
 function buildTree(paths: string[]): TreeNode[] {
@@ -27,9 +31,7 @@ function buildTree(paths: string[]): TreeNode[] {
     parts.forEach((part, index) => {
       const isFile = index === parts.length - 1;
 
-      let existingNode = currentLevel.find(
-        (node) => node.name === part
-      );
+      let existingNode = currentLevel.find((node) => node.name === part);
 
       if (!existingNode) {
         existingNode = {
@@ -52,14 +54,23 @@ function buildTree(paths: string[]): TreeNode[] {
 
 const treeData = buildTree(data);
 
-function TreeItem({ node }: { node: TreeNode }) {
+type TreeItemProps = {
+  node: TreeNode;
+  level?: number;
+};
+
+function TreeItem({ node, level = 0 }: TreeItemProps) {
+  const [open, setOpen] = useState(false);
+
+  const paddingLeftFolder = `${level * 12}px`;
+  const paddingLeftFile = `${level * 22}px`;
   if (node.type === "file") {
     return (
-      <div className="flex items-center gap-2 py-1 pl-7 text-gray-500">
-        <FileCode2
-          size={18}
-          className="text-blue-500 shrink-0"
-        />
+      <div
+        style={{ paddingLeft: paddingLeftFile }}
+        className="group flex items-center gap-2 rounded-md py-1.5 pr-2 font-light text-xs text-gray-600 transition hover:bg-gray-100"
+      >
+        <FileCode2 size={12} className="shrink-0 text-blue-500" />
 
         <span className="truncate">{node.name}</span>
       </div>
@@ -67,53 +78,58 @@ function TreeItem({ node }: { node: TreeNode }) {
   }
 
   return (
-    <div className="pl-2">
-      <div className="flex items-center gap-2 py-2 text-gray-700">
-        <ChevronDown
-          size={16}
-          className="text-gray-500"
-        />
+    <div>
+      {/* FOLDER */}
+      <button
+        onClick={() => setOpen(!open)}
+        style={{ paddingLeft: paddingLeftFolder }}
+        className="group flex w-full items-center gap-2 rounded-md py-1.5 pr-2 font-light text-xs text-gray-700 transition hover:bg-gray-100"
+      >
+        {open ? (
+          <ChevronDown size={12} className="text-gray-400" />
+        ) : (
+          <ChevronRight size={12} className="text-gray-400" />
+        )}
 
-        <Folder
-          size={18}
-          className="text-yellow-500 shrink-0"
-        />
+        {open ? (
+          <FolderOpen size={12} className="shrink-0 text-yellow-500" />
+        ) : (
+          <Folder size={12} className="shrink-0 text-yellow-500" />
+        )}
 
-        <span>{node.name}</span>
-      </div>
+        <span className="truncate">{node.name}</span>
+      </button>
 
-      <div className="pl-4">
-        {node.children?.map((child) => (
-          <TreeItem
-            key={child.name}
-            node={child}
-          />
-        ))}
-      </div>
+      {/* CHILDREN */}
+      {open && (
+        <div className="mt-0.5">
+          {node.children?.map((child) => (
+            <TreeItem
+              key={`${node.name}-${child.name}`}
+              node={child}
+              level={level + 1}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 export default function ExplorerCard() {
   return (
-    <div className="w-[320px] rounded-2xl border bg-white shadow-sm overflow-hidden">
-      
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border bg-gray-50 border-gray-200">
       {/* HEADER */}
-      <div className="flex items-center gap-3 border-b px-5 py-4">
-        <Folder className="text-blue-500" />
+      <div className="flex items-center gap-3 border-b border-gray-200 px-3 py-2">
+        <FolderTree size={12} className="text-blue-500" />
 
-        <h2 className="text-xl font-bold tracking-wide">
-          EXPLORER
-        </h2>
+        <h2 className="text-xs font-bold tracking-wide">EXPLORER</h2>
       </div>
 
       {/* CONTENT */}
-      <div className="p-4">
+      <div className="p-2 overflow-y-auto flex-1">
         {treeData.map((node) => (
-          <TreeItem
-            key={node.name}
-            node={node}
-          />
+          <TreeItem key={node.name} node={node} />
         ))}
       </div>
     </div>
