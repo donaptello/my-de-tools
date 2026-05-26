@@ -1,12 +1,20 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ExplorerCard from "../../components/hop-management-dir/DirectoryCard";
 import { LayoutContextType } from "../../components/main/Layout";
-import { Activity, HardDrive } from "lucide-react";
-import { useEffect } from "react";
+import { Activity, FileCode2, HardDrive } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  useHopDirectory,
+  useHopReadFile,
+} from "../../services/hooks/useHopDirectory";
+import GraphNodeCard from "../../components/hop-management-dir/GraphNodeCard";
 
 export default function HopManagementDir() {
   const navigate = useNavigate();
+  const [selected, setSelected] = useState<string | null>(null);
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
+  const { data: dataDirectory } = useHopDirectory();
+  const { data: dataRead, setQuery } = useHopReadFile();
 
   useEffect(() => {
     setTitle("Hop Management Directory");
@@ -38,11 +46,26 @@ export default function HopManagementDir() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 flex-1 min-h-0">
         <div className="md:col-span-1 h-full min-h-0">
-          <ExplorerCard />
+          <ExplorerCard
+            darkMode={darkMode}
+            selected={selected}
+            setSelected={(value: string) => {
+              setSelected(value);
+              setQuery({ path: value });
+            }}
+            data={dataDirectory?.data}
+          />
         </div>
 
-        <div className="md:col-span-3 border h-full overflow-hidden">
-            Graph Node 
+        <div className="md:col-span-3">
+          {selected && dataRead !== null ? (
+            <GraphNodeCard darkMode={darkMode} dataRead={dataRead.data} />
+          ) : (
+            <div className={`h-full w-full rounded-xl flex flex-col items-center justify-center border ${darkMode ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}>
+                <FileCode2 size={40} className="shrink-0 text-gray-400/60 mb-2" />
+                <span className="text-gray-500/90 font-light text-sm">Select a <mark className="bg-gray-200 text-gray-500/90 px-2 rounded-md">.hpl</mark> file to view pipeline graph</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

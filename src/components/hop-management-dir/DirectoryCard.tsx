@@ -11,14 +11,9 @@ import { useState } from "react";
 type TreeNode = {
   name: string;
   type: "folder" | "file";
+  path: string;
   children?: TreeNode[];
 };
-
-const data = [
-  "pipelines/entitas/dim_entitas(cleaning).hpl",
-  "pipelines/entitas/dim_entitas.hpl",
-  "pipelines/backup/dim_entitas_backup10022026.hpl",
-];
 
 function buildTree(paths: string[]): TreeNode[] {
   const root: TreeNode[] = [];
@@ -37,6 +32,7 @@ function buildTree(paths: string[]): TreeNode[] {
         existingNode = {
           name: part,
           type: isFile ? "file" : "folder",
+          path: path,
           children: isFile ? undefined : [],
         };
 
@@ -52,14 +48,14 @@ function buildTree(paths: string[]): TreeNode[] {
   return root;
 }
 
-const treeData = buildTree(data);
-
 type TreeItemProps = {
   node: TreeNode;
   level?: number;
+  selected: string | null;
+  setSelected: (value: string) => void;
 };
 
-function TreeItem({ node, level = 0 }: TreeItemProps) {
+function TreeItem({ node, level = 0, selected, setSelected }: TreeItemProps) {
   const [open, setOpen] = useState(false);
 
   const paddingLeftFolder = `${level * 12}px`;
@@ -72,7 +68,14 @@ function TreeItem({ node, level = 0 }: TreeItemProps) {
       >
         <FileCode2 size={12} className="shrink-0 text-blue-500" />
 
-        <span className="truncate">{node.name}</span>
+        <span
+          onClick={() => {
+            setSelected(node.path);
+          }}
+          className="truncate"
+        >
+          {node.name}
+        </span>
       </div>
     );
   }
@@ -81,7 +84,9 @@ function TreeItem({ node, level = 0 }: TreeItemProps) {
     <div>
       {/* FOLDER */}
       <button
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          setOpen(!open);
+        }}
         style={{ paddingLeft: paddingLeftFolder }}
         className="group flex w-full items-center gap-2 rounded-md py-1.5 pr-2 font-light text-xs text-gray-700 transition hover:bg-gray-100"
       >
@@ -108,6 +113,8 @@ function TreeItem({ node, level = 0 }: TreeItemProps) {
               key={`${node.name}-${child.name}`}
               node={child}
               level={level + 1}
+              selected={selected}
+              setSelected={setSelected}
             />
           ))}
         </div>
@@ -116,9 +123,25 @@ function TreeItem({ node, level = 0 }: TreeItemProps) {
   );
 }
 
-export default function ExplorerCard() {
+type ExploreCardProps = {
+  darkMode: boolean;
+  selected: string | null;
+  setSelected: (value: string) => void;
+  data: string[] | undefined;
+};
+
+export default function ExplorerCard({
+  darkMode,
+  selected,
+  setSelected,
+  data,
+}: ExploreCardProps) {
+  const treeData = buildTree(data ?? []);
+
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border bg-gray-50 border-gray-200">
+    <div
+      className={`flex h-full flex-col overflow-hidden rounded-xl border ${darkMode ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
+    >
       {/* HEADER */}
       <div className="flex items-center gap-3 border-b border-gray-200 px-3 py-2">
         <FolderTree size={12} className="text-blue-500" />
@@ -129,7 +152,12 @@ export default function ExplorerCard() {
       {/* CONTENT */}
       <div className="p-2 overflow-y-auto flex-1">
         {treeData.map((node) => (
-          <TreeItem key={node.name} node={node} />
+          <TreeItem
+            key={node.name}
+            node={node}
+            selected={selected}
+            setSelected={setSelected}
+          />
         ))}
       </div>
     </div>
