@@ -1,7 +1,6 @@
 import {
   Background,
   Controls,
-  Edge,
   Node,
   Position,
   ReactFlow,
@@ -9,6 +8,7 @@ import {
   Handle,
   BaseEdge,
   getBezierPath,
+  EdgeProps,
 } from "reactflow";
 
 import {
@@ -90,7 +90,11 @@ function PipelineNode({ data }: { data: PipelineNodeData }) {
   );
 }
 
-function CustomEdge(props: any) {
+type EdgeData = {
+  status?: "SUCCESS" | "ERROR";
+};
+
+function CustomEdge(props: EdgeProps<EdgeData>) {
   const [path] = getBezierPath(props);
 
   return (
@@ -105,96 +109,6 @@ function CustomEdge(props: any) {
     </>
   );
 }
-
-const nodeTypes = {
-  pipeline: PipelineNode,
-};
-
-const edgeTypes = {
-  custom: CustomEdge,
-};
-
-const nodes: Node[] = [
-  {
-    id: "1",
-    type: "pipeline",
-    position: { x: 100, y: 250 },
-    data: {
-      title: "Table Input",
-      subtitle: "TableInput",
-      status: "SUCCESS",
-      icon: <Database className="h-6 w-6 text-blue-500" />,
-    },
-  },
-
-  {
-    id: "2",
-    type: "pipeline",
-    position: { x: 500, y: 250 },
-    data: {
-      title: "Filter Rows",
-      subtitle: "FilterRows",
-      status: "SUCCESS",
-      icon: <Filter className="h-6 w-6 text-blue-500" />,
-    },
-  },
-
-  {
-    id: "3",
-    type: "pipeline",
-    position: { x: 900, y: 150 },
-    data: {
-      title: "Table Output",
-      subtitle: "TableOutput",
-      status: "SUCCESS",
-      icon: <Database className="h-6 w-6 text-blue-500" />,
-    },
-  },
-
-  {
-    id: "4",
-    type: "pipeline",
-    position: { x: 900, y: 350 },
-    data: {
-      title: "Reject Rows",
-      subtitle: "WriteToLog",
-      status: "ERROR",
-      icon: <CircleX className="h-6 w-6 text-red-500" />,
-    },
-  },
-];
-
-const edges: Edge[] = [
-  {
-    id: "e1-2",
-    source: "1",
-    target: "2",
-    type: "custom",
-    data: {
-      status: "SUCCESS",
-    },
-  },
-
-  {
-    id: "e2-3",
-    source: "2",
-    target: "3",
-    type: "custom",
-    data: {
-      status: "SUCCESS",
-    },
-  },
-
-  {
-    id: "e2-4",
-    source: "2",
-    target: "4",
-    type: "custom",
-    data: {
-      status: "ERROR",
-    },
-  },
-];
 
 const stepIcons: Record<string, ReactNode> = {
   TableInput: <Database className="h-6 w-6 text-blue-500" />,
@@ -242,8 +156,12 @@ export default function GraphNodeCard({
         <ReactFlow
           nodes={mappedNodes}
           edges={edges}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
+          nodeTypes={{
+            pipeline: PipelineNode,
+          }}
+          edgeTypes={{
+            custom: CustomEdge,
+          }}
           proOptions={{ hideAttribution: true }}
           fitView
         >
