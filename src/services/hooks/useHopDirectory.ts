@@ -35,6 +35,8 @@ export function useHopReadFile() {
   const [query, setQuery] = useState<ReadFileParams>({});
 
   useEffect(() => {
+    if (!query.path) return;
+
     setLoading(true);
     hopManagementDirService
       .getReadFile(query)

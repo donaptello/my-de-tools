@@ -29,7 +29,7 @@ import {
   HopReadFile,
   HopReadFileNodes,
 } from "../../services/types/HopManagementDir.types";
-import { ReactNode, useCallback, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 
 type StatusType = "SUCCESS" | "ERROR";
 
@@ -46,18 +46,16 @@ function PipelineNode({ data }: { data: PipelineNodeData }) {
   return (
     <>
       <div
-        className={`relative rounded-2xl border-2 bg-white px-5 py-4 shadow-sm ${
+        className={`relative cursor-pointer rounded-2xl border-2 bg-white px-5 py-4 shadow-sm ${
           isSuccess ? "border-green-300" : "border-red-300"
         }`}
       >
-        {/* LEFT HANDLE */}
+        
         <Handle
           type="target"
           position={Position.Left}
           className="h-3! w-3! bg-blue-500!"
         />
-
-        {/* RIGHT HANDLE */}
         <Handle
           type="source"
           position={Position.Right}
@@ -65,7 +63,6 @@ function PipelineNode({ data }: { data: PipelineNodeData }) {
         />
 
         <div className="items-center">
-          {/* ICON */}
           <div
             className={`flex h-12 w-12 items-center justify-center rounded-xl ${
               isSuccess ? "bg-blue-50" : "bg-red-50"
@@ -74,7 +71,6 @@ function PipelineNode({ data }: { data: PipelineNodeData }) {
             {data.icon}
           </div>
         </div>
-        {/* Title */}
       </div>
       <div className="absolute items-center">{data.title}</div>
     </>
@@ -132,13 +128,20 @@ export type GraphNodeCardProps = {
   dataRead: HopReadFile | null;
 };
 
+const nodeTypes = {
+  pipeline: PipelineNode,
+};
+
+const edgeTypes = {
+  custom: CustomEdge,
+};
+
 export default function GraphNodeCard({
   darkMode,
   dataRead,
 }: GraphNodeCardProps) {
-  const mappedNodes = dataRead?.nodes.map(mapHopStepToNode);
-  const [nodes, setNodes] = useState<Node[]>(mappedNodes ?? []);
-  const [edges, setEdges] = useState<Edge[]>(dataRead?.edges ?? []);
+  const [nodes, setNodes] = useState<Node[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) =>
@@ -155,6 +158,14 @@ export default function GraphNodeCard({
     [],
   );
 
+  useEffect(() => {
+    if (!dataRead) return;
+
+    setNodes(dataRead.nodes.map(mapHopStepToNode));
+
+    setEdges(dataRead.edges ?? []);
+  }, [dataRead]);
+
   return (
     <ReactFlowProvider>
       <div
@@ -163,12 +174,8 @@ export default function GraphNodeCard({
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          nodeTypes={{
-            pipeline: PipelineNode,
-          }}
-          edgeTypes={{
-            custom: CustomEdge,
-          }}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           proOptions={{ hideAttribution: true }}

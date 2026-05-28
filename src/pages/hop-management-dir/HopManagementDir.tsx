@@ -22,7 +22,7 @@ export default function HopManagementDir() {
   });
   return (
     <div className="flex flex-col px-10 md:px-40 flex-1 h-full">
-      <div className="flex justify-start mb-6">
+      <div className="flex justify-between mb-6">
         <div className="inline-flex items-center rounded-2xl">
           {/* ACTIVE */}
           <button
@@ -42,6 +42,23 @@ export default function HopManagementDir() {
             <span>File Directory</span>
           </button>
         </div>
+        {selected ? (
+          <div className="inline-flex items-end">
+            <div className="flex gap-2">
+              <FileCode2 size={14} className="text-blue-500" />
+              <span
+                className={`font-mono ${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}
+              >
+                {(() => {
+                  if (selected === null) return "";
+                  return (selected as string).split("/").pop() ?? "";
+                })()}
+              </span>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 flex-1 min-h-0">
@@ -61,9 +78,17 @@ export default function HopManagementDir() {
           {selected && dataRead !== null ? (
             <GraphNodeCard darkMode={darkMode} dataRead={dataRead.data} />
           ) : (
-            <div className={`h-full w-full rounded-xl flex flex-col items-center justify-center border ${darkMode ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}>
-                <FileCode2 size={40} className="shrink-0 text-gray-400/60 mb-2" />
-                <span className="text-gray-500/90 font-light text-sm">Select a <mark className="bg-gray-200 text-gray-500/90 px-2 rounded-md">.hpl</mark> file to view pipeline graph</span>
+            <div
+              className={`h-full w-full rounded-xl flex flex-col items-center justify-center border ${darkMode ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
+            >
+              <FileCode2 size={40} className="shrink-0 text-gray-400/60 mb-2" />
+              <span className="text-gray-500/90 font-light text-sm">
+                Select a{" "}
+                <mark className="bg-gray-200 text-gray-500/90 px-2 rounded-md">
+                  .hpl
+                </mark>{" "}
+                file to view pipeline graph
+              </span>
             </div>
           )}
         </div>
