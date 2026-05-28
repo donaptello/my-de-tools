@@ -9,13 +9,16 @@ import {
   BaseEdge,
   getBezierPath,
   EdgeProps,
+  applyNodeChanges,
+  applyEdgeChanges,
+  NodeChange,
+  EdgeChange,
+  Edge,
 } from "reactflow";
 
 import {
   Database,
   Filter,
-  CircleCheck,
-  CircleX,
   Combine,
   FileOutput,
   CircleHelp,
@@ -26,7 +29,7 @@ import {
   HopReadFile,
   HopReadFileNodes,
 } from "../../services/types/HopManagementDir.types";
-import { ReactNode } from "react";
+import { ReactNode, useCallback, useState } from "react";
 
 type StatusType = "SUCCESS" | "ERROR";
 
@@ -41,52 +44,40 @@ function PipelineNode({ data }: { data: PipelineNodeData }) {
   const isSuccess = data.status === "SUCCESS";
 
   return (
-    <div
-      className={`relative min-w-[250px] rounded-2xl border-2 bg-white px-5 py-4 shadow-sm ${
-        isSuccess ? "border-green-300" : "border-red-300"
-      }`}
-    >
-      {/* LEFT HANDLE */}
-      <Handle
-        type="target"
-        position={Position.Left}
-        className="h-3! w-3! bg-blue-500!"
-      />
+    <>
+      <div
+        className={`relative rounded-2xl border-2 bg-white px-5 py-4 shadow-sm ${
+          isSuccess ? "border-green-300" : "border-red-300"
+        }`}
+      >
+        {/* LEFT HANDLE */}
+        <Handle
+          type="target"
+          position={Position.Left}
+          className="h-3! w-3! bg-blue-500!"
+        />
 
-      {/* RIGHT HANDLE */}
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="h-3! w-3! bg-blue-500!"
-      />
+        {/* RIGHT HANDLE */}
+        <Handle
+          type="source"
+          position={Position.Right}
+          className="h-3! w-3! bg-blue-500!"
+        />
 
-      <div className="flex items-center gap-4">
-        {/* ICON */}
-        <div
-          className={`flex h-12 w-12 items-center justify-center rounded-xl ${
-            isSuccess ? "bg-blue-50" : "bg-red-50"
-          }`}
-        >
-          {data.icon}
+        <div className="items-center">
+          {/* ICON */}
+          <div
+            className={`flex h-12 w-12 items-center justify-center rounded-xl ${
+              isSuccess ? "bg-blue-50" : "bg-red-50"
+            }`}
+          >
+            {data.icon}
+          </div>
         </div>
-
-        {/* TEXT */}
-        <div className="flex-1">
-          <h2 className="text-xl font-semibold text-gray-800">{data.title}</h2>
-
-          <p className="text-lg text-gray-500">{data.subtitle}</p>
-        </div>
-
-        {/* STATUS */}
-        <div>
-          {isSuccess ? (
-            <CircleCheck className="text-green-500" />
-          ) : (
-            <CircleX className="text-red-500" />
-          )}
-        </div>
+        {/* Title */}
       </div>
-    </div>
+      <div className="absolute items-center">{data.title}</div>
+    </>
   );
 }
 
@@ -146,7 +137,23 @@ export default function GraphNodeCard({
   dataRead,
 }: GraphNodeCardProps) {
   const mappedNodes = dataRead?.nodes.map(mapHopStepToNode);
-  const edges = dataRead?.edges;
+  const [nodes, setNodes] = useState<Node[]>(mappedNodes ?? []);
+  const [edges, setEdges] = useState<Edge[]>(dataRead?.edges ?? []);
+
+  const onNodesChange = useCallback(
+    (changes: NodeChange[]) =>
+      setNodes((nodesSnapshot: Node[]) =>
+        applyNodeChanges(changes, nodesSnapshot),
+      ),
+    [],
+  );
+  const onEdgesChange = useCallback(
+    (changes: EdgeChange[]) =>
+      setEdges((edgesSnapshot: Edge[]) =>
+        applyEdgeChanges(changes, edgesSnapshot),
+      ),
+    [],
+  );
 
   return (
     <ReactFlowProvider>
@@ -154,7 +161,7 @@ export default function GraphNodeCard({
         className={`h-full w-full rounded-xl overflow-hidden border ${darkMode ? "bg-gray-900 border-gray-700" : "bg-gray-100 border-gray-200"}`}
       >
         <ReactFlow
-          nodes={mappedNodes}
+          nodes={nodes}
           edges={edges}
           nodeTypes={{
             pipeline: PipelineNode,
@@ -162,6 +169,8 @@ export default function GraphNodeCard({
           edgeTypes={{
             custom: CustomEdge,
           }}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
           proOptions={{ hideAttribution: true }}
           fitView
         >
