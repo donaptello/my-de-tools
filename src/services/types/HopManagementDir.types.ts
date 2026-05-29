@@ -12,6 +12,7 @@ export interface HopReadFileEdges {
   id: string;
   source: string;
   target: string;
+  status: string;
 }
 
 export interface HopReadFileEdgesProperties {

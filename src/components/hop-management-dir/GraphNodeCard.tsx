@@ -22,11 +22,20 @@ import {
   Combine,
   FileOutput,
   CircleHelp,
+  ArrowDownWideNarrow,
+  CircleDot,
+  Braces,
+  Upload,
+  Columns3,
+  TableProperties,
+  Workflow,
+  ShieldCheck,
 } from "lucide-react";
 
 import "reactflow/dist/style.css";
 import {
   HopReadFile,
+  HopReadFileEdges,
   HopReadFileNodes,
 } from "../../services/types/HopManagementDir.types";
 import { ReactNode, useCallback, useEffect, useState } from "react";
@@ -46,11 +55,10 @@ function PipelineNode({ data }: { data: PipelineNodeData }) {
   return (
     <>
       <div
-        className={`relative cursor-pointer rounded-2xl border-2 bg-white px-5 py-4 shadow-sm ${
+        className={`relative cursor-pointer transition-shadow duration-300 ease-out hover:shadow-xl rounded-2xl border-2 bg-white px-5 py-4 shadow-sm ${
           isSuccess ? "border-green-300" : "border-red-300"
         }`}
       >
-        
         <Handle
           type="target"
           position={Position.Left}
@@ -83,14 +91,13 @@ type EdgeData = {
 
 function CustomEdge(props: EdgeProps<EdgeData>) {
   const [path] = getBezierPath(props);
-
   return (
     <>
       <BaseEdge
         path={path}
         style={{
           stroke: props.data?.status === "ERROR" ? "#ef4444" : "#22c55e",
-          strokeWidth: 2,
+          strokeWidth: 1,
         }}
       />
     </>
@@ -102,6 +109,15 @@ const stepIcons: Record<string, ReactNode> = {
   FilterRows: <Filter className="h-6 w-6 text-blue-500" />,
   ConcatFields: <Combine className="h-6 w-6 text-blue-500" />,
   TableOutput: <FileOutput className="h-6 w-6 text-blue-500" />,
+  GroupBy: <ArrowDownWideNarrow className="h-6 w-6 text-indigo-500" />,
+  SortRows: <ArrowDownWideNarrow className="h-6 w-6 text-cyan-500" />,
+  Dummy: <CircleDot className="h-6 w-6 text-gray-400" />,
+  UserDefinedJavaClass: <Braces className="h-6 w-6 text-orange-500" />,
+  PGBulkLoader: <Upload className="h-6 w-6 text-green-500" />,
+  SelectValues: <Columns3 className="h-6 w-6 text-purple-500" />,
+  Denormaliser: <TableProperties className="h-6 w-6 text-pink-500" />,
+  StreamSchema: <Workflow className="h-6 w-6 text-sky-500" />,
+  Validator: <ShieldCheck className="h-6 w-6 text-sky-500" />,
 };
 
 function mapHopStepToNode(step: HopReadFileNodes): Node {
@@ -119,6 +135,18 @@ function mapHopStepToNode(step: HopReadFileNodes): Node {
       icon: stepIcons[step.type] || (
         <CircleHelp className="h-6 w-6 text-gray-400" />
       ),
+    },
+  };
+}
+
+function mapHopEdge(edge: HopReadFileEdges): Edge {
+  return {
+    id: edge.id,
+    source: edge.source,
+    target: edge.target,
+    type: "custom",
+    data: {
+      status: edge.status,
     },
   };
 }
@@ -160,10 +188,8 @@ export default function GraphNodeCard({
 
   useEffect(() => {
     if (!dataRead) return;
-
     setNodes(dataRead.nodes.map(mapHopStepToNode));
-
-    setEdges(dataRead.edges ?? []);
+    setEdges(dataRead.edges.map(mapHopEdge));
   }, [dataRead]);
 
   return (
