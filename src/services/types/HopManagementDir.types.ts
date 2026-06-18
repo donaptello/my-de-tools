@@ -15,7 +15,19 @@ export interface HopReadFileEdges {
   status: string;
 }
 
-export interface HopReadFileEdgesProperties {
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JSONValue[]
+  | { [key: string]: JSONValue };
+
+export interface NestedDict {
+  [key: string]: JSONValue;
+}
+
+export interface HopReadFileEdgesProperties extends NestedDict {
   GUI: {
     xloc: string;
     yloc: string;

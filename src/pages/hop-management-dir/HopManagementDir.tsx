@@ -8,6 +8,8 @@ import {
   useHopReadFile,
 } from "../../services/hooks/useHopDirectory";
 import GraphNodeCard from "../../components/hop-management-dir/GraphNodeCard";
+import ModalNodeDetail from "../../components/modal/node-detail/ModalShowQuery";
+import { PipelineNodeData } from "../../components/hop-management-dir/GraphNodeCard";
 
 export default function HopManagementDir() {
   const navigate = useNavigate();
@@ -15,6 +17,8 @@ export default function HopManagementDir() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
   const { data: dataDirectory } = useHopDirectory();
   const { data: dataRead, setQuery } = useHopReadFile();
+  const [dataSelected, setDataSelected] = useState<PipelineNodeData | null>(null);
+  const [openPopUpDetail, setOpenPopUpDetail] = useState<boolean>(false);
 
   useEffect(() => {
     setTitle("Hop Management Directory");
@@ -76,7 +80,12 @@ export default function HopManagementDir() {
 
         <div className="md:col-span-3">
           {selected && dataRead !== null ? (
-            <GraphNodeCard darkMode={darkMode} dataRead={dataRead.data} />
+            <GraphNodeCard 
+              darkMode={darkMode} 
+              dataRead={dataRead.data} 
+              setDataSelected={setDataSelected}
+              setOpenPopUpDetail={setOpenPopUpDetail}
+            />
           ) : (
             <div
               className={`h-full w-full rounded-xl flex flex-col items-center justify-center border ${darkMode ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
@@ -93,6 +102,13 @@ export default function HopManagementDir() {
           )}
         </div>
       </div>
+      
+      <ModalNodeDetail 
+        showModalNodeDetail={openPopUpDetail}
+        darkMode={darkMode}
+        data={dataSelected}
+        setOpenPopUpDetail={(value: boolean) => setOpenPopUpDetail(value)}
+      />
     </div>
   );
 }

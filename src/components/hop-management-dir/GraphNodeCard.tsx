@@ -37,16 +37,18 @@ import {
   HopReadFile,
   HopReadFileEdges,
   HopReadFileNodes,
+  NestedDict,
 } from "../../services/types/HopManagementDir.types";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 
 type StatusType = "SUCCESS" | "ERROR";
 
-type PipelineNodeData = {
+export type PipelineNodeData = {
   title: string;
   subtitle: string;
   status: StatusType;
   icon: React.ReactNode;
+  properties?: NestedDict;
 };
 
 function PipelineNode({ data }: { data: PipelineNodeData }) {
@@ -120,7 +122,7 @@ const stepIcons: Record<string, ReactNode> = {
   Validator: <ShieldCheck className="h-6 w-6 text-sky-500" />,
 };
 
-function mapHopStepToNode(step: HopReadFileNodes): Node {
+function mapHopStepToNode(step: HopReadFileNodes): Node<PipelineNodeData> {
   return {
     id: step.id,
     type: "pipeline",
@@ -135,6 +137,7 @@ function mapHopStepToNode(step: HopReadFileNodes): Node {
       icon: stepIcons[step.type] || (
         <CircleHelp className="h-6 w-6 text-gray-400" />
       ),
+      properties: step.properties,
     },
   };
 }
@@ -154,6 +157,8 @@ function mapHopEdge(edge: HopReadFileEdges): Edge {
 export type GraphNodeCardProps = {
   darkMode: boolean;
   dataRead: HopReadFile | null;
+  setDataSelected: (value: PipelineNodeData) => void;
+  setOpenPopUpDetail: (value: boolean) => void;
 };
 
 const nodeTypes = {
@@ -167,8 +172,10 @@ const edgeTypes = {
 export default function GraphNodeCard({
   darkMode,
   dataRead,
+  setDataSelected,
+  setOpenPopUpDetail,
 }: GraphNodeCardProps) {
-  const [nodes, setNodes] = useState<Node[]>([]);
+  const [nodes, setNodes] = useState<Node<PipelineNodeData>[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
 
   const onNodesChange = useCallback(
@@ -192,6 +199,16 @@ export default function GraphNodeCard({
     setEdges(dataRead.edges.map(mapHopEdge));
   }, [dataRead]);
 
+  const handleNodeClick = (
+    _event: React.MouseEvent,
+    node: Node<PipelineNodeData>,
+  ) => {
+    console.info(node.id);
+    console.info(node.data);
+    setDataSelected(node.data);
+    setOpenPopUpDetail(true);
+  };
+
   return (
     <ReactFlowProvider>
       <div
@@ -205,6 +222,7 @@ export default function GraphNodeCard({
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           proOptions={{ hideAttribution: true }}
+          onNodeClick={handleNodeClick}
           fitView
         >
           <Background gap={24} size={1} />
