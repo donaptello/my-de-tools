@@ -24,7 +24,16 @@ export default function HopManagement() {
   const { darkMode, setTitle, setDesc } = useOutletContext<LayoutContextType>();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(() => {
+    try {
+      const saved = localStorage.getItem("set-auto-refresh-home")
+      if (!saved) return false;
+      return JSON.parse(saved);
+    } catch (e) {
+      /* ignore */
+    }
+    return false;
+  });
   const { optionsMode } = useOptionHopMode();
   const navigate = useNavigate();
   const {
@@ -67,6 +76,12 @@ export default function HopManagement() {
   useEffect(() => {
     setTitle("Hop Management");
     setDesc("Apache Hop monitoring overview");
+
+    try {
+      localStorage.setItem("set-auto-refresh-home", enabled ? "true" : "false");
+    } catch (e) {
+      /* ignore */
+    }
   });
   return (
     <div className="grid grid-cols-1 px-10 md:px-40 flex-1 items-stretch">
@@ -83,8 +98,9 @@ export default function HopManagement() {
 
           {/* INACTIVE */}
           <button
+            disabled
             onClick={() => navigate("/hop-directory")}
-            className={`flex items-center gap-2 rounded-r-xl px-3 py-1.5 text-xs ${darkMode ? "text-gray-400 hover:text-gray-100 border-gray-700" : "text-gray-500 border-gray-200 hover:text-gray-800"} border-t border-r border-b transition-all cursor-pointer`}
+            className={`flex items-center gap-2 rounded-r-xl px-3 py-1.5 text-xs ${darkMode ? "text-gray-400 border-gray-700" : "text-gray-500 border-gray-200"} border-t border-r border-b transition-all cursor-not-allowed`}
           >
             <HardDrive className="h-3 w-3" />
             <span>File Directory</span>
@@ -94,7 +110,7 @@ export default function HopManagement() {
         <AutoRefresh
           darkMode={darkMode}
           onRefresh={() => {
-            console.log("On Running: ", Date.now());
+            // console.log("On Running: ", Date.now());
             handleRefresh();
           }}
           enabled={enabled}
