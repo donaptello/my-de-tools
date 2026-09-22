@@ -7,12 +7,14 @@ type CardStatusHopProps = {
   loading: boolean;
 };
 
-function memoryColorAlert(value: number | undefined, darkMode: boolean): string {
+function memoryColorAlert(value: number | undefined, darkMode: boolean, isMemoryFree: boolean = false): string {
   
   const percentage: number = value ?? 0
-  if (percentage >= 80) {
+  if (isMemoryFree == false && percentage >= 80) {
     return `${darkMode ? "bg-red-600" :"bg-red-500"}`;
-  } 
+  } else if (isMemoryFree == true && percentage <= 20) {
+    return `${darkMode ? "bg-red-600" :"bg-red-500"}`;
+  }
   return `${darkMode ? "bg-blue-600" :"bg-blue-500"}`;
 }
 
@@ -21,7 +23,7 @@ export default function CardStatusHop({
   hopStatus
 }: CardStatusHopProps) {
   const memoryPercent = ((hopStatus?.memoryUsed ?? 0) / (hopStatus?.memoryTotal ?? 1)) * 100;
-  const memoryFreePercent = ((hopStatus?.memoryFree ?? 0) / (hopStatus?.memoryTotal ?? 1)) * 100;
+  const memoryFreePercent = (((hopStatus?.memoryFree ?? 0) / (hopStatus?.memoryTotal ?? 1)) * 100);
   return (
     <>
       {/* Hop Server */}
@@ -86,6 +88,21 @@ export default function CardStatusHop({
         </div>
 
         <div className="flex justify-between text-sm mb-2">
+          <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Memory Free</span>
+          <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>
+            {hopStatus?.memoryFree.toFixed(2)} /{" "}
+            {hopStatus?.memoryTotal.toFixed(2)} GB
+          </span>
+        </div>
+
+        <div className={`w-full h-2 ${darkMode ? "bg-gray-700/80" : "bg-gray-200"} rounded-full overflow-hidden mb-4`}>
+          <div
+            className={`h-full ${memoryColorAlert(memoryFreePercent, darkMode, true)} transition-all duration-500 ease-out`}
+            style={{ width: `${memoryFreePercent}%` }}
+          />
+        </div>
+        
+        <div className="flex justify-between text-sm mb-2">
           <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Memory Used</span>
           <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>
             {hopStatus?.memoryUsed.toFixed(2)} /{" "}
@@ -100,20 +117,6 @@ export default function CardStatusHop({
           />
         </div>
 
-        <div className="flex justify-between text-sm mb-2">
-          <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Memory Free</span>
-          <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>
-            {hopStatus?.memoryFree.toFixed(2)} /{" "}
-            {hopStatus?.memoryTotal.toFixed(2)} GB
-          </span>
-        </div>
-
-        <div className={`w-full h-2 ${darkMode ? "bg-gray-700/80" : "bg-gray-200"} rounded-full overflow-hidden mb-4`}>
-          <div
-            className={`h-full ${memoryColorAlert(memoryFreePercent, darkMode)} transition-all duration-500 ease-out`}
-            style={{ width: `${memoryFreePercent}%` }}
-          />
-        </div>
 
         <div className="space-y-4 text-sm">
           <div>
