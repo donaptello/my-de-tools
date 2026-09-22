@@ -102,7 +102,7 @@ export default function HopManagement() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6 items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-stretch">
         <CardStatusHop
           loading={loadingStatus}
           darkMode={darkMode}

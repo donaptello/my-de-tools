@@ -1,4 +1,4 @@
-import { Cpu, HardDrive, Server } from "lucide-react";
+import { HardDrive, Server } from "lucide-react";
 import { HopStatus } from "../../services/types/HopManagement.types";
 
 type CardStatusHopProps = {
@@ -48,12 +48,12 @@ export default function CardStatusHop({
 
           <div className="flex justify-between">
             <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Threads</span>
-            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"}`}>{hopStatus?.cpuCores}</span>
+            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"}`}>{hopStatus?.threadCount}</span>
           </div>
 
-          <div className="flex justify-between">
-            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Load Avg</span>
-            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"}`}>{hopStatus?.loadAvg}</span>
+          <div className="flex justify-between items-center">
+            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Cores</span>
+            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} font-bold`}>{hopStatus?.cpuCores}</span>
           </div>
         </div>
       </div>
@@ -72,12 +72,12 @@ export default function CardStatusHop({
           <h3
             className={`tracking-tight text-sm font-medium flex items-center gap-2 ${darkMode ? "text-gray-200" : ""}`}
           >
-            Memory Usage
+            Statistic Usage
           </h3>
         </div>
 
         <div className="flex justify-between text-sm mb-2">
-          <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Used</span>
+          <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Memory Used</span>
           <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>
             {hopStatus?.memoryUsed.toFixed(2)} /{" "}
             {hopStatus?.memoryTotal.toFixed(2)} GB
@@ -91,56 +91,11 @@ export default function CardStatusHop({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
-          <div className={`rounded-lg ${darkMode ? "bg-gray-900/50" : "bg-gray-50"} p-4 text-center`}>
-            <p className="text-xs text-gray-500">Free</p>
-            <p className={`${darkMode ? "text-green-600/80": "text-green-500"} font-semibold`}>
-              {hopStatus?.memoryFree.toFixed(2)} GB
-            </p>
-          </div>
-
-          <div className={`rounded-lg ${darkMode ? "bg-gray-900/50": "bg-gray-50"} p-4 text-center`}>
-            <p className="text-xs text-gray-500">Used</p>
-            <p className={`${darkMode ? "text-red-800/90" : "text-red-500"} font-semibold`}>
-              {hopStatus?.memoryUsed.toFixed(2)} GB
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* CPU */}
-      <div
-        className={`rounded-xl border p-6 shadow-sm ${
-          darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
-        }`}
-      >
-        <div className="flex items-center gap-2 mb-6">
-          <Cpu
-            size={18}
-            className={`text-muted-foreground ${darkMode ? "text-gray-300" : ""}`}
-          />
-          <h3
-            className={`tracking-tight text-sm font-medium flex items-center gap-2 ${darkMode ? "text-gray-200" : ""}`}
-          >
-            CPU Info
-          </h3>
-        </div>
-
         <div className="space-y-4 text-sm">
-          <div className="flex justify-between items-center">
-            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Cores</span>
-            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-3xl font-bold`}>{hopStatus?.cpuCores}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>Load Average</span>
-            <span className={`${darkMode ? "text-gray-300" : "text-gray-500"}`}>{hopStatus?.loadAvg}</span>
-          </div>
-
           <div>
             <div className="flex justify-between text-sm mb-1">
               <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>CPU Load</span>
-              <span className={`${darkMode ? "text-gray-300" : "text-gray-500"}`}>{hopStatus?.loadAvg}%</span>
+              <span className={`${darkMode ? "text-gray-300" : "text-gray-500"} text-xs`}>{hopStatus?.loadAvg}%</span>
             </div>
 
             <div className={`w-full h-2 ${darkMode ? "bg-gray-700/80" : "bg-gray-200"} rounded-full overflow-hidden`}>
@@ -152,6 +107,7 @@ export default function CardStatusHop({
           </div>
         </div>
       </div>
+
     </>
   );
 }
